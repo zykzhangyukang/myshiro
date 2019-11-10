@@ -31,6 +31,12 @@ public class ResultVo<T> {
         objectResultVo.setMsg(ResultEnum.ERROR.getMsg());
         return objectResultVo;
     }
+    public static ResultVo ERROR(String msg){
+        ResultVo<Object> objectResultVo = new ResultVo<>();
+        objectResultVo.setCode(ResultEnum.ERROR.getCode());
+        objectResultVo.setMsg(msg);
+        return objectResultVo;
+    }
 
     public static ResultVo ERROR(ResultEnum resultEnum){
         ResultVo<Object> objectResultVo = new ResultVo<>();
@@ -39,11 +45,22 @@ public class ResultVo<T> {
         return objectResultVo;
     }
 
+    /**
+     * 放数据
+     * @param object
+     * @return
+     */
     public static ResultVo OK(Object object){
         ResultVo<Object> objectResultVo = new ResultVo<>();
         objectResultVo.setCode(ResultEnum.OK.getCode());
         objectResultVo.setMsg(ResultEnum.OK.getMsg());
         objectResultVo.setData(object);
+        return objectResultVo;
+    }
+    public static ResultVo OK(ResultEnum resultEnum){
+        ResultVo<Object> objectResultVo = new ResultVo<>();
+        objectResultVo.setCode(ResultEnum.OK.getCode());
+        objectResultVo.setMsg(resultEnum.getMsg());
         return objectResultVo;
     }
 

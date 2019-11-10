@@ -2,6 +2,7 @@ package com.coderman.rent.sys.realm;
 
 import com.coderman.rent.sys.bean.ActiveUser;
 import com.coderman.rent.sys.bean.User;
+import com.coderman.rent.sys.contast.MyConstant;
 import com.coderman.rent.sys.service.UserService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -35,13 +36,17 @@ public class UserRealm extends AuthorizingRealm {
         UsernamePasswordToken token= (UsernamePasswordToken) authenticationToken;
         String username = token.getUsername();
         User user = userService.findUserByName(username);
-        if(null!=user){
+        if(null==user){
+            throw new UnknownAccountException("该账号不存在");
+        } else {
+            if(user.getStatus().equals(MyConstant.LOCKED)){
+                throw new LockedAccountException("用户账号已被锁定");
+            }
             ActiveUser activeUser = new ActiveUser();
             activeUser.setUser(user);
             Object hashedCredentials=user.getPassWord();
             ByteSource credentialsSalt = ByteSource.Util.bytes(user.getSalt());
             return new SimpleAuthenticationInfo(activeUser,  hashedCredentials,  credentialsSalt, getName());
         }
-        return null;
     }
 }

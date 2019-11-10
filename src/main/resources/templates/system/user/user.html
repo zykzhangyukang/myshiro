@@ -1,0 +1,279 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>系统登入用户</title>
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="/resources/css/index.css" media="all" />
+</head>
+<body>
+<!--模糊查询部分-->
+<form class="layui-form" id="searchForm" lay-filter="searchForm">
+    <blockquote class="layui-elem-quote quoteBox">
+        <form class="layui-form">
+            <span>用户名:</span>&nbsp;&nbsp;
+            <div class="layui-inline">
+                <input class="layui-input" name="userName" id="name" placeholder="用户名称" autocomplete="off">
+            </div>
+            <span>电子邮件:</span>&nbsp;&nbsp;
+            <div class="layui-inline">
+                <input class="layui-input" name="email" id="location'" placeholder="电子邮件" autocomplete="off">
+            </div>
+            <div class="layui-inline">
+                &nbsp;&nbsp;
+                <button type="button" class="layui-btn layui-btn-normal"  lay-submit="" lay-filter="doSearch"><span class="layui-icon layui-icon-search"></span>搜索</button></legend>
+                <button type="reset" class="layui-btn layui-btn-warm" ><span class="layui-icon layui-icon-refresh"></span>重置</button></legend>
+            </div>
+        </form>
+    </blockquote>
+</form>
+<!--数据表格-->
+<table class="layui-hide" id="userTable" lay-filter="userTable"></table>
+<!--表格工具条-->
+<div id="toolBar" style="display: none;">
+    <button type="button" class="layui-btn  layui-bg-blue layui-btn-sm"  lay-event="add"><span class="layui-icon">&#xe608;</span>添加用户</button>
+    <button type="button" class="layui-btn  layui-btn-sm layui-btn-danger"  lay-event="batchDelete" ><i class="layui-icon"></i>批量删除</button>
+</div>
+<!--单行工具条-->
+<script type="text/html" id="lineBar">
+    <a class="layui-btn layui-btn-primary layui-btn-sm" lay-event="detail">查看</a>
+    <a class="layui-btn layui-btn-sm" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="delete">删除</a>
+</script>
+
+<script type="text/html" id="switchTpl">
+    <input type="checkbox" name="sex" value="{{d.id}}" lay-skin="switch" lay-text="女|男" lay-filter="sex" {{ d.sex == 1 ? 'checked' : '' }}>
+</script>
+
+<script type="text/html" id="checkboxTpl">
+    <input type="checkbox" name="status" value="{{d.id}}" title="锁定" lay-filter="status" {{ d.status == 0 ? 'checked' : '' }}>
+</script>
+
+<!--用户添加修改模态框-->
+<div style="display: none;padding: 10px" id="addOrUpdateModal">
+    <form action="" method="post" class="layui-form layui-form-pane" id="dataFrm" lay-filter="dataFrm">
+
+        <div class="layui-form-item layui-row layui-col-xs12">
+            <label class="layui-form-label">用户姓名</label>
+            <input type="hidden" name="id" id="id" >
+            <div class="layui-input-block">
+                <input type="text" class="layui-input" name="userName" lay-verify="required" placeholder="请输入登录名">
+            </div>
+        </div>
+        <div class="layui-form-item layui-row layui-col-xs12">
+            <label class="layui-form-label">邮箱</label>
+            <div class="layui-input-block">
+                <input type="text" name="email" class="layui-input" lay-verify="email" placeholder="请输入邮箱">
+            </div>
+        </div>
+        <div class="layui-form-item layui-row layui-col-xs12">
+            <label class="layui-form-label">电话号码</label>
+            <div class="layui-input-block">
+                <input type="text" name="phoneNumber" class="layui-input" lay-verify="phone" placeholder="请输入电话号码">
+            </div>
+        </div>
+        <div class="layui-form-item" pane="">
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-block">
+                <input type="radio" name="sex" value="0" title="男" checked=""><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><div>男</div></div>
+                <input type="radio" name="sex" value="1" title="女"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>女</div></div>
+            </div>
+        </div>
+        <div class="layui-form-item" pane="">
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-block">
+                <input type="radio" name="status" value="0" title="锁定" checked=""><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><div>锁定</div></div>
+                <input type="radio" name="status" value="1" title="正常"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>正常</div></div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-row layui-col-xs12">
+            <label class="layui-form-label">用户简介</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入用户简介" name="description" class="layui-textarea userDesc"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item layui-row layui-col-xs12">
+            <div class="layui-input-block">
+                <button type="button" class="layui-btn layui-btn" lay-submit="" lay-filter="doSubmit">提交</button>
+                <button type="reset" class="layui-btn layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<script type="text/javascript" src="/resources/layui/layui.js"></script>
+<script  type="text/javascript">
+    layui.use(['laydate', 'laypage', 'layer', 'table','form'], function(){
+        var laydate = layui.laydate //日期
+        var table = layui.table //表格
+        var form=layui.form;
+        var $=layui.jquery;
+        //初始化时间选择器
+        laydate.render({
+            elem: '#range' //指定元素
+            ,range: '~'
+        });
+        //加载数据
+        var tableIns= table.render({
+            elem: '#userTable'
+            ,url:'/user/findPage'
+            ,title: '用户表'
+            ,page: true //开启分页
+            ,height:'full-75'
+            ,toolbar: '#toolBar' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+            ,cols: [ [
+                {type: 'checkbox', fixed: 'left'}
+                ,{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left', totalRowText: '合计：'}
+                ,{field: 'userName', title: '用户名'}
+                ,{field: 'email', title: '邮箱', sort: true, totalRow: true}
+                ,{field: 'phoneNumber', title: '电话号码', sort: true}
+                ,{field: 'description', title: '描述'}
+                ,{field:'sex', title:'性别', width:85, templet: '#switchTpl', unresize: true}
+                ,{field:'status', title:'是否锁定', width:110, templet: '#checkboxTpl', unresize: true}
+                ,{fixed: 'right',title:'操作' , align:'center', toolbar: '#lineBar'}
+
+            ] ]
+        });
+        //模糊查询
+        form.on('submit(doSearch)',function (data) {
+            tableIns.reload({
+                where:data.field,
+                page:{
+                    curr:1
+                }
+            });
+        })
+        //监听工具条的事件
+        table.on("toolbar(userTable)",function(obj){
+            var data = obj.data;
+            switch(obj.event){
+                case 'batchDelete':
+                    batchDelete(data);
+                    break;
+                case 'add':
+                    openAddModal(data);
+                    break;
+
+            };
+        });
+        //监听行工具条的事件
+        table.on("tool(userTable)",function(obj){
+            var data = obj.data; //获得当前行数据
+            switch(obj.event){
+                case 'delete':
+                    deleteUser(data);
+                    break;
+                case 'edit':
+                    openUpdateUserModal(data);
+                    break;
+            };
+        });
+        //打开添加的弹出层
+        function openAddModal(){
+            $("#id").val("");
+            mainIndex=layer.open({
+                type:1,
+                content: $("#addOrUpdateModal"),
+                area:['800px','520px'],
+                title:'添加用户',
+                success:function(){
+                    $("#dataFrm")[0].reset();
+                    url="/user/add";
+                }
+            });
+        }
+        //打开修改模态框
+        var mainIndex;
+        var url;
+        function openUpdateUserModal(data) {
+            mainIndex=layer.open({
+                type:1,
+                content: $("#addOrUpdateModal"),
+                area:['800px','520px'],
+                title:'修改用户',
+                success:function(){
+                    form.val("dataFrm",data);
+                    url="/user/update";
+                }
+            });
+        }
+        //更新
+        form.on('submit(doSubmit)',function (data) {
+            $.post(url,data.field,function(res){
+                if(res.code==0){
+                    tableIns.reload();
+                }
+                layer.msg(res.msg);
+                layer.close(mainIndex);
+            })
+            return false;
+        })
+
+        //更新性别
+        form.on('switch(sex)', function(obj){
+            layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
+            var sex=obj.elem.checked==false?'0':'1';
+            $.post("/user/update",{"id":this.value,"sex":sex},function (res) {
+                if(res.code!=0){
+                    layer.msg(res.msg);
+                }
+                tableIns.reload();
+            })
+        });
+        //更新锁定状态
+        form.on('checkbox(status)', function(obj){
+            layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
+            var status=obj.elem.checked==true?'0':'1';
+            $.post("/user/update",{"id":this.value,"status":status},function (res) {
+                if(res.code!=0){
+                    layer.msg(res.msg);
+                }
+                tableIns.reload();
+            })
+        });
+        //删除
+        function deleteUser(data) {
+            layer.confirm('你确定要删除['+data.userName+']这条登入用户吗?', {icon: 3, title:'提示'}, function(index){
+                $.get("/user/delete",{id:data.id},function(res){
+                    if(res.code==0){
+                        tableIns.reload();
+                    }
+                    layer.msg(res.msg);
+                })
+                layer.close(index);
+            });
+        }
+        //批量删除
+        function batchDelete() {
+            //得到选中行
+            var checkStatus = table.checkStatus('userTable');
+            var dataLength=checkStatus.data.length;
+            if(dataLength>0){
+                layer.confirm('你确定要删除这些数据吗?', {icon: 3, title:'提示'}, function(index){
+                    var data=checkStatus.data; //获取选中行的数据
+                    var ids="";
+                    $.each(data,function(index,item){
+                        ids+=item.id+",";
+                    })
+                    ids=ids.substring(0,ids.length-1);
+                    $.get("/user/batchDelete",{"ids":ids},function(res){
+                        if(res.code==0){
+                            tableIns.reload();
+                        }
+                        layer.msg(res.msg);
+                    })
+                    layer.close(index);
+                });
+
+            }else{
+                layer.msg("请选中操作行")
+            }
+        }
+    });
+</script>
+</body>
+</html>

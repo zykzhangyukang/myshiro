@@ -12,6 +12,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/system")
 public class SystemController {
 
+
+    /**
+     * 跳转到y用户管理
+     * @return
+     */
+    @GetMapping("/user")
+    public String user(){
+        return "system/user/user";
+    }
+    /**
+     * 跳转到登入日志
+     * @return
+     */
+    @GetMapping("/loginLog")
+    public String loginLog(){
+        return "system/monitor/loginLog";
+    }
     /**
      * 跳转到后台首页
      * @return

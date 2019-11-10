@@ -8,7 +8,14 @@ public enum ResultEnum {
     OK(0,"请求成功"),
     ERROR(1,"请求失败"),
     NAME_OR_PWD_EMPTY(2,"用户名或密码必填"),
-    LOGIN_FAIL(3,"用户名或密码错误" );
+    PWD_ERROR(3,"密码错误" ),
+    DELETE_SUCCESS(4,"删除成功"),
+    DELETE_FAIL(5,"删除失败"),
+    UPDATE_SUCCESS(6,"更新成功"),
+    UPDATE_FAIL(7,"更新失败"),
+    ADD_SUCCESS(8,"添加成功"),
+    ADD_FAIL(9,"添加失败"),
+    ;
     private Integer code;
     private String msg;
 

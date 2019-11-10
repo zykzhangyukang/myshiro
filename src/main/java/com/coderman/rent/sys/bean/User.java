@@ -6,15 +6,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
 
-/**
- * 系统用户
- */
 @Data
 @Table(name = "sys_user")
 public class User {
-    /**用户id 主键**/
     @Id
-    private Long userId;
+    private Long id;
 
     /**用户名**/
     private String userName;
@@ -31,7 +27,7 @@ public class User {
     /**电话号码**/
     private String phoneNumber;
 
-    /**用户状态:0锁定  1：有效**/
+    /**用户状态:0锁定  1：有效,默认正常**/
     private String status;
 
     /**用户创建时间**/
@@ -57,5 +53,4 @@ public class User {
 
     /**用户类型 0:超级管理员，1：系统普通用户，默认为普通用户**/
     private Integer type;
-
 }

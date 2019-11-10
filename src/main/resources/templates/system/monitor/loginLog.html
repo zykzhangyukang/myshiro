@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>系统登入日志</title>
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="/resources/css/index.css" media="all" />
+</head>
+<body>
+<!--模糊查询部分-->
+<form class="layui-form" id="searchForm" lay-filter="searchForm">
+    <blockquote class="layui-elem-quote quoteBox">
+        <form class="layui-form">
+            <span>用户名:</span>&nbsp;&nbsp;
+            <div class="layui-inline">
+                <input class="layui-input" name="userName" id="name" placeholder="用户名称" autocomplete="off">
+            </div>
+            <span>IP地址:</span>&nbsp;&nbsp;
+            <div class="layui-inline">
+                <input class="layui-input" name="ip" id="ip" placeholder="IP地址" autocomplete="off">
+            </div>
+            <span>登入地址:</span>&nbsp;&nbsp;
+            <div class="layui-inline">
+                <input class="layui-input" name="location" id="location'" placeholder="登入地点" autocomplete="off">
+            </div>
+            <span>时间范围:</span>&nbsp;&nbsp;
+            <div class="layui-inline">
+                <input class="layui-input" name="range" id="range" placeholder="时间范围" autocomplete="off">
+            </div>
+            <div class="layui-inline">
+                &nbsp;&nbsp;
+                <button type="button" class="layui-btn layui-btn-normal"  lay-submit="" lay-filter="doSearch"><span class="layui-icon layui-icon-search"></span>搜索</button></legend>
+                <button type="reset" class="layui-btn layui-btn-warm" ><span class="layui-icon layui-icon-refresh"></span>重置</button></legend>
+            </div>
+        </form>
+    </blockquote>
+</form>
+<!--数据表格-->
+<table class="layui-hide" id="loginLogTable" lay-filter="loginLogTable"></table>
+<!--表格工具条-->
+<div id="toolBar" style="display: none;">
+    <button type="button" class="layui-btn  layui-btn-sm"  lay-event="batchDelete" ><i class="layui-icon"></i>批量删除</button>
+</div>
+<!--行工具条-->
+<script type="text/html" id="lineBar">
+
+    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete"> <i class="layui-icon">&#xe640;</i>批量删除</a>
+</script>
+
+<script type="text/javascript" src="/resources/layui/layui.js"></script>
+<script  type="text/javascript">
+    layui.use(['laydate', 'laypage', 'layer', 'table','form'], function(){
+        var laydate = layui.laydate //日期
+        var table = layui.table //表格
+        var form=layui.form;
+        var $=layui.jquery;
+        //初始化时间选择器
+        laydate.render({
+            elem: '#range' //指定元素
+            ,range: '~'
+        });
+        //加载数据
+        var tableIns= table.render({
+            elem: '#loginLogTable'
+            ,url:'/login/logList'
+            ,title: '用户表'
+            ,page: true //开启分页
+            ,height:'full-75'
+            ,toolbar: '#toolBar' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+            ,cols: [ [
+                {type: 'checkbox', fixed: 'left'}
+                ,{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left', totalRowText: '合计：'}
+                ,{field: 'userName', title: '用户名'}
+                ,{field: 'ip', title: '登入IP', sort: true, totalRow: true}
+                ,{field: 'loginTime', title: '登入时间', sort: true}
+                ,{field: 'location', title: '登入地点', sort: true}
+                ,{field: 'system', title: '系统', sort: true, totalRow: true}
+                ,{field: 'browser', title: '浏览器'}
+                ,{fixed: 'right',title:'操作' , align:'center', toolbar: '#lineBar'}
+            ] ]
+        });
+        //模糊查询
+        form.on('submit(doSearch)',function (data) {
+            tableIns.reload({
+                where:data.field,
+                page:{
+                    curr:1
+                }
+            });
+        })
+        //监听工具条的事件
+        table.on("toolbar(loginLogTable)",function(obj){
+            var data = obj.data;
+            switch(obj.event){
+                case 'batchDelete':
+                    batchDelete(data);
+                    break;
+            };
+        });
+        //监听行工具条的事件
+        table.on("tool(loginLogTable)",function(obj){
+            var data = obj.data; //获得当前行数据
+            switch(obj.event){
+                case 'delete':
+                    deleteLoginLog(data);
+                    break;
+            };
+        });
+        //删除
+        function deleteLoginLog(data) {
+            layer.confirm('你确定要删除['+data.userName+']这条登入日志吗?', {icon: 3, title:'提示'}, function(index){
+                $.get("/login/deleteLog",{id:data.id},function(res){
+                    if(res.code==0){
+                        tableIns.reload();
+                    }
+                    layer.msg(res.msg);
+                })
+                layer.close(index);
+            });
+        }
+        //批量删除
+        function batchDelete() {
+            //得到选中行
+            var checkStatus = table.checkStatus('loginLogTable');
+            var dataLength=checkStatus.data.length;
+            if(dataLength>0){
+                layer.confirm('你确定要删除这些数据吗?', {icon: 3, title:'提示'}, function(index){
+                    var data=checkStatus.data; //获取选中行的数据
+                    var ids="";
+                    $.each(data,function(index,item){
+                        ids+=item.id+",";
+                    })
+                    ids=ids.substring(0,ids.length-1);
+                    $.get("/login/batchDelete",{"ids":ids},function(res){
+                        if(res.code==0){
+                            tableIns.reload();
+                        }
+                        layer.msg(res.msg);
+                    })
+                    layer.close(index);
+                });
+
+            }else{
+                layer.msg("请选中操作行")
+            }
+        }
+    });
+</script>
+</body>
+</html>

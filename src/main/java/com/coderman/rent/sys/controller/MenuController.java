@@ -49,7 +49,6 @@ public class MenuController {
         }else {
             //普通用户(根据用户的角色查询权限获取用户的菜单)
 
-
         }
         List<MenuNode> MenuTree= MenuTreeBuilder.build(menuNodeList);
         return MenuTree;
