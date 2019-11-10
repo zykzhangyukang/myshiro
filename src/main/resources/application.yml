@@ -1,0 +1,55 @@
+#配置数据源的属性
+spring:
+  datasource:
+    druid:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://127.0.0.1:3306/bookrent
+      username: root
+      password: zhangyukang
+      max-active: 20
+      max-wait: 5000
+      initial-size: 1
+      filters: stat,wall
+      validationQuery: SELECT 'x'   #验证连接
+      enable: true
+   #监控配置
+      stat-view-servlet:
+        enabled: true
+        login-username: root
+        login-password: zhangyukang
+        allow: 
+        deny: 
+        url-pattern: /druid/*
+  #thymeleaf的配置 
+  thymeleaf: 
+    cache: false
+    enabled: true
+#      web-stat-filter: 
+#        enabled: true
+#        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
+
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+#配置mybatisplus
+mybatis:
+  #实体类所做包
+  type-aliases-package: com.coderman.rent.*.modal
+  #mapper.xml所在位置
+  mapper-locations: classpath:mapper/*/*Mapper.xml
+
+
+#shiro的配置
+shiro:
+  hash-algorithm-name: md5
+  hash-iterations: 1024
+  anon-urls:
+  - /index.html*
+  - /system/toLogin*
+  - /login/login*
+  - /resources/**
+  login-url: /index.html
+  log-out-url: /login/logout*
+  authc-ulrs:
+  - /**
