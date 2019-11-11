@@ -3,7 +3,9 @@ package com.coderman.rent.sys.service.impl;
 import com.coderman.rent.sys.bean.ActiveUser;
 import com.coderman.rent.sys.bean.User;
 import com.coderman.rent.sys.contast.MyConstant;
+import com.coderman.rent.sys.dto.UserDTO;
 import com.coderman.rent.sys.mapper.DepartmentMapper;
+import com.coderman.rent.sys.mapper.UserExtMapper;
 import com.coderman.rent.sys.mapper.UserMapper;
 import com.coderman.rent.sys.service.UserService;
 import com.coderman.rent.sys.utils.MD5Util;
@@ -31,6 +33,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private UserExtMapper userExtMapper;
+
 
     @Override
     public User findUserByName(String userName) {
@@ -44,24 +49,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PageVo<User> findPage(UserVo userVo) {
+    public PageVo<UserDTO> findPage(UserVo userVo) {
         PageHelper.startPage(userVo.getPage(),userVo.getLimit());
-        Example example=new Example(User.class);
-        Example.Criteria criteria = example.createCriteria();
-        if(userVo!=null){
-            if(userVo.getUserName()!=null&&!"".equals(userVo.getUserName())){
-                criteria.andLike("userName","%"+userVo.getUserName()+"%");
-            }
-            if(userVo.getEmail()!=null&&!"".equals(userVo.getEmail())){
-                criteria.andLike("email","%"+userVo.getEmail()+"%");
-            }
-            if(userVo.getSex()!=null&&!"".equals(userVo.getSex())){
-                criteria.andEqualTo("sex",userVo.getSex());
-            }
-        }
-        List<User> users=userMapper.selectByExample(example);
+        List<UserDTO> users = userExtMapper.findAllWithDepartment(userVo);
         if(!CollectionUtils.isEmpty(users)){
-            PageInfo<User> info=new PageInfo<>(users);
+            PageInfo<UserDTO> info=new PageInfo<>(users);
             return new PageVo<>(info.getTotal(),info.getList());
         }
         return null;

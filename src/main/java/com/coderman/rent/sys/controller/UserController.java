@@ -1,6 +1,7 @@
 package com.coderman.rent.sys.controller;
 
 import com.coderman.rent.sys.bean.User;
+import com.coderman.rent.sys.dto.UserDTO;
 import com.coderman.rent.sys.enums.ResultEnum;
 import com.coderman.rent.sys.service.UserService;
 import com.coderman.rent.sys.vo.PageVo;
@@ -59,8 +60,8 @@ public class UserController {
      * @return
      */
     @GetMapping("/findPage")
-    public PageVo<User> findPage(UserVo userVo){
-        PageVo<User> page = userService.findPage(userVo);
+    public PageVo<UserDTO> findPage(UserVo userVo){
+        PageVo<UserDTO> page = userService.findPage(userVo);
         return page;
     }
 

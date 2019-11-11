@@ -22,6 +22,18 @@
             <div class="layui-inline">
                 <input class="layui-input" name="email" id="location'" placeholder="电子邮件" autocomplete="off">
             </div>
+            <span>性别:</span>&nbsp;&nbsp;&nbsp;&nbsp;
+            <div class="layui-inline">
+                <input type="radio" name="sex" value="0" title="男"><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><div>男</div></div>
+                <input type="radio" name="sex" value="1" title="女"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>女</div></div>
+                <input type="radio" name="sex" value="" title="全部" checked="checked"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>女</div></div>
+            </div>
+            <span>状态:</span>&nbsp;&nbsp;&nbsp;&nbsp;
+            <div class="layui-inline">
+                <input type="radio" name="status" value="1" title="正常"><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><div>正常</div></div>
+                <input type="radio" name="status" value="0" title="锁定"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>锁定</div></div>
+                <input type="radio" name="status" value="" title="全部" checked="checked"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>锁定</div></div>
+            </div>
             <div class="layui-inline">
                 &nbsp;&nbsp;
                 <button type="button" class="layui-btn layui-btn-normal"  lay-submit="" lay-filter="doSearch"><span class="layui-icon layui-icon-search"></span>搜索</button></legend>
@@ -39,7 +51,6 @@
 </div>
 <!--单行工具条-->
 <script type="text/html" id="lineBar">
-    <a class="layui-btn layui-btn-primary layui-btn-sm" lay-event="detail">查看</a>
     <a class="layui-btn layui-btn-sm" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="delete">删除</a>
 </script>
@@ -83,7 +94,7 @@
             </div>
         </div>
         <div class="layui-form-item" pane="">
-            <label class="layui-form-label">性别</label>
+            <label class="layui-form-label">状态</label>
             <div class="layui-input-block">
                 <input type="radio" name="status" value="0" title="锁定" checked=""><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><div>锁定</div></div>
                 <input type="radio" name="status" value="1" title="正常"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>正常</div></div>
@@ -129,6 +140,7 @@
                 {type: 'checkbox', fixed: 'left'}
                 ,{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left', totalRowText: '合计：'}
                 ,{field: 'userName', title: '用户名'}
+                ,{field: 'deptName', title: '所在部门'}
                 ,{field: 'email', title: '邮箱', sort: true, totalRow: true}
                 ,{field: 'phoneNumber', title: '电话号码', sort: true}
                 ,{field: 'description', title: '描述'}

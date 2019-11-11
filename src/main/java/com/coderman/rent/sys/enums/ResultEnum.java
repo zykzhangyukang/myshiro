@@ -15,6 +15,8 @@ public enum ResultEnum {
     UPDATE_FAIL(7,"更新失败"),
     ADD_SUCCESS(8,"添加成功"),
     ADD_FAIL(9,"添加失败"),
+    SQ_SUCCESS(8,"授权成功"),
+    SQ_FAIL(9,"授权失败"),
     ;
     private Integer code;
     private String msg;

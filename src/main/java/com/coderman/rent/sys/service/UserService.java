@@ -2,6 +2,7 @@ package com.coderman.rent.sys.service;
 
 import com.coderman.rent.sys.bean.ActiveUser;
 import com.coderman.rent.sys.bean.User;
+import com.coderman.rent.sys.dto.UserDTO;
 import com.coderman.rent.sys.vo.PageVo;
 import com.coderman.rent.sys.vo.UserVo;
 
@@ -23,7 +24,7 @@ public interface UserService {
      * @param userVo
      * @return
      */
-    PageVo<User> findPage(UserVo userVo);
+    PageVo<UserDTO> findPage(UserVo userVo);
 
     /**
      * 用户更新
@@ -49,5 +50,9 @@ public interface UserService {
      */
     void batchDelete(UserVo userVo);
 
+    /**
+     * 更新用户的最新登入时间
+     * @param activeUser
+     */
     void updateLastLoginTime(ActiveUser activeUser);
 }

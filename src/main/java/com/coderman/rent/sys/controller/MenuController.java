@@ -1,5 +1,6 @@
 package com.coderman.rent.sys.controller;
 
+import com.coderman.rent.sys.bean.DTreeJson;
 import com.coderman.rent.sys.bean.Menu;
 import com.coderman.rent.sys.bean.MenuNode;
 import com.coderman.rent.sys.bean.User;
@@ -8,9 +9,12 @@ import com.coderman.rent.sys.enums.UserTypeEnum;
 import com.coderman.rent.sys.service.MenuService;
 import com.coderman.rent.sys.utils.MenuTreeBuilder;
 import com.coderman.rent.sys.utils.WebUtil;
+import com.coderman.rent.sys.vo.ResultVo;
+import com.coderman.rent.sys.vo.RoleVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,6 +30,25 @@ public class MenuController {
 
     @Autowired
     private MenuService menuService;
+
+    /**
+     * 根据角色id获取该角色菜单树
+     * @return
+     */
+    @PostMapping("/loadAllMenuByRoleId")
+    public ResultVo<List<DTreeJson>> loadAllMenuByRoleId(RoleVo roleVo){
+        List<DTreeJson> dTreeJsons= menuService.loadAllMenuByRoleId(roleVo.getId());
+        return ResultVo.OK(dTreeJsons);
+    }
+    /**
+     * 所有可用的菜单和按钮
+     * @return: 角色添加页面JSON（dTree）
+     */
+    @PostMapping("/loadAllMenuJSON")
+    public ResultVo<List<DTreeJson>> loadAllMenuJSON(){
+        List<DTreeJson> dTreeJsons= menuService.loadAllMenuJSON();
+        return ResultVo.OK(dTreeJsons);
+    }
 
     /**
      * 加载系统左边的菜单

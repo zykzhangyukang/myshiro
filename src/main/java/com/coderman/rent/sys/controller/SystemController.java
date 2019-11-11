@@ -13,6 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class SystemController {
 
     /**
+     * 跳转到角色管理页面
+     * @return
+     */
+    @GetMapping("/role")
+    public String role(){
+        return "system/role/role";
+    }
+    /**
      * 跳转到druid监控
      * @return
      */

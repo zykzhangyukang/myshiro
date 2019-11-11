@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>角色管理页面</title>
+    <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="/resources/css/public.css" media="all" />
+    <link rel="stylesheet" href="/resources/layui_ext/dtree/dtree.css" media="all" />
+    <link rel="stylesheet" href="/resources/layui_ext/dtree/font/dtreefont.css" media="all" />
+</head>
+
+<body>
+<!--角色授权模态框-->
+<div style="display: none;padding: 10px" id="UpdateRolePermissionDIV">
+    <form class="layui-form" id="UpdateRolePermissionForm" lay-filter="UpdateRolePermissionForm">
+    <input type="hidden" name="id">
+    <ul id="roleMenuTree" class="dtree" data-id="0"></ul>
+    <div class="layui-form-item" style="margin-top: 50px;text-align: center">
+    <div class="layui-input-block">
+        <button type="button" class="layui-btn layui-btn-normal"  lay-submit="" lay-filter="updateMenu"><span class="layui-icon layui-icon-search"></span>确定授权</button></legend>
+    </div>
+    </div>
+    </form>
+</div>
+<!--角色基本信息模态框-->
+<!--用户添加修改模态框-->
+<div style="display: none;padding: 10px" id="roleBaseInfo">
+    <form action="" method="post" class="layui-form layui-form-pane" id="roleBaseInfoFrm" lay-filter="roleBaseInfoFrm">
+        <div class="layui-form-item layui-row layui-col-xs12">
+            <label class="layui-form-label">角色名称</label>
+            <input type="hidden" name="id" id="id">
+            <div class="layui-input-block">
+                <input type="text" class="layui-input" name="roleName" lay-verify="required" placeholder="请输入登录名">
+            </div>
+        </div>
+        <div class="layui-form-item layui-row layui-col-xs12">
+            <label class="layui-form-label">角色描述</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入角色描述" name="remark" class="layui-textarea userDesc"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item layui-row layui-col-xs12">
+            <div class="layui-input-block">
+                <button type="button" class="layui-btn layui-btn" lay-submit="" lay-filter="updateBaseInfo">提交</button>
+                <button type="reset" class="layui-btn layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+<!---->
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space14" >
+        <div class="layui-col-xs8">
+            <div class="grid-demo grid-demo-bg1">
+                <!--模糊查询部分-->
+                <form class="layui-form" id="searchForm" lay-filter="searchForm">
+                    <blockquote class="layui-elem-quote quoteBox">
+                        <form class="layui-form">
+                            <span>角色名称:</span>&nbsp;&nbsp;
+                            <div class="layui-inline">
+                                <input class="layui-input" name="roleName" id="name" placeholder="请输入角色名称" autocomplete="off">
+                            </div>
+                            <div class="layui-inline">
+                                &nbsp;&nbsp;
+                                <button type="button" class="layui-btn layui-btn-normal"  lay-submit="" lay-filter="doSearch"><span class="layui-icon layui-icon-search"></span>搜索</button></legend>
+                                <button type="reset" class="layui-btn layui-btn-warm" ><span class="layui-icon layui-icon-refresh"></span>重置</button></legend>
+
+                            </div>
+                        </form>
+                    </blockquote>
+                </form>
+                <!--数据表格-->
+                <table class="layui-hide" id="roleTable" lay-filter="roleTable"></table>
+                <!--行工具条-->
+                <script type="text/html" id="lineBar">
+                    <button type="button" class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit"><i class="layui-icon"></i>编辑</button>
+                    <button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="distribution"><i class="layui-icon">&#xe614;</i>授权</button>
+                    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><i class="layui-icon"></i>删除</button>
+                </script>
+            </div>
+        </div>
+        <div class="layui-col-xs4" >
+            <div class="grid-demo">
+                <blockquote class="layui-elem-quote quoteBox">
+                    <span class="layui-icon">&#xe613;</span> 新增角色
+                </blockquote>
+                <form class="layui-form" action="" id="example" lay-filter="example">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">角色名称</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="roleName" lay-verify="required" autocomplete="off" placeholder="请输入角色名称" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">角色描述</label>
+                        <div class="layui-input-block">
+                            <textarea placeholder="请输入内容" class="layui-textarea" name="remark"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <!-- 存放树的容器 -->
+                        <label class="layui-form-label">分配权限</label>
+                        <div class="layui-input-block">
+                            <ul id="menuTree" class="dtree" data-id="0"></ul>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button type="submit" class="layui-btn layui-btn layui-btn-normal" lay-submit="" lay-filter="doSubmit"><span class="layui-icon">&#xe654;</span>保存</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="/resources/layui/layui.js"></script>
+<script  type="text/javascript">
+    var menuTree;
+    var roleMenuTree;//角色菜单树
+    layui.extend({
+        dtree: '/resources/layui_ext/dtree/dtree'   // {/}的意思即代表采用自有路径，即不跟随 base 路径
+    }).use(['laydate', 'laypage', 'layer', 'table','form','dtree'], function(){
+        var laydate = layui.laydate //日期
+        var table = layui.table //表格
+        var form=layui.form;
+        var dtree=layui.dtree;
+        var $=layui.jquery;
+        // 加载角色所有的可用的菜单和按钮
+        menuTree= dtree.render({
+            elem: "#menuTree",
+            dataStyle: "layuiStyle",  //使用layui风格的数据格式
+            dataFormat: "list",  //配置data的风格为list
+            checkbar:true, //开启复选框
+            skin: "layui",
+            response:{message:"msg",statusCode:0},  //修改response中返回数据的定义
+            url: "/menu/loadAllMenuJSON", // 使用url加载（可与data加载同时存在）
+        });
+        //初始化时间选择器
+        laydate.render({
+            elem: '#range' //指定元素
+            ,range: '~'
+        });
+        //加载数据
+        var tableIns= table.render({
+            elem: '#roleTable'
+            ,url:'/role/findPage'
+            ,title: '用户表'
+            ,page: true //开启分页
+            ,height:'full-100'
+            ,cols: [ [
+                {field: 'id', title: 'ID',hide:true, width:80, sort: true, fixed: 'left', totalRowText: '合计：'}
+                ,{field: 'roleName', title: '角色名称'}
+                ,{field: 'createTime', title: '创建时间'}
+                ,{field: 'remark', title: '角色描述', sort: true, totalRow: true}
+                ,{fixed: 'right',title:'操作' , align:'center', toolbar: '#lineBar'}
+            ] ]
+        });
+        //模糊查询
+        form.on('submit(doSearch)',function (data) {
+            tableIns.reload({
+                where:data.field,
+                page:{
+                    curr:1
+                }
+            });
+        })
+
+        //监听行工具条的事件
+        table.on("tool(roleTable)",function(obj){
+            var data = obj.data; //获得当前行数据
+            switch(obj.event){
+                case 'delete':
+                    deleteRole(data);
+                    break;
+                case 'distribution':
+                    openUpdateRolePermissionDIV(data)
+                    break;
+                case 'edit':
+                    openRoleInfoDIV(data)
+                    break;
+            };
+        });
+        //更新用户的基本信息
+        var div;
+        function openRoleInfoDIV(data) {
+            div=layer.open({
+                type:1,
+                content: $("#roleBaseInfo"),
+                area:['500px','300px'],
+                title:'修改角色信息',
+                success:function(){
+                    form.val("roleBaseInfoFrm",data);
+                    url="/role/update";
+                }
+            });
+        }
+        form.on('submit(updateBaseInfo)',function (data) {
+            $.post("/role/update",data.field,function(res){
+                console.log(data.field)
+                if(res.code==0){
+                    layer.close(div);
+                    layer.msg(res.msg);
+                    tableIns.reload();
+                }
+                layer.msg(res.msg);
+            })
+        });
+        //打开角色授权模态框
+        var mainIndex;
+        var url;
+        function openUpdateRolePermissionDIV(data){
+            mainIndex=layer.open({
+                type:1,
+                content: $("#UpdateRolePermissionDIV"),
+                area:['320px','500px'],
+                title:'分配权限',
+                success:function(){
+                     // 根据角色id加载可用的菜单和按钮
+                    roleMenuTree= dtree.render({
+                        elem: "#roleMenuTree",
+                        dataStyle: "layuiStyle",  //使用layui风格的数据格式
+                        dataFormat: "list",  //配置data的风格为list
+                        checkbar:true, //开启复选框
+                        skin: "layui",
+                        response:{message:"msg",statusCode:0},  //修改response中返回数据的定义
+                        url: "/menu/loadAllMenuByRoleId?id="+data.id, // 使用url加载（可与data加载同时存在）
+                    });
+                    form.val("UpdateRolePermissionForm",data);
+                    url="/role/updateMenu";
+                }
+            });
+        }
+        //更新用户的菜单
+        form.on('submit(updateMenu)',function (data) {
+            var menuTree = dtree.getCheckbarNodesParam("roleMenuTree");
+            var params="";
+            $.each(menuTree,function(index,item){
+                params+="mIds="+item.nodeId+"&";
+            });
+            params=params.substring(0,params.length-1);
+            $.post("/role/updateRoleMenu?"+params,data.field,function(res){
+                if(res.code==0){
+                   layer.close(mainIndex);
+                    layer.msg(res.msg);
+                }
+                layer.msg(res.msg);
+            })
+        });
+        //添加
+        form.on('submit(doSubmit)',function (data) {
+            var menuTree = dtree.getCheckbarNodesParam("menuTree");
+            var params="";
+            $.each(menuTree,function(index,item){
+                params+="mIds="+item.nodeId+"&";
+            });
+            params=params.substring(0,params.length-1);
+            $.post("/role/add?"+params,data.field,function(res){
+                if(res.code==0){
+                    $("#example")[0].reset();
+                    dtree.reload("menuTree",{
+                        url: "/menu/loadAllMenuJSON",
+                        method: "post", //默认为post
+                        initLevel: "1" //默认为2
+                    });
+                    tableIns.reload();
+                }
+                layer.msg(res.msg);
+            })
+            return false;
+        })
+        //删除
+        function deleteRole(data) {
+            layer.confirm('你确定要删除['+data.roleName+']这个角色吗?', {icon: 3, title:'提示'}, function(index){
+                $.get("/role/delete",{id:data.id},function(res){
+                    if(res.code==0){
+                        tableIns.reload();
+                    }
+                    layer.msg(res.msg);
+                })
+                layer.close(index);
+            });
+        }
+    });
+</script>
+</body>
+</html>

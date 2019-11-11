@@ -1,8 +1,12 @@
 package com.coderman.rent.sys.test;
 
 //import com.coderman.rent.sys.mapper.UserMapper;
+
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.coderman.rent.sys.bean.Menu;
 import com.coderman.rent.sys.bean.User;
+import com.coderman.rent.sys.dto.UserDTO;
+import com.coderman.rent.sys.mapper.UserExtMapper;
 import com.coderman.rent.sys.mapper.UserMapper;
 import com.coderman.rent.sys.service.MenuService;
 import com.coderman.rent.sys.vo.UserVo;
@@ -11,9 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -50,6 +52,20 @@ public class TestUserMapper {
         System.out.println("hello word");
     }
 
+    @Autowired
+    private UserExtMapper userExtMapper;
+
+    @Test
+    public void testgetUserWithDepartment(){
+        UserVo userVo = new UserVo();
+        userVo.setUserName("zhangyukang");
+        List<UserDTO> allWithDepartment = userExtMapper.findAllWithDepartment(userVo);
+        log.error("size:{}",allWithDepartment.size());
+        for (UserDTO userDTO : allWithDepartment) {
+            System.out.println(userDTO);
+        }
+        System.out.println(allWithDepartment);
+    }
     @Test
     public void testListAllUserWithDepartment(){
 //        UserVo userVo = new UserVo();

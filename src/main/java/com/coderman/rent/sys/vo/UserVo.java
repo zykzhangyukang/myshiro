@@ -12,4 +12,6 @@ public class UserVo extends User{
     private int limit;
     private String range;
     private String ids;
+
+    private String deptName;
 }
