@@ -48,7 +48,15 @@ public class MenuController {
             }
         }else {
             //普通用户(根据用户的角色查询权限获取用户的菜单)
-
+            List<Menu> menus = menuService.loadAllMenu();
+            if(!CollectionUtils.isEmpty(menus)){
+                for (Menu menu : menus) {
+                    Boolean spread=menu.getIsOpen()==MyConstant.MENU_OPEN? true:false;
+                    Long parentId = menu.getParentId();
+                    MenuNode menuNode = new MenuNode(menu.getMenuId(),menu.getMenuName(), menu.getIcon(), menu.getUrl(), spread, parentId);
+                    menuNodeList.add(menuNode);
+                }
+            }
         }
         List<MenuNode> MenuTree= MenuTreeBuilder.build(menuNodeList);
         return MenuTree;

@@ -25,6 +25,20 @@ public class UserController {
 
 
     /**
+     * 批量删除
+     * @param userVo
+     * @return
+     */
+    @GetMapping("/batchDelete")
+    public ResultVo batchDelete(UserVo userVo){
+        try {
+            userService.batchDelete(userVo);
+            return ResultVo.OK(ResultEnum.DELETE_SUCCESS);
+        } catch (Exception e) {
+            return ResultVo.ERROR(ResultEnum.DELETE_FAIL);
+        }
+    }
+    /**
      * 删除用户
      * @param userVo
      * @return

@@ -5,6 +5,7 @@ import com.coderman.rent.sys.bean.LoginLog;
 import com.coderman.rent.sys.contast.MyConstant;
 import com.coderman.rent.sys.enums.ResultEnum;
 import com.coderman.rent.sys.service.LoginLogService;
+import com.coderman.rent.sys.service.UserService;
 import com.coderman.rent.sys.utils.AddressUtil;
 import com.coderman.rent.sys.utils.IPUtil;
 import com.coderman.rent.sys.utils.BrowserUtil;
@@ -42,6 +43,9 @@ public class LoginController {
 
     @Autowired
     private LoginLogService loginLogService;
+
+    @Autowired
+    private UserService userService;
     /**
      * 用户登入
      * @return
@@ -68,6 +72,9 @@ public class LoginController {
             loginLog.setBrowser(BrowserUtil.getRequestBrowserInfo(request));
             loginLog.setLoginTime(new Date());
             loginLogService.saveLog(loginLog);
+            //更新最新登入时间
+            userService.updateLastLoginTime(activeUser);
+
             log.info("【登入成功】 user={}",WebUtil.getSession().getAttribute(MyConstant.USER));
             return ResultVo.OK();
         }catch (IncorrectCredentialsException e){

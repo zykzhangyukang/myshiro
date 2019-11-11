@@ -1,5 +1,6 @@
 package com.coderman.rent.sys.service.impl;
 
+import com.coderman.rent.sys.bean.ActiveUser;
 import com.coderman.rent.sys.bean.User;
 import com.coderman.rent.sys.contast.MyConstant;
 import com.coderman.rent.sys.mapper.DepartmentMapper;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -36,7 +38,7 @@ public class UserServiceImpl implements UserService {
         example.createCriteria().andLike("userName",userName);
         List<User> users = userMapper.selectByExample(example);
         if(!CollectionUtils.isEmpty(users)){
-            return   users.get(0);
+            return users.get(0);
         }
         return null;
     }
@@ -57,7 +59,7 @@ public class UserServiceImpl implements UserService {
                 criteria.andEqualTo("sex",userVo.getSex());
             }
         }
-        List<User> users = userMapper.selectByExample(example);
+        List<User> users=userMapper.selectByExample(example);
         if(!CollectionUtils.isEmpty(users)){
             PageInfo<User> info=new PageInfo<>(users);
             return new PageVo<>(info.getTotal(),info.getList());
@@ -86,5 +88,27 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(UserVo userVo) {
         userMapper.deleteByPrimaryKey(userVo.getId());
+    }
+
+    @Override
+    public void batchDelete(UserVo userVo) {
+        String ids = userVo.getIds();
+        String[] split = ids.split(",");
+        List<Long> idsList=new ArrayList<>();
+        for (String s : split) {
+            idsList.add(Long.parseLong(s));
+        }
+        if(!CollectionUtils.isEmpty(idsList)){
+            Example example = new Example(User.class);
+            example.createCriteria().andIn("id",idsList);
+            userMapper.deleteByExample(example);
+        }
+    }
+
+    @Override
+    public void updateLastLoginTime(ActiveUser activeUser) {
+        User user = activeUser.getUser();
+        user.setLastLoginTime(new Date());
+        userMapper.updateByPrimaryKeySelective(user);
     }
 }

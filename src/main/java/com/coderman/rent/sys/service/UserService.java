@@ -1,5 +1,6 @@
 package com.coderman.rent.sys.service;
 
+import com.coderman.rent.sys.bean.ActiveUser;
 import com.coderman.rent.sys.bean.User;
 import com.coderman.rent.sys.vo.PageVo;
 import com.coderman.rent.sys.vo.UserVo;
@@ -41,4 +42,12 @@ public interface UserService {
      * @param userVo
      */
     void delete(UserVo userVo);
+
+    /**
+     * 批量删除
+     * @param userVo
+     */
+    void batchDelete(UserVo userVo);
+
+    void updateLastLoginTime(ActiveUser activeUser);
 }

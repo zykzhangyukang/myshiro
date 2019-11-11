@@ -3,7 +3,7 @@ package com.coderman.rent.sys.bean;
 import java.util.Date;
 
 public class Department {
-    private Long deptId;
+    private Long id;
 
     private Long parentId;
 
@@ -15,12 +15,12 @@ public class Department {
 
     private Date modifiedTime;
 
-    public Long getDeptId() {
-        return deptId;
+    public Long getId() {
+        return id;
     }
 
-    public void setDeptId(Long deptId) {
-        this.deptId = deptId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getParentId() {

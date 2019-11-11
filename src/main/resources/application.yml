@@ -6,16 +6,18 @@ spring:
       url: jdbc:mysql://127.0.0.1:3306/bookrent
       username: root
       password: zhangyukang
+      type: com.alibaba.druid.pool.DruidDataSource
       max-active: 20
       max-wait: 5000
-      initial-size: 1
-      filters: stat,wall
+      initial-size: 5
+      filters: stat,log4j,wall
       validationQuery: SELECT 'x'   #验证连接
       enable: true
+
    #监控配置
       stat-view-servlet:
         enabled: true
-        login-username: root
+        login-username: zhangyukang
         login-password: zhangyukang
         allow: 
         deny: 
@@ -37,7 +39,7 @@ mybatis:
   #实体类所做包
   type-aliases-package: com.coderman.rent.*.modal
   #mapper.xml所在位置
-  mapper-locations: classpath:mapper/*/*Mapper.xml
+  mapper-locations: classpath:mapper/*Mapper.xml
 
 
 #shiro的配置

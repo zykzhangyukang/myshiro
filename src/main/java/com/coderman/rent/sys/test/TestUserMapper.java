@@ -5,6 +5,7 @@ import com.coderman.rent.sys.bean.Menu;
 import com.coderman.rent.sys.bean.User;
 import com.coderman.rent.sys.mapper.UserMapper;
 import com.coderman.rent.sys.service.MenuService;
+import com.coderman.rent.sys.vo.UserVo;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -46,6 +48,17 @@ public class TestUserMapper {
     @Test
     public void test(){
         System.out.println("hello word");
+    }
+
+    @Test
+    public void testListAllUserWithDepartment(){
+//        UserVo userVo = new UserVo();
+//        List<User> userVos = userMapper.listAllUserWithDept(userVo);
+//        if(!CollectionUtils.isEmpty(userVos)){
+//            for (User vo : userVos) {
+//                System.out.println(vo);
+//            }
+//        }
     }
 
 }
