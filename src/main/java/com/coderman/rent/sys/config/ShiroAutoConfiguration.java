@@ -2,6 +2,7 @@ package com.coderman.rent.sys.config;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import com.coderman.rent.sys.realm.UserRealm;
+import com.coderman.rent.sys.utils.MySessionDAO;
 import lombok.Data;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
@@ -9,7 +10,9 @@ import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication.Type;
@@ -34,6 +37,9 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "shiro")
 @Data
 public class ShiroAutoConfiguration {
+
+	@Autowired
+	private MySessionDAO mySessionDAO;
 
 	private static final String SHIRO_DIALECT = "shiroDialect";
 	private static final String SHIRO_FILTER = "shiroFilter";
@@ -75,6 +81,7 @@ public class ShiroAutoConfiguration {
 		DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
 		// 注入userRealm
 		securityManager.setRealm(userRealm);
+		securityManager.setSessionManager(sessionManager());
 		return securityManager;
 	}
 
@@ -157,5 +164,19 @@ public class ShiroAutoConfiguration {
 	@Bean(name = SHIRO_DIALECT)
 	public ShiroDialect shiroDialect() {
 		return new ShiroDialect();
+	}
+
+
+	/**
+	 * session 管理对象
+	 *
+	 * @return DefaultWebSessionManager
+	 */
+	@Bean
+	public DefaultWebSessionManager sessionManager() {
+		DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+		sessionManager.setSessionIdUrlRewritingEnabled(false);
+		sessionManager.setSessionDAO(mySessionDAO);
+		return sessionManager;
 	}
 }

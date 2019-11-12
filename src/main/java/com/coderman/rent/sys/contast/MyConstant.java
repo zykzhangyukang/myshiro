@@ -56,4 +56,10 @@ public class MyConstant {
     public  static  final  Integer MENU_TYPE = 0;
     public  static  final  Integer BUTTON_TYPE = 1;
 
+
+    /**
+     * 第三方电影接口
+     */
+    public  static  final  String HOT_MOVIE_URL = "https://api-m.mtime.cn/Showtime/LocationMovies.api?locationId=328";
+
 }

@@ -24,7 +24,8 @@ public class MenuTreeBuilder {
                 tree.add(n1);
             }
             for (MenuNode n2 : menuNodeList) {
-                if(n2.getPId()==n1.getMenuId()){
+                //BUG:比较的时候不能使用==
+                if(n2.getPId().equals(n1.getMenuId())){
                    n1.getChildren().add(n2);
                 }
             }

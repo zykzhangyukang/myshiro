@@ -1,6 +1,5 @@
 package com.coderman.rent.sys.controller;
 
-import com.coderman.rent.sys.bean.User;
 import com.coderman.rent.sys.dto.UserDTO;
 import com.coderman.rent.sys.enums.ResultEnum;
 import com.coderman.rent.sys.service.UserService;
@@ -23,7 +22,6 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
 
     /**
      * 批量删除

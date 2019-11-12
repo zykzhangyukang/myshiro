@@ -2,6 +2,8 @@ package com.coderman.rent.sys.service;
 
 import com.coderman.rent.sys.bean.DTreeJson;
 import com.coderman.rent.sys.bean.Menu;
+import com.coderman.rent.sys.vo.MenuVo;
+import com.coderman.rent.sys.vo.PageVo;
 
 import java.util.List;
 
@@ -34,4 +36,29 @@ public interface MenuService {
      * @return
      */
     List<DTreeJson> loadAllMenuByRoleId(Long id);
+
+    /**
+     * 查询所有的菜单
+     * @param menuVo
+     * @return
+     */
+    PageVo<Menu> findMenuPage(MenuVo menuVo);
+
+    /**
+     * 更新菜单信息
+     * @param menuVo
+     */
+    void update(MenuVo menuVo);
+
+    /**
+     * 添加菜单信息
+     * @param menuVo
+     */
+    void add(MenuVo menuVo);
+
+    /**
+     * 删除菜单
+     * @param menuVo
+     */
+    void delete(MenuVo menuVo);
 }

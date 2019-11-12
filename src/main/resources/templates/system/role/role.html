@@ -11,15 +11,10 @@
 
 <body>
 <!--角色授权模态框-->
-<div style="display: none;padding: 10px" id="UpdateRolePermissionDIV">
+<div style="display: none;" id="UpdateRolePermissionDIV">
     <form class="layui-form" id="UpdateRolePermissionForm" lay-filter="UpdateRolePermissionForm">
     <input type="hidden" name="id">
     <ul id="roleMenuTree" class="dtree" data-id="0"></ul>
-    <div class="layui-form-item" style="margin-top: 50px;text-align: center">
-    <div class="layui-input-block">
-        <button type="button" class="layui-btn layui-btn-normal"  lay-submit="" lay-filter="updateMenu"><span class="layui-icon layui-icon-search"></span>确定授权</button></legend>
-    </div>
-    </div>
     </form>
 </div>
 <!--角色基本信息模态框-->
@@ -212,10 +207,16 @@
         var url;
         function openUpdateRolePermissionDIV(data){
             mainIndex=layer.open({
-                type:1,
+                type:1
+                ,shade: 0.8,
                 content: $("#UpdateRolePermissionDIV"),
-                area:['320px','500px'],
-                title:'分配权限',
+                area:['380px','500px']
+                ,btn: ['分配菜单', '算了关了']
+                ,btnAlign: 'c',
+                title:'分配菜单给【'+data.roleName+'】',
+                yes: function(){
+                  giveMenu(data);
+                },
                 success:function(){
                      // 根据角色id加载可用的菜单和按钮
                     roleMenuTree= dtree.render({
@@ -233,21 +234,22 @@
             });
         }
         //更新用户的菜单
-        form.on('submit(updateMenu)',function (data) {
+        function giveMenu(data) {
             var menuTree = dtree.getCheckbarNodesParam("roleMenuTree");
             var params="";
             $.each(menuTree,function(index,item){
                 params+="mIds="+item.nodeId+"&";
             });
             params=params.substring(0,params.length-1);
-            $.post("/role/updateRoleMenu?"+params,data.field,function(res){
+            $.post("/role/updateRoleMenu?"+params,{"id":data.id},function(res){
                 if(res.code==0){
-                   layer.close(mainIndex);
+                    layer.close(mainIndex);
+                    layer.msg(res.msg);
+                }else {
                     layer.msg(res.msg);
                 }
-                layer.msg(res.msg);
             })
-        });
+        }
         //添加
         form.on('submit(doSubmit)',function (data) {
             var menuTree = dtree.getCheckbarNodesParam("menuTree");

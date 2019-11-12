@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>在线用户管理</title>
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="/resources/css/index.css" media="all" />
+</head>
+<style>.febs-tag-green {
+    color: #52c41a;
+    background: #f6ffed;
+    border: 1px solid #b7eb8f;
+}
+.febs-alert-success {
+    border: 1px solid #b7eb8f;
+    background-color: #f6ffed;
+}
+.febs-alert-base {
+    margin: 3px 0 3px 0;
+    display: block;
+    border-radius: 2px;
+    padding: 8px 15px 8px 15px;
+}
+</style>
+<body>
+<div class="layui-fluid">
+    <span style="margin-top: 20px;" class="febs-alert-base febs-alert-success" >当前共<strong id="count"> 15 </strong>人在线</span>
+</div>
+<!--数据表格-->
+<table class="layui-hide" id="OnlineTable" lay-filter="OnlineTable"></table>
+<!--行工具条-->
+<script type="text/html" id="lineBar">
+
+    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete"> <i class="layui-icon">&#xe640;</i>踢出</a>
+</script>
+
+<script type="text/javascript" src="/resources/layui/layui.js"></script>
+<script  type="text/javascript">
+    layui.use(['laydate', 'laypage', 'layer', 'table','form'], function(){
+        var table = layui.table //表格
+        var form=layui.form;
+        var $=layui.jquery;
+        //加载数据
+        var tableIns= table.render({
+            elem: '#OnlineTable'
+            ,url:'/session/online/[[${session.user.userName}]]'
+            ,title: '用户表'
+            ,page: true //开启分页
+            ,height:'full-75'
+            ,cols: [ [
+                {type: 'checkbox', fixed: 'left'}
+                ,{field: 'userId', title: 'ID', width:80, sort: true, fixed: 'left', totalRowText: '合计：'}
+                ,{field: 'id', title: 'ID',hide:true, width:80, sort: true, fixed: 'left', totalRowText: '合计：'}
+                ,{field: 'username', title: '用户名'}
+                ,{field: 'startTimestamp', title: '登入时间', sort: true, totalRow: true}
+                ,{field: 'lastAccessTime', title: '最后访问时间', sort: true, totalRow: true}
+                ,{field: 'host', title: '主机地址', sort: true, totalRow: true}
+                ,{field: 'location', title: '所在地', sort: true}
+                ,{field: 'status', title: '状态', sort: true, templet:function (data) {
+                        return data.status=="1"?"<span class=\"layui-badge febs-tag-green\">在线</span>":"离线";
+                    }}
+                ,{fixed: 'right',title:'操作' , align:'center', toolbar: '#lineBar'}
+            ] ]
+            , done: function (res, curr, count) {
+                $("#count").html(res.data.length);
+        }
+        });
+        //监听行工具条的事件
+        table.on("tool(OnlineTable)",function(obj){
+            var data = obj.data; //获得当前行数据
+            switch(obj.event){
+                case 'delete':
+                    deleteOnline(data);
+                    break;
+            };
+        });
+        //踢人
+        function deleteOnline(data) {
+            layer.confirm('你确定踢出['+data.username+']这个用户吗?', {icon: 3, title:'提示'}, function(index){
+                alert(data.id)
+                $.get("/session/delete/"+data.id,{"time":new Date()},function(res){
+                    if(res.code==0){
+                        tableIns.reload();
+                        layer.msg(res.msg);
+                    }
+                    layer.msg(res.msg);
+                })
+                layer.close(index);
+            });
+        }
+
+    });
+</script>
+</body>
+</html>

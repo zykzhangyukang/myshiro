@@ -17,7 +17,8 @@ public enum ResultEnum {
     ADD_FAIL(9,"添加失败"),
     SQ_SUCCESS(8,"授权成功"),
     SQ_FAIL(9,"授权失败"),
-    ;
+    KICK_SUCCESS(10,"踢出成功" ),
+    KICK_FAIL(10,"踢出失败" );
     private Integer code;
     private String msg;
 

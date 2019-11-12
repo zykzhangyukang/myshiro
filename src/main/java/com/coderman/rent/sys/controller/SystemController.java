@@ -12,6 +12,43 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/system")
 public class SystemController {
 
+
+
+    /**
+     * 跳转到菜单管理(左边)
+     * @return
+     */
+    @GetMapping("/toMenuLeft")
+    public String toMenuLeft(){
+        return "system/menu/menuLeft";
+    }
+
+    /**
+     * 跳转到菜单管理（右边）
+     * @return
+     */
+    @GetMapping("/toMenuRight")
+    public String toMenuRight(){
+        return "system/menu/menuRight";
+    }
+
+    /**
+     * 跳转到菜单管理
+     * @return
+     */
+    @GetMapping("/menu")
+    public String menu(){
+        return "system/menu/menu";
+    }
+
+    /**
+     * 跳转到在线用户管理
+     * @return
+     */
+    @GetMapping("/online")
+    public String online(){
+        return "system/monitor/online";
+    }
     /**
      * 跳转到角色管理页面
      * @return

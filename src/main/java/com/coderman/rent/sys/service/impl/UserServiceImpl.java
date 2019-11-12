@@ -79,11 +79,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(UserVo userVo) {
+        //删除中间表
+        //TODO
         userMapper.deleteByPrimaryKey(userVo.getId());
     }
 
     @Override
     public void batchDelete(UserVo userVo) {
+        //删除中间表
+        //TODO
         String ids = userVo.getIds();
         String[] split = ids.split(",");
         List<Long> idsList=new ArrayList<>();

@@ -59,8 +59,13 @@ public class RoleServiceImpl implements RoleService {
         roleMapper.updateByPrimaryKeySelective(t);
     }
 
+    @Transactional
     @Override
     public void delete(RoleVo roleVo) {
+        //删除该中间表的数据(sys_role_menu)
+        Example o = new Example(RoleMenu.class);
+        o.createCriteria().andEqualTo("roleId",roleVo.getId());
+        roleMenuMapper.deleteByExample(o);
         roleMapper.deleteByPrimaryKey(roleVo.getId());
     }
 
