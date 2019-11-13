@@ -21,4 +21,11 @@
                 and u.status=#{status}
             </if>
     </select>
+    <insert id="insertUserWithRoles" >
+        INSERT  into sys_user_role(user_id,role_id)
+        values
+        <foreach collection="roles" item="rid" separator=",">
+            (#{userId},#{rid})
+        </foreach>
+    </insert>
 </mapper>

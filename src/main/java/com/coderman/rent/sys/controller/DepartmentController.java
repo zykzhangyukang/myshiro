@@ -8,6 +8,7 @@ import com.coderman.rent.sys.service.DepartmentService;
 import com.coderman.rent.sys.vo.DepartmentVo;
 import com.coderman.rent.sys.vo.PageVo;
 import com.coderman.rent.sys.vo.ResultVo;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +34,7 @@ public class DepartmentController {
      * @param departmentVo
      * @return
      */
+    @RequiresPermissions({"dept:add"})
     @PostMapping("/add")
     public ResultVo add(DepartmentVo departmentVo){
         try {
@@ -48,6 +50,7 @@ public class DepartmentController {
      * @param departmentVo
      * @return
      */
+    @RequiresPermissions({"dept:delete"})
     @PostMapping("/delete")
     public ResultVo delete(DepartmentVo departmentVo){
         try {
@@ -62,6 +65,7 @@ public class DepartmentController {
      * 更新信息
      * @return
      */
+    @RequiresPermissions({"dept:update"})
     @PostMapping("/update")
     public ResultVo update(DepartmentVo departmentVo){
         try {

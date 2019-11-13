@@ -100,28 +100,33 @@
             <input type="text" name="url" placeholder="请输入菜单地址" autocomplete="off" class="layui-input">
         </div>
         </div>
+        <div class="layui-form-item">
+        <label class="layui-form-label">权限编码</label>
+        <div class="layui-input-block">
+            <input type="text" name="perms" placeholder="请输入权限编码" autocomplete="off" class="layui-input">
+        </div>
+        </div>
 
         <div class="layui-form-item" pane="">
             <label class="layui-form-label">是否展开</label>
             <div class="layui-input-block">
-                <input type="radio" name="isOpen" value="1" title="展开" checked=""><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><div>男</div></div>
-                <input type="radio" name="isOpen" value="0" title="关闭"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>女</div></div>
+                <input type="radio" name="isOpen" value="1" title="展开"><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><div>男</div></div>
+                <input type="radio" name="isOpen" value="0" title="关闭"  checked=""><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>女</div></div>
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">状态</label>
-            <div class="layui-input-block">
+            <div class="layui-input-inline">
                 <input type="radio" name="available" value="1" title="可用" checked=""><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><div>可用</div></div>
                 <input type="radio" name="available" value="0" title="禁用"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>禁用</div></div>
             </div>
-        </div>
-        <div class="layui-form-item">
             <label class="layui-form-label">类型</label>
-            <div class="layui-input-block">
+            <div class="layui-input-inline">
                 <input type="radio" name="type" value="0" title="菜单" checked=""><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><div>可用</div></div>
                 <input type="radio" name="type" value="1" title="按钮"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>禁用</div></div>
             </div>
         </div>
+
         <div class="layui-form-item">
             <label class="layui-form-label">排序</label>
             <div class="layui-input-inline">
@@ -168,8 +173,9 @@
                         return d.type==0?'<font class="layui-badge febs-tag-green">菜单</font>':'<font class="layui-badge febs-tag-red">按钮</font>';
                     }}
                 ,{field:'icon', title:'图标',hide:true,align:'center',sort:'true'}
+                ,{field:'perms', title:'编码',align:'center',sort:'true',width:100}
                 ,{field:'orderNum', title:'排序',align:'center',sort:'true'}
-                ,{field:'isOpen', title:'菜单',align:'center',sort:'true',templet: function (d) {
+                ,{field:'isOpen', title:'菜单',align:'center',sort:'true',width:80,templet: function (d) {
                         return d.isOpen==1?'<font class="layui-badge febs-tag-green">展开</font>':'<font class="layui-badge febs-tag-red">关闭</font>';
                     }}
                 ,{field:'available', title:'状态',align:'center',sort:'true',sort:'true',width:100,templet:function (data) {

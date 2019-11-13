@@ -1,12 +1,12 @@
 package com.coderman.rent.sys.service.impl;
 
 import com.coderman.rent.sys.bean.ActiveUser;
+import com.coderman.rent.sys.bean.Role;
 import com.coderman.rent.sys.bean.User;
+import com.coderman.rent.sys.bean.UserRole;
 import com.coderman.rent.sys.contast.MyConstant;
 import com.coderman.rent.sys.dto.UserDTO;
-import com.coderman.rent.sys.mapper.DepartmentMapper;
-import com.coderman.rent.sys.mapper.UserExtMapper;
-import com.coderman.rent.sys.mapper.UserMapper;
+import com.coderman.rent.sys.mapper.*;
 import com.coderman.rent.sys.service.UserService;
 import com.coderman.rent.sys.utils.MD5Util;
 import com.coderman.rent.sys.vo.PageVo;
@@ -16,13 +16,11 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by zhangyukang on 2019/11/10 10:45
@@ -35,6 +33,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserExtMapper userExtMapper;
+
+    @Autowired
+    private UserRoleMapper userRoleMapper;
+
+    @Autowired
+    private RoleMapper roleMapper;
 
 
     @Override
@@ -77,10 +81,13 @@ public class UserServiceImpl implements UserService {
         userMapper.insertSelective(user);
     }
 
+    @Transactional
     @Override
     public void delete(UserVo userVo) {
-        //删除中间表
-        //TODO
+        //删除中间表(user_role)
+        Example o = new Example(UserRole.class);
+        o.createCriteria().andEqualTo("userId",userVo.getId());
+        userRoleMapper.deleteByExample(o);
         userMapper.deleteByPrimaryKey(userVo.getId());
     }
 
@@ -106,5 +113,55 @@ public class UserServiceImpl implements UserService {
         User user = activeUser.getUser();
         user.setLastLoginTime(new Date());
         userMapper.updateByPrimaryKeySelective(user);
+    }
+
+    @Override
+    public List<Role> listRolesByUserId(UserVo userVo) {
+        Example o = new Example(UserRole.class);
+        o.createCriteria().andEqualTo("userId",userVo.getId());
+        List<UserRole> userRoles = userRoleMapper.selectByExample(o);
+        if(!CollectionUtils.isEmpty(userRoles)){
+
+        }
+        return null;
+    }
+
+    @Override
+    public Map<String, Object> loadUserRoles(UserVo userVo) {
+        //已经拥有的
+        Example o = new Example(UserRole.class);
+        o.createCriteria().andEqualTo("userId",userVo.getId());
+        List<UserRole> userRoles = userRoleMapper.selectByExample(o);
+        //所有的角色
+        List<Long> haveList=new ArrayList<>();
+        List<Role> roles = roleMapper.selectAll();
+        if(!CollectionUtils.isEmpty(roles)){
+          haveList=new ArrayList<>();
+            for (Role role : roles) {
+                for (UserRole userRole : userRoles) {
+                    if(userRole.getRoleId().equals( role.getId())){
+                        haveList.add(role.getId());
+                        break;
+                    }
+                }
+            }
+        }
+        Map<String,Object> map=new HashMap<>();
+        map.put("allRoles",roles);
+        map.put("haveRoles",haveList);
+        return map;
+    }
+
+    @Transactional
+    @Override
+    public void giveUserRoles(UserVo userVo, List<Integer> rids) {
+        Long userId=userVo.getId();
+        //先删除之前该用户拥有的角色
+        Example o = new Example(UserRole.class);
+        o.createCriteria().andEqualTo("userId",userId);
+        userRoleMapper.deleteByExample(o);
+        if(!CollectionUtils.isEmpty(rids)){
+            userExtMapper.insertUserWithRoles(userId,rids);
+        }
     }
 }

@@ -27,4 +27,11 @@ public interface RoleService {
      * @param roleVo
      */
     void updateRoleMenu(RoleVo roleVo);
+
+    /**
+     * 获取用户的角色
+     * @param id
+     * @return
+     */
+    List<String> findRoleNameByUserId(Long id);
 }

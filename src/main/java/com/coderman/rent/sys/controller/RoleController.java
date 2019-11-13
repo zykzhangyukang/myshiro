@@ -6,6 +6,7 @@ import com.coderman.rent.sys.service.RoleService;
 import com.coderman.rent.sys.vo.PageVo;
 import com.coderman.rent.sys.vo.ResultVo;
 import com.coderman.rent.sys.vo.RoleVo;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +32,7 @@ public class RoleController {
      * @param mIds
      * @return
      */
+    @RequiresPermissions({"role:updateRoleMenu"})
     @PostMapping("/updateRoleMenu")
     public ResultVo updateRoleMenu(RoleVo roleVo,Long mIds[]){
         roleVo.setMIds(Arrays.asList(mIds));
@@ -59,6 +61,7 @@ public class RoleController {
      * @param roleVo
      * @return
      */
+    @RequiresPermissions({"role:delete"})
     @GetMapping("/delete")
     public ResultVo delete(RoleVo roleVo){
         try {
@@ -75,6 +78,7 @@ public class RoleController {
      * @param roleVo
      * @return
      */
+    @RequiresPermissions({"role:add"})
     @PostMapping("/add")
     public ResultVo add(RoleVo roleVo,Long mIds[]){
         try {
@@ -92,6 +96,7 @@ public class RoleController {
      * @param roleVo
      * @return
      */
+    @RequiresPermissions({"role:update"})
     @PostMapping("/update")
     public ResultVo update(RoleVo roleVo){
         try {

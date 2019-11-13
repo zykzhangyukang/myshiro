@@ -1,19 +1,21 @@
 package com.coderman.rent.sys.controller;
 
-import com.coderman.rent.sys.bean.MenuDTreeJson;
-import com.coderman.rent.sys.bean.Menu;
-import com.coderman.rent.sys.bean.MenuNode;
-import com.coderman.rent.sys.bean.User;
+import com.coderman.rent.sys.bean.*;
 import com.coderman.rent.sys.contast.MyConstant;
 import com.coderman.rent.sys.enums.ResultEnum;
 import com.coderman.rent.sys.enums.UserTypeEnum;
 import com.coderman.rent.sys.service.MenuService;
+import com.coderman.rent.sys.service.RoleService;
 import com.coderman.rent.sys.utils.MenuTreeBuilder;
 import com.coderman.rent.sys.utils.WebUtil;
 import com.coderman.rent.sys.vo.MenuVo;
 import com.coderman.rent.sys.vo.PageVo;
 import com.coderman.rent.sys.vo.ResultVo;
 import com.coderman.rent.sys.vo.RoleVo;
+import net.bytebuddy.asm.Advice;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,11 +36,15 @@ public class MenuController {
     @Autowired
     private MenuService menuService;
 
+    @Autowired
+    private RoleService roleService;
+
 
     /**
      * 删除菜单
      * @return
      */
+    @RequiresPermissions({"menu:delete"})
     @PostMapping("/delete")
     public ResultVo delete(MenuVo menuVo){
         try {
@@ -55,6 +61,7 @@ public class MenuController {
      * 添加菜单
      * @return
      */
+    @RequiresPermissions({"menu:add"})
     @PostMapping("/add")
     public ResultVo add(MenuVo menuVo){
         try {
@@ -80,6 +87,7 @@ public class MenuController {
      * 更新菜单
      * @return
      */
+    @RequiresPermissions({"menu:update"})
     @PostMapping("/update")
     public ResultVo update(MenuVo menuVo){
         try {
@@ -124,20 +132,35 @@ public class MenuController {
         if(user.getType().equals(UserTypeEnum.SYSTEM_USER.getCode())){
             //超级管理员
             List<Menu> menus = menuService.loadAllMenu();
-            if(!CollectionUtils.isEmpty(menus)){
-                for (Menu menu : menus) {
-                    Boolean spread=menu.getIsOpen()==MyConstant.MENU_OPEN? true:false;
-                    Long parentId = menu.getParentId();
-                    MenuNode menuNode = new MenuNode(menu.getId(),menu.getMenuName(), menu.getIcon(), menu.getUrl(), spread, parentId);
-                    menuNodeList.add(menuNode);
-                }
-            }
+            menuListToMenuNodeList(menuNodeList, menus);
         }else {
             //普通用户(根据用户的角色查询权限获取用户的菜单)
-           //TODO
+            List<Menu> menus=menuService.loadAllMenuByUserId(user.getId());
+            menuListToMenuNodeList(menuNodeList, menus);
+            //设置普通用户的角色，和权限编码
+            Subject subject = SecurityUtils.getSubject();
+            ActiveUser activeUser= (ActiveUser) subject.getPrincipal();
+            activeUser.setRoles(roleService.findRoleNameByUserId(user.getId()));
+            activeUser.setPermissions(menuService.findUserPermissionCode(user.getId()));
         }
         List<MenuNode> MenuTree= MenuTreeBuilder.build(menuNodeList);
         return MenuTree;
+    }
+
+    /**
+     * 将菜单转化成菜单节点
+     * @param menuNodeList
+     * @param menus
+     */
+    private void menuListToMenuNodeList(List<MenuNode> menuNodeList, List<Menu> menus) {
+        if(!CollectionUtils.isEmpty(menus)){
+            for (Menu menu : menus) {
+                Boolean spread=menu.getIsOpen()== MyConstant.MENU_OPEN? true:false;
+                Long parentId = menu.getParentId();
+                MenuNode menuNode = new MenuNode(menu.getId(),menu.getMenuName(), menu.getIcon(), menu.getUrl(), spread, parentId);
+                menuNodeList.add(menuNode);
+            }
+        }
     }
 
 }

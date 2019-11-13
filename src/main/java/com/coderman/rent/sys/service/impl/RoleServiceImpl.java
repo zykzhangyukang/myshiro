@@ -2,9 +2,11 @@ package com.coderman.rent.sys.service.impl;
 
 import com.coderman.rent.sys.bean.Role;
 import com.coderman.rent.sys.bean.RoleMenu;
+import com.coderman.rent.sys.bean.UserRole;
 import com.coderman.rent.sys.mapper.RoleExtMapper;
 import com.coderman.rent.sys.mapper.RoleMapper;
 import com.coderman.rent.sys.mapper.RoleMenuMapper;
+import com.coderman.rent.sys.mapper.UserRoleMapper;
 import com.coderman.rent.sys.service.RoleService;
 import com.coderman.rent.sys.vo.PageVo;
 import com.coderman.rent.sys.vo.RoleVo;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -34,6 +37,9 @@ public class RoleServiceImpl implements RoleService {
 
     @Autowired
     private RoleMenuMapper roleMenuMapper;
+
+    @Autowired
+    private UserRoleMapper userRoleMapper;
 
     @Override
     public PageVo<Role> findPage(RoleVo roleVo) {
@@ -105,6 +111,29 @@ public class RoleServiceImpl implements RoleService {
         if(!CollectionUtils.isEmpty(roleVo.getMIds())){
             roleExtMapper.insertRoleWithMenu(roleVo.getId(),roleVo.getMIds());
         }
+    }
+
+    @Override
+    public List<String> findRoleNameByUserId(Long id) {
+        List<String> roleNames=new ArrayList<>();
+        Example o = new Example(UserRole.class);
+        o.createCriteria().andEqualTo("userId",id);
+        List<UserRole> userRoles = userRoleMapper.selectByExample(o);
+        if(!CollectionUtils.isEmpty(userRoles)){
+            List<Long> roleIds=new ArrayList<>();
+            for (UserRole userRole : userRoles) {
+                roleIds.add(userRole.getRoleId());
+            }
+            Example o1 = new Example(Role.class);
+            o1.createCriteria().andIn("id",roleIds);
+            List<Role> roles = roleMapper.selectByExample(o1);
+            if(!CollectionUtils.isEmpty(roles)){
+                for (Role role : roles) {
+                    roleNames.add(role.getRoleName());
+                }
+            }
+        }
+        return roleNames;
     }
 
 }

@@ -37,7 +37,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         Example.Criteria criteria = o.createCriteria();
         if(departmentVo!=null){
             if(departmentVo.getDeptName()!=null&&!"".equals(departmentVo.getDeptName())){
-                criteria.andLike("deptName",departmentVo.getDeptName());
+                criteria.andLike("deptName","%"+departmentVo.getDeptName()+"%");
             }
             if(departmentVo.getId()!=null&&!"".equals(departmentVo.getId())){
                 criteria.andEqualTo("id",departmentVo.getId());

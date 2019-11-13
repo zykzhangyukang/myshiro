@@ -61,4 +61,11 @@ public interface MenuService {
      * @param menuVo
      */
     void delete(MenuVo menuVo);
+
+    /**
+     * 查询用户具有的按钮权限
+     * @param id
+     * @return
+     */
+    List<String> findUserPermissionCode(Long id);
 }

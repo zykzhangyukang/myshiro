@@ -243,11 +243,12 @@
             params=params.substring(0,params.length-1);
             $.post("/role/updateRoleMenu?"+params,{"id":data.id},function(res){
                 if(res.code==0){
-                    layer.close(mainIndex);
                     layer.msg(res.msg);
                 }else {
                     layer.msg(res.msg);
+
                 }
+                layer.close(mainIndex);
             })
         }
         //添加

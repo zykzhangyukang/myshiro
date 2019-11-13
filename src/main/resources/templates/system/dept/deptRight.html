@@ -23,7 +23,7 @@
     <form class="layui-form" action="" id="departmentForm" method="post">
         <span>部门名称:</span>&nbsp;
         <div class="layui-inline">
-            <input class="layui-input" name="title" id="title" placeholder="部门名称" autocomplete="off">
+            <input class="layui-input" name="deptName" id="title" placeholder="部门名称" autocomplete="off">
         </div>&nbsp;
         <span>地址:</span>
         <div class="layui-inline">
@@ -234,6 +234,7 @@
             dataStyle: "layuiStyle",  //使用layui风格的数据格式
             dataFormat: "list",  //配置data的风格为list
             menubar:true,
+            skin:'zdy',
             response:{message:"msg",statusCode:0},  //修改response中返回数据的定义
             url: "/dept/loadDeptTree", // 使用url加载（可与data加载同时存在）
 
@@ -245,7 +246,7 @@
         });
         //删除单记录
         function deletedepartment(data){
-            layer.confirm('你确定要删除['+data.title+']这个部门吗?', {icon: 3, title:'提示'}, function(index){
+            layer.confirm('你确定要删除['+data.deptName+']这个部门吗?', {icon: 3, title:'提示'}, function(index){
                 $.post("/dept/delete",{id:data.id},function(res){
                     if(res.code==0){
                         tableIns.reload();

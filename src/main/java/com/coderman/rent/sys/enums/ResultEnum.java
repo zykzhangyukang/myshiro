@@ -18,7 +18,13 @@ public enum ResultEnum {
     SQ_SUCCESS(8,"授权成功"),
     SQ_FAIL(9,"授权失败"),
     KICK_SUCCESS(10,"踢出成功" ),
-    KICK_FAIL(10,"踢出失败" );
+    KICK_FAIL(10,"踢出失败" ),
+    GIVE_ROLE_SUCCESS(11,"分配角色成功" ),
+    GIVE_ROLE_FAIL(12,"分配角色失败" ),
+    YOU_NOT_PERMISSION(13,"悲剧了~，权限不足" ),
+    LOCK_SUCCESS(14,"成功锁定" ),
+    LOCK_FAIL(14,"锁定失败" ),
+    ;
     private Integer code;
     private String msg;
 

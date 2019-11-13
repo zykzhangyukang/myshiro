@@ -1,10 +1,14 @@
 package com.coderman.rent.sys.service;
 
 import com.coderman.rent.sys.bean.ActiveUser;
+import com.coderman.rent.sys.bean.Role;
 import com.coderman.rent.sys.bean.User;
 import com.coderman.rent.sys.dto.UserDTO;
 import com.coderman.rent.sys.vo.PageVo;
 import com.coderman.rent.sys.vo.UserVo;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhangyukang on 2019/11/10 10:44
@@ -55,4 +59,24 @@ public interface UserService {
      * @param activeUser
      */
     void updateLastLoginTime(ActiveUser activeUser);
+
+    /**
+     * 根据用户的id获取拥有的角色
+     * @param userVo
+     */
+    List<Role> listRolesByUserId(UserVo userVo);
+
+    /**
+     * 加载用户拥有的角色和没有拥有的角色
+     * @param userVo
+     * @return
+     */
+    Map<String,Object> loadUserRoles(UserVo userVo);
+
+    /**
+     * 给用户分配权限
+     * @param userVo
+     * @param integers
+     */
+    void giveUserRoles(UserVo userVo, List<Integer> integers);
 }

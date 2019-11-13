@@ -8,6 +8,8 @@
     <link rel="icon" href="favicon.ico">
     <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all" />
     <link rel="stylesheet" href="/resources/css/index.css" media="all" />
+    <link rel="stylesheet" href="/resources/layui_ext/dtree/dtree.css" media="all" />
+    <link rel="stylesheet" href="/resources/layui_ext/dtree/font/dtreefont.css" media="all" />
 </head>
 <body>
 <!--模糊查询部分-->
@@ -64,9 +66,13 @@
     <input type="checkbox" name="status" value="{{d.id}}" title="锁定" lay-filter="status" {{ d.status == 0 ? 'checked' : '' }}>
 </script>
 
+<!--分配角色弹出框开始-->
+<div style="display: none;" id="giveUserRoleDiv">
+    <div id="test1" class="demo-transfer"></div>
+</div>
 <!--用户添加修改模态框-->
 <div style="display: none;padding: 10px" id="addOrUpdateModal">
-    <form action="" method="post" class="layui-form layui-form-pane" id="dataFrm" lay-filter="dataFrm">
+    <form action="" method="post" class="layui-form " id="dataFrm" lay-filter="dataFrm">
 
         <div class="layui-form-item layui-row layui-col-xs12">
             <label class="layui-form-label">用户姓名</label>
@@ -74,6 +80,12 @@
             <div class="layui-input-block">
                 <input type="text" class="layui-input" name="userName" lay-verify="required" placeholder="请输入登录名">
             </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">部门</label>
+            <div class="layui-input-block">
+                <input type="hidden" name="deptId" id="pid">
+                <ul id="selectTree" class="dtree" data-id="0" ></ul></div>
         </div>
         <div class="layui-form-item layui-row layui-col-xs12">
             <label class="layui-form-label">邮箱</label>
@@ -89,16 +101,14 @@
         </div>
         <div class="layui-form-item" pane="">
             <label class="layui-form-label">性别</label>
-            <div class="layui-input-block">
+            <div class="layui-input-inline">
                 <input type="radio" name="sex" value="0" title="男" checked=""><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><div>男</div></div>
                 <input type="radio" name="sex" value="1" title="女"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>女</div></div>
             </div>
-        </div>
-        <div class="layui-form-item" pane="">
             <label class="layui-form-label">状态</label>
-            <div class="layui-input-block">
-                <input type="radio" name="status" value="0" title="锁定" checked=""><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><div>锁定</div></div>
-                <input type="radio" name="status" value="1" title="正常"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>正常</div></div>
+            <div class="layui-input-inline">
+                <input type="radio" name="status" value="0" title="锁定" ><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><div>锁定</div></div>
+                <input type="radio" name="status" value="1" title="正常" checked=""><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>正常</div></div>
             </div>
         </div>
         <div class="layui-form-item layui-row layui-col-xs12">
@@ -119,15 +129,37 @@
 
 <script type="text/javascript" src="/resources/layui/layui.js"></script>
 <script  type="text/javascript">
-    layui.use(['laydate', 'laypage', 'layer', 'table','form'], function(){
+    var selectTree;
+    layui.extend({
+        dtree: '/resources/layui_ext/dtree/dtree'   // {/}的意思即代表采用自有路径，即不跟随 base 路径
+    }).use(['laydate', 'laypage','transfer', 'layer','dtree', 'table','form'], function(){
         var laydate = layui.laydate //日期
+        var dtree=layui.dtree;
         var table = layui.table //表格
         var form=layui.form;
         var $=layui.jquery;
+        var transfer=layui.transfer;
         //初始化时间选择器
         laydate.render({
             elem: '#range' //指定元素
             ,range: '~'
+        });
+        //下拉树
+        selectTree=dtree.renderSelect({
+            elem: "#selectTree",
+            width: "100%", // 可以在这里指定树的宽度来填满div
+            dataStyle: "layuiStyle",  //使用layui风格的数据格式
+            dataFormat: "list",  //配置data的风格为list
+            menubar:true,
+            skin:'zdy',
+            response:{message:"msg",statusCode:0},  //修改response中返回数据的定义
+            url: "/dept/loadDeptTree", // 使用url加载（可与data加载同时存在）
+
+        });
+        // 点击节点触发回调，其中obj内包含丰富的数据，打开浏览器F12查看！
+        dtree.on("node(selectTree)" ,function(obj){
+            $("#pid").val(obj.param.nodeId);
+            console.log(obj.param.nodeId); // 点击当前节点传递的参数
         });
         //加载数据
         var tableIns= table.render({
@@ -147,7 +179,7 @@
                 ,{field: 'description', title: '描述'}
                 ,{field:'sex', title:'性别', width:85, templet: '#switchTpl', unresize: true}
                 ,{field:'status', title:'是否锁定', width:110, templet: '#checkboxTpl', unresize: true}
-                ,{fixed: 'right',title:'操作' , align:'center', toolbar: '#lineBar'}
+                ,{fixed: 'right',title:'操作' , align:'center', toolbar: '#lineBar',width:200}
 
             ] ]
         });
@@ -170,9 +202,6 @@
                 case 'add':
                     openAddModal(data);
                     break;
-
-
-
             };
         });
 
@@ -191,9 +220,65 @@
                     break;
             };
         });
-        //给用户分配角色
+        var selectPermissionDiv;
+        //分配角色
         function giveRole(data) {
-            layer.msg("give role")
+            //弹出框
+            selectPermissionDiv=layer.open({
+                type:1,
+                content: $("#giveUserRoleDiv"),
+                area:['500px','600px'],
+                title:'用户【'+data.userName+'】分配角色',
+                success:function(){
+                    //用户拥有的角色
+                    $.get("/user/loadUserRoles",{"id":data.id},function (data) {
+                        //初始右侧数据
+                        var arrayObj = new Array();
+                        $.each(data.data.haveRoles,function(index,item){
+                            arrayObj.push(item);
+                        });
+                        transfer.render({
+                            elem: '#test1'
+                            ,data: data.data.allRoles
+                            ,value: arrayObj
+                            ,title: ['未拥有的角色', '已拥有的角色']
+                            ,showSearch: true
+                            ,id: 'demo1' //定义索引
+                            ,parseData: function(res){
+                                return {
+                                    "value": res.id //数据值
+                                    ,"title": res.roleName //数据标题
+                                    ,"disabled": res.disabled  //是否禁用
+                                }
+                            }
+                        })
+                    })
+                },
+                btn: ['<span class=layui-icon>&#xe605;分配角色</span>', '<span class=layui-icon>&#x1006;关闭窗口</span>'],
+                btnAlign: 'c',
+                yes: function(index, layero){
+                    //给用户分配角色
+                    var getData = transfer.getData('demo1');
+                    var params="id="+data.id;
+                    $.each(getData,function(index,item){
+                        params+="&rids="+item.value;
+                    });
+                    $.get("/user/giveUserRoles",params,function(res){
+                        if(res.code==0){
+                            layer.close(selectPermissionDiv);
+                            layer.msg(res.msg);
+                            return false;
+                        }else{
+                            layer.close(selectPermissionDiv);
+                            layer.msg(res.msg);
+                            return false;
+                        }
+                        return false;
+                    })
+                },
+            });
+
+
         }
         //打开添加的弹出层
         function openAddModal(){
@@ -220,6 +305,8 @@
                 title:'修改用户',
                 success:function(){
                     form.val("dataFrm",data);
+                    dtree.dataInit("selectTree", data.deptId);
+                    dtree.setSelectValue("selectTree");
                     url="/user/update";
                 }
             });
@@ -251,7 +338,7 @@
         form.on('checkbox(status)', function(obj){
             layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
             var status=obj.elem.checked==true?'0':'1';
-            $.post("/user/update",{"id":this.value,"status":status},function (res) {
+            $.post("/user/lock",{"id":this.value,"status":status},function (res) {
                 if(res.code!=0){
                     layer.msg(res.msg);
                 }

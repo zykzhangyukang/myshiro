@@ -3,13 +3,19 @@ package com.coderman.rent.sys.realm;
 import com.coderman.rent.sys.bean.ActiveUser;
 import com.coderman.rent.sys.bean.User;
 import com.coderman.rent.sys.contast.MyConstant;
+import com.coderman.rent.sys.service.MenuService;
 import com.coderman.rent.sys.service.UserService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * 用户认证
@@ -22,7 +28,19 @@ public class UserRealm extends AuthorizingRealm {
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        return null;
+        SimpleAuthorizationInfo authorizationInfo=new SimpleAuthorizationInfo();
+        ActiveUser activeUser=(ActiveUser) principalCollection.getPrimaryPrincipal();
+        User user=activeUser.getUser();
+        List<String> permissions = activeUser.getPermissions();
+        if(user.getType()==0) {
+            authorizationInfo.addStringPermission("*:*");
+        }else {
+            if(null!=permissions&&permissions.size()>0) {
+                authorizationInfo.setRoles(new HashSet<>( activeUser.getRoles()));
+                authorizationInfo.addStringPermissions(permissions);
+            }
+        }
+        return authorizationInfo;
     }
 
     /**

@@ -3,9 +3,11 @@ package com.coderman.rent.sys.service.impl;
 import com.coderman.rent.sys.bean.MenuDTreeJson;
 import com.coderman.rent.sys.bean.Menu;
 import com.coderman.rent.sys.bean.RoleMenu;
+import com.coderman.rent.sys.bean.UserRole;
 import com.coderman.rent.sys.contast.MyConstant;
 import com.coderman.rent.sys.mapper.MenuMapper;
 import com.coderman.rent.sys.mapper.RoleMenuMapper;
+import com.coderman.rent.sys.mapper.UserRoleMapper;
 import com.coderman.rent.sys.service.MenuService;
 import com.coderman.rent.sys.vo.MenuVo;
 import com.coderman.rent.sys.vo.PageVo;
@@ -31,6 +33,9 @@ public class MenuServiceImpl implements MenuService {
     @Autowired
     private MenuMapper menuMapper;
 
+    @Autowired
+    private UserRoleMapper userRoleMapper;
+
     @Override
     public List<Menu> loadAllMenu() {
         Example example=new Example(Menu.class);
@@ -43,7 +48,32 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public List<Menu> loadAllMenuByUserId(Long userId) {
-        return null;
+        //根据用户userId，查询该用户具有的角色
+        Example o = new Example(UserRole.class);
+        o.createCriteria().andEqualTo("userId",userId);
+        List<UserRole> userRoles = userRoleMapper.selectByExample(o);
+        List<Long> roleIdList=new ArrayList<>();
+        if(!CollectionUtils.isEmpty(userRoles)){
+            for (UserRole userRole : userRoles) {
+                roleIdList.add(userRole.getRoleId());
+            }
+        }
+        //根据角色rId集合获取菜单
+        Example o1 = new Example(RoleMenu.class);
+        o1.createCriteria().andEqualTo("roleId",roleIdList);
+        List<RoleMenu> roleMenus = roleMenuMapper.selectByExample(o1);
+        Set<Long> menuIds=new HashSet<>();
+        if(!CollectionUtils.isEmpty(roleMenus)){
+           menuIds=new HashSet<>();
+            for (RoleMenu roleMenu : roleMenus) {
+                menuIds.add(roleMenu.getMenuId());
+            }
+        }
+        //查询菜单
+        Example o2 = new Example(Menu.class);
+        o2.createCriteria().andIn("id",menuIds);
+        List<Menu> menus = menuMapper.selectByExample(o2);
+        return menus;
     }
 
     @Override
@@ -137,5 +167,19 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public void delete(MenuVo menuVo) {
         menuMapper.deleteByPrimaryKey(menuVo.getId());
+    }
+
+    @Override
+    public List<String> findUserPermissionCode(Long id) {
+        List<String> codes=new ArrayList<>();
+        List<Menu> menus = loadAllMenuByUserId(id);
+        if(!CollectionUtils.isEmpty(menus)){
+            for (Menu menu : menus) {
+               if(menu.getPerms()!=null&&!"".equals(menu.getPerms())){
+                   codes.add(menu.getPerms());
+               }
+            }
+        }
+        return codes;
     }
 }

@@ -4,6 +4,7 @@ import com.coderman.rent.sys.bean.ActiveUser;
 import com.coderman.rent.sys.enums.ResultEnum;
 import com.coderman.rent.sys.service.SessionService;
 import com.coderman.rent.sys.vo.ResultVo;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,6 +39,7 @@ public class SessionController {
      * @param id
      * @return
      */
+    @RequiresPermissions({"user:kickout"})
     @GetMapping("delete/{id}")
     public ResultVo forceLogout(@PathVariable String id) {
         try {

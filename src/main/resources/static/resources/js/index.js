@@ -1,6 +1,6 @@
 var $,tab,dataStr,layer;
 layui.config({
-	base : "js/"
+	base : "/resources/js/"
 }).extend({
 	"bodyTab" : "bodyTab"
 })
