@@ -1,8 +1,16 @@
 package com.coderman.rent.sys.bean;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
+
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
+@Data
+@Table(name ="sys_dept")
 public class Department {
+    @Id
     private Long id;
 
     private Long parentId;
@@ -11,55 +19,20 @@ public class Department {
 
     private Long orderNumber;
 
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     private Date createTime;
 
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     private Date modifiedTime;
 
-    public Long getId() {
-        return id;
-    }
+    private String remark;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private String phone;
 
-    public Long getParentId() {
-        return parentId;
-    }
+    private Long count;
 
-    public void setParentId(Long parentId) {
-        this.parentId = parentId;
-    }
+    private String address;
 
-    public String getDeptName() {
-        return deptName;
-    }
+    private Integer isOpen;
 
-    public void setDeptName(String deptName) {
-        this.deptName = deptName == null ? null : deptName.trim();
-    }
-
-    public Long getOrderNumber() {
-        return orderNumber;
-    }
-
-    public void setOrderNumber(Long orderNumber) {
-        this.orderNumber = orderNumber;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getModifiedTime() {
-        return modifiedTime;
-    }
-
-    public void setModifiedTime(Date modifiedTime) {
-        this.modifiedTime = modifiedTime;
-    }
 }

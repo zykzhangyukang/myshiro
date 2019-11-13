@@ -8,18 +8,19 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-public class DTreeJson {
+public class MenuDTreeJson {
     private Long id;
     private String title;
     Boolean spread;
     Long parentId;
     String checkArr;
 
-    public DTreeJson(Long id, String title, Boolean spread, Long parentId, String checkArr) {
+    public MenuDTreeJson(Long id, String title, Boolean spread, Long parentId, String checkArr) {
         this.id = id;
         this.title = title;
         this.spread = spread;
         this.parentId = parentId;
         this.checkArr = checkArr;
     }
+
 }

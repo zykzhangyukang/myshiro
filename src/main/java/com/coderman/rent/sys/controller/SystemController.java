@@ -12,8 +12,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/system")
 public class SystemController {
 
-
-
+    /**
+     * 跳转到部门管理页面(左边)
+     * @return
+     */
+    @GetMapping("/deptLeft")
+    public String deptLeft(){
+        return "system/dept/deptLeft";
+    }
+    /**
+     * 跳转到部门管理页面（右边）
+     * @return
+     */
+    @GetMapping("/deptRight")
+    public String deptRight(){
+        return "system/dept/deptRight";
+    }
+    /**
+     * 跳转到部门管理页面
+     * @return
+     */
+    @GetMapping("/dept")
+    public String dept(){
+        return "system/dept/dept";
+    }
     /**
      * 跳转到菜单管理(左边)
      * @return

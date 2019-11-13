@@ -1,6 +1,6 @@
 package com.coderman.rent.sys.service;
 
-import com.coderman.rent.sys.bean.DTreeJson;
+import com.coderman.rent.sys.bean.MenuDTreeJson;
 import com.coderman.rent.sys.bean.Menu;
 import com.coderman.rent.sys.vo.MenuVo;
 import com.coderman.rent.sys.vo.PageVo;
@@ -28,14 +28,14 @@ public interface MenuService {
      * 加载所有可用的菜单（dTree）
      * @return
      */
-    List<DTreeJson> loadAllMenuJSON();
+    List<MenuDTreeJson> loadAllMenuJSON();
 
     /**
      * 根据角色Id加载所有可用的菜单（dTree）
      * @param id：角色id
      * @return
      */
-    List<DTreeJson> loadAllMenuByRoleId(Long id);
+    List<MenuDTreeJson> loadAllMenuByRoleId(Long id);
 
     /**
      * 查询所有的菜单

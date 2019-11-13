@@ -1,6 +1,6 @@
 package com.coderman.rent.sys.controller;
 
-import com.coderman.rent.sys.bean.DTreeJson;
+import com.coderman.rent.sys.bean.MenuDTreeJson;
 import com.coderman.rent.sys.bean.Menu;
 import com.coderman.rent.sys.bean.MenuNode;
 import com.coderman.rent.sys.bean.User;
@@ -99,18 +99,18 @@ public class MenuController {
      * @return
      */
     @PostMapping("/loadAllMenuByRoleId")
-    public ResultVo<List<DTreeJson>> loadAllMenuByRoleId(RoleVo roleVo){
-        List<DTreeJson> dTreeJsons= menuService.loadAllMenuByRoleId(roleVo.getId());
-        return ResultVo.OK(dTreeJsons);
+    public ResultVo<List<MenuDTreeJson>> loadAllMenuByRoleId(RoleVo roleVo){
+        List<MenuDTreeJson> menuDTreeJsons = menuService.loadAllMenuByRoleId(roleVo.getId());
+        return ResultVo.OK(menuDTreeJsons);
     }
     /**
      * 所有可用的菜单和按钮
      * @return: 角色添加页面JSON（dTree）
      */
     @PostMapping("/loadAllMenuJSON")
-    public ResultVo<List<DTreeJson>> loadAllMenuJSON(){
-        List<DTreeJson> dTreeJsons= menuService.loadAllMenuJSON();
-        return ResultVo.OK(dTreeJsons);
+    public ResultVo<List<MenuDTreeJson>> loadAllMenuJSON(){
+        List<MenuDTreeJson> menuDTreeJsons = menuService.loadAllMenuJSON();
+        return ResultVo.OK(menuDTreeJsons);
     }
 
     /**

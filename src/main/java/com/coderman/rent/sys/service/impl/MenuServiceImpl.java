@@ -1,11 +1,10 @@
 package com.coderman.rent.sys.service.impl;
 
-import com.coderman.rent.sys.bean.DTreeJson;
+import com.coderman.rent.sys.bean.MenuDTreeJson;
 import com.coderman.rent.sys.bean.Menu;
 import com.coderman.rent.sys.bean.RoleMenu;
 import com.coderman.rent.sys.contast.MyConstant;
 import com.coderman.rent.sys.mapper.MenuMapper;
-import com.coderman.rent.sys.mapper.RoleMapper;
 import com.coderman.rent.sys.mapper.RoleMenuMapper;
 import com.coderman.rent.sys.service.MenuService;
 import com.coderman.rent.sys.vo.MenuVo;
@@ -48,24 +47,24 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public List<DTreeJson> loadAllMenuJSON() {
+    public List<MenuDTreeJson> loadAllMenuJSON() {
         Example o = new Example(Menu.class);
         o.setOrderByClause("order_num asc");
         o.createCriteria().andEqualTo("available",MyConstant.AVAILABLE);
         List<Menu> menus = menuMapper.selectByExample(o);
-        List<DTreeJson> list=new ArrayList<>();
+        List<MenuDTreeJson> list=new ArrayList<>();
         if(!CollectionUtils.isEmpty(menus)){
             for (Menu menu : menus) {
                 Boolean spread=menu.getIsOpen()==MyConstant.MENU_OPEN? true:false;
-                list.add(new DTreeJson(menu.getId(),menu.getMenuName(),spread,menu.getParentId(),"0"));
+                list.add(new MenuDTreeJson(menu.getId(),menu.getMenuName(),spread,menu.getParentId(),"0"));
             }
         }
         return list;
     }
 
     @Override
-    public List<DTreeJson> loadAllMenuByRoleId(Long id) {
-        List<DTreeJson> list=new ArrayList<>();
+    public List<MenuDTreeJson> loadAllMenuByRoleId(Long id) {
+        List<MenuDTreeJson> list=new ArrayList<>();
         //查询该角色的所有的菜单Id
         Example o = new Example(RoleMenu.class);
         o.createCriteria().andEqualTo("roleId",id);
@@ -88,7 +87,7 @@ public class MenuServiceImpl implements MenuService {
                 checkArr="1";
             }
             Boolean spread=menu.getIsOpen()==MyConstant.MENU_OPEN? true:false;
-            list.add(new DTreeJson(menu.getId(),menu.getMenuName(),spread,menu.getParentId(),checkArr));
+            list.add(new MenuDTreeJson(menu.getId(),menu.getMenuName(),spread,menu.getParentId(),checkArr));
         }
         return list;
     }
@@ -107,6 +106,7 @@ public class MenuServiceImpl implements MenuService {
             }
             if(menuVo.getId()!=null&&!"".equals(menuVo.getId())){
                 criteria.andEqualTo("id",menuVo.getId());
+                criteria.orEqualTo("parentId",menuVo.getId());
             }
         }
         List<Menu> menus = menuMapper.selectByExample(o);

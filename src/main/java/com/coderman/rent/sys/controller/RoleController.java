@@ -1,6 +1,5 @@
 package com.coderman.rent.sys.controller;
 
-import com.coderman.rent.sys.bean.DTreeJson;
 import com.coderman.rent.sys.bean.Role;
 import com.coderman.rent.sys.enums.ResultEnum;
 import com.coderman.rent.sys.service.RoleService;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * 角色前端控制器
