@@ -1,8 +1,7 @@
 package com.coderman.rent.sys.controller;
 
-import com.aliyuncs.ecs.model.v20140526.DescribeCommandsRequest;
+import com.coderman.rent.sys.annotation.ControllerEndpoint;
 import com.coderman.rent.sys.bean.DeptDTreeJson;
-import com.coderman.rent.sys.bean.MenuDTreeJson;
 import com.coderman.rent.sys.enums.ResultEnum;
 import com.coderman.rent.sys.service.DepartmentService;
 import com.coderman.rent.sys.vo.DepartmentVo;
@@ -36,6 +35,7 @@ public class DepartmentController {
      */
     @RequiresPermissions({"dept:add"})
     @PostMapping("/add")
+    @ControllerEndpoint(exceptionMessage = "添加部门失败",operation ="添加部门")
     public ResultVo add(DepartmentVo departmentVo){
         try {
             departmentService.add(departmentVo);
@@ -52,6 +52,7 @@ public class DepartmentController {
      */
     @RequiresPermissions({"dept:delete"})
     @PostMapping("/delete")
+    @ControllerEndpoint(exceptionMessage = "删除部门失败",operation ="删除部门")
     public ResultVo delete(DepartmentVo departmentVo){
         try {
             departmentService.delete(departmentVo);
@@ -67,6 +68,7 @@ public class DepartmentController {
      */
     @RequiresPermissions({"dept:update"})
     @PostMapping("/update")
+    @ControllerEndpoint(exceptionMessage = "修改部门失败",operation ="修改部门")
     public ResultVo update(DepartmentVo departmentVo){
         try {
             departmentService.update(departmentVo);

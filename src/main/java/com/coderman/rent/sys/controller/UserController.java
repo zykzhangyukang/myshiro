@@ -1,8 +1,10 @@
 package com.coderman.rent.sys.controller;
 
+import com.coderman.rent.sys.annotation.ControllerEndpoint;
 import com.coderman.rent.sys.dto.UserDTO;
 import com.coderman.rent.sys.enums.ResultEnum;
 import com.coderman.rent.sys.service.UserService;
+import com.coderman.rent.sys.utils.WebUtil;
 import com.coderman.rent.sys.vo.PageVo;
 import com.coderman.rent.sys.vo.ResultVo;
 import com.coderman.rent.sys.vo.UserVo;
@@ -67,6 +69,7 @@ public class UserController {
      */
     @RequiresPermissions({"user:batchDelete"})
     @GetMapping("/batchDelete")
+    @ControllerEndpoint(exceptionMessage = "批量删除用户失败",operation ="批量删除用户")
     public ResultVo batchDelete(UserVo userVo){
         try {
             userService.batchDelete(userVo);
@@ -82,6 +85,7 @@ public class UserController {
      */
     @RequiresPermissions({"user:delete"})
     @GetMapping("/delete")
+    @ControllerEndpoint(exceptionMessage = "删除用户失败",operation ="删除用户")
     public ResultVo delete(UserVo userVo){
         try {
             userService.delete(userVo);
@@ -109,6 +113,7 @@ public class UserController {
      */
     @RequiresPermissions({"user:lock"})
     @PostMapping("/lock")
+    @ControllerEndpoint(exceptionMessage = "锁定用户失败",operation ="用户锁定/解锁")
     public ResultVo lock(UserVo userVo){
         try {
             userService.update(userVo);
@@ -123,8 +128,10 @@ public class UserController {
      * @param userVo
      * @return
      */
+
     @RequiresPermissions({"user:update"})
     @PostMapping("/update")
+    @ControllerEndpoint(exceptionMessage = "修改用户失败",operation ="修改用户")
     public ResultVo update(UserVo userVo){
         try {
             userService.update(userVo);
@@ -141,6 +148,7 @@ public class UserController {
      */
     @RequiresPermissions({"user:add"})
     @PostMapping("/add")
+    @ControllerEndpoint(exceptionMessage = "添加用户失败",operation ="添加用户")
     public ResultVo add(UserVo userVo){
         try {
             userService.add(userVo);

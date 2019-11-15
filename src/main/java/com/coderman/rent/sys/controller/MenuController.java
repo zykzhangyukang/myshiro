@@ -1,5 +1,6 @@
 package com.coderman.rent.sys.controller;
 
+import com.coderman.rent.sys.annotation.ControllerEndpoint;
 import com.coderman.rent.sys.bean.*;
 import com.coderman.rent.sys.contast.MyConstant;
 import com.coderman.rent.sys.enums.ResultEnum;
@@ -46,6 +47,7 @@ public class MenuController {
      */
     @RequiresPermissions({"menu:delete"})
     @PostMapping("/delete")
+    @ControllerEndpoint(exceptionMessage = "删除菜单失败",operation ="删除菜单/按钮")
     public ResultVo delete(MenuVo menuVo){
         try {
             if( menuVo.getId()!=null)
@@ -63,6 +65,7 @@ public class MenuController {
      */
     @RequiresPermissions({"menu:add"})
     @PostMapping("/add")
+    @ControllerEndpoint(exceptionMessage = "添加菜单失败",operation ="添加菜单/按钮")
     public ResultVo add(MenuVo menuVo){
         try {
             menuService.add(menuVo);
@@ -89,6 +92,7 @@ public class MenuController {
      */
     @RequiresPermissions({"menu:update"})
     @PostMapping("/update")
+    @ControllerEndpoint(exceptionMessage = "更新菜单失败",operation ="更新菜单/按钮")
     public ResultVo update(MenuVo menuVo){
         try {
             Long id = menuVo.getId();

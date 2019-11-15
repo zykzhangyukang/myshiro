@@ -91,10 +91,10 @@ public class UserServiceImpl implements UserService {
         userMapper.deleteByPrimaryKey(userVo.getId());
     }
 
+    @Transactional
     @Override
     public void batchDelete(UserVo userVo) {
-        //删除中间表
-        //TODO
+
         String ids = userVo.getIds();
         String[] split = ids.split(",");
         List<Long> idsList=new ArrayList<>();
@@ -105,6 +105,9 @@ public class UserServiceImpl implements UserService {
             Example example = new Example(User.class);
             example.createCriteria().andIn("id",idsList);
             userMapper.deleteByExample(example);
+            Example o = new Example(UserRole.class);
+            o.createCriteria().andIn("userId",idsList);
+            userRoleMapper.deleteByExample(o);
         }
     }
 

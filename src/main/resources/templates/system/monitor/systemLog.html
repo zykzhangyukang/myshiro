@@ -3,7 +3,7 @@
       xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
-    <title>系统登入日志</title>
+    <title>系统日志管理</title>
     <link rel="icon" href="favicon.ico">
     <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all" />
     <link rel="stylesheet" href="/resources/css/index.css" media="all" />
@@ -54,6 +54,12 @@
         background: #fcffe6;
         border: 1px solid #eaff8f;
     }
+    .febs-tag-cyan {
+        color: #13c2c2;
+        background: #e6fffb;
+        border: 1px solid #87e8de;
+    }
+
 </style>
 <body>
 <!--模糊查询部分-->
@@ -85,19 +91,32 @@
     </blockquote>
 </form>
 <!--数据表格-->
-<table class="layui-hide" id="loginLogTable" lay-filter="loginLogTable"></table>
+<table class="layui-hide" id="systemLogTable" lay-filter="systemLogTable"></table>
 <!--表格工具条-->
 <div id="toolBar" style="display: none;">
     <button type="button" class="layui-btn  layui-btn-sm"  lay-event="batchDelete" ><i class="layui-icon"></i>批量删除</button>
 </div>
 <!--行工具条-->
 <script type="text/html" id="lineBar">
-    <span shiro:lacksPermission="login:deleteLog">
+    <span shiro:lacksPermission="systemLog:delete">
         <span class="layui-badge-dot febs-bg-orange"></span> 无权限
     </span>
-    <a shiro:hasPermission="login:deleteLog" class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete"> <i class="layui-icon">&#xe640;</i>删除</a>
+    <a shiro:hasPermission="systemLog:delete" class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete"> <i class="layui-icon">&#xe640;</i>删除</a>
 </script>
 
+<script type="text/html" id="log-time">
+    <div>
+        {{# if (d.time < 500) { }}
+        <span class="layui-badge febs-tag-green">{{d.time}} ms</span>
+        {{# } else if (d.time < 1000) { }}
+        <span class="layui-badge febs-tag-cyan">{{d.time}} ms</span>
+        {{# } else if (d.time < 1500) { }}
+        <span class="layui-badge febs-tag-blue">{{d.time}} ms</span>
+        {{# } else { }}
+        <span class="layui-badge febs-tag-red">{{d.time}} ms</span>
+        {{# } }}
+    </div>
+</script>
 <script type="text/javascript" src="/resources/layui/layui.js"></script>
 <script  type="text/javascript">
     layui.use(['laydate', 'laypage', 'layer', 'table','form'], function(){
@@ -112,8 +131,8 @@
         });
         //加载数据
         var tableIns= table.render({
-            elem: '#loginLogTable'
-            ,url:'/login/logList'
+            elem: '#systemLogTable'
+            ,url:'/systemLog/findPage'
             ,title: '用户表'
             ,page: true //开启分页
             ,height:'full-75'
@@ -121,12 +140,14 @@
             ,cols: [ [
                 {type: 'checkbox', fixed: 'left'}
                 ,{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left', totalRowText: '合计：'}
-                ,{field: 'userName', title: '用户名'}
-                ,{field: 'ip', title: '登入IP', sort: true, totalRow: true}
-                ,{field: 'loginTime', title: '登入时间', sort: true}
-                ,{field: 'location', title: '登入地点', sort: true}
-                ,{field: 'system', title: '系统', sort: true, totalRow: true}
-                ,{field: 'browser', title: '浏览器'}
+                ,{field: 'userName', title: '操作人'}
+                ,{field: 'time', title: '操作耗时', templet: "#log-time", sort: true}
+                ,{field: 'operation', title: '操作', sort: true}
+                ,{field: 'method', title: '方法', sort: true}
+                ,{field: 'params', title: '参数列表', sort: true, totalRow: true}
+                ,{field: 'ip', title: 'IP地址', sort: true, totalRow: true}
+                ,{field: 'createTime', title: '时间', sort: true, totalRow: true}
+                ,{field: 'location', title: '操作地点'}
                 ,{fixed: 'right',title:'操作' , align:'center', toolbar: '#lineBar'}
             ] ]
         });
@@ -140,7 +161,7 @@
             });
         })
         //监听工具条的事件
-        table.on("toolbar(loginLogTable)",function(obj){
+        table.on("toolbar(systemLogTable)",function(obj){
             var data = obj.data;
             switch(obj.event){
                 case 'batchDelete':
@@ -149,7 +170,7 @@
             };
         });
         //监听行工具条的事件
-        table.on("tool(loginLogTable)",function(obj){
+        table.on("tool(systemLogTable)",function(obj){
             var data = obj.data; //获得当前行数据
             switch(obj.event){
                 case 'delete':
@@ -159,8 +180,8 @@
         });
         //删除
         function deleteLoginLog(data) {
-            layer.confirm('你确定要删除['+data.userName+']这条登入日志吗?', {icon: 3, title:'提示'}, function(index){
-                $.get("/login/deleteLog",{id:data.id},function(res){
+            layer.confirm('你确定要删除['+data.userName+']这条操作日志吗?', {icon: 3, title:'提示'}, function(index){
+                $.get("/systemLog/delete",{id:data.id},function(res){
                     if(res.code==0){
                         tableIns.reload();
                     }
@@ -172,7 +193,7 @@
         //批量删除
         function batchDelete() {
             //得到选中行
-            var checkStatus = table.checkStatus('loginLogTable');
+            var checkStatus = table.checkStatus('systemLogTable');
             var dataLength=checkStatus.data.length;
             if(dataLength>0){
                 layer.confirm('你确定要删除这些数据吗?', {icon: 3, title:'提示'}, function(index){
@@ -182,7 +203,7 @@
                         ids+=item.id+",";
                     })
                     ids=ids.substring(0,ids.length-1);
-                    $.get("/login/batchDelete",{"ids":ids},function(res){
+                    $.get("/systemLog/batchDelete",{"ids":ids},function(res){
                         if(res.code==0){
                             tableIns.reload();
                         }

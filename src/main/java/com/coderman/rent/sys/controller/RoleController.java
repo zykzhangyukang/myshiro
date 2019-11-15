@@ -1,5 +1,6 @@
 package com.coderman.rent.sys.controller;
 
+import com.coderman.rent.sys.annotation.ControllerEndpoint;
 import com.coderman.rent.sys.bean.Role;
 import com.coderman.rent.sys.enums.ResultEnum;
 import com.coderman.rent.sys.service.RoleService;
@@ -34,6 +35,7 @@ public class RoleController {
      */
     @RequiresPermissions({"role:updateRoleMenu"})
     @PostMapping("/updateRoleMenu")
+    @ControllerEndpoint(exceptionMessage = "分配菜单失败",operation = "分配菜单/按钮")
     public ResultVo updateRoleMenu(RoleVo roleVo,Long mIds[]){
         roleVo.setMIds(Arrays.asList(mIds));
         try {
@@ -63,6 +65,7 @@ public class RoleController {
      */
     @RequiresPermissions({"role:delete"})
     @GetMapping("/delete")
+    @ControllerEndpoint(exceptionMessage = "删除角色失败",operation = "删除角色")
     public ResultVo delete(RoleVo roleVo){
         try {
             roleService.delete(roleVo);
@@ -80,6 +83,7 @@ public class RoleController {
      */
     @RequiresPermissions({"role:add"})
     @PostMapping("/add")
+    @ControllerEndpoint(exceptionMessage = "添加角色失败",operation = "添加角色")
     public ResultVo add(RoleVo roleVo,Long mIds[]){
         try {
             roleVo.setMIds(Arrays.asList(mIds));
@@ -98,6 +102,7 @@ public class RoleController {
      */
     @RequiresPermissions({"role:update"})
     @PostMapping("/update")
+    @ControllerEndpoint(exceptionMessage = "修改角色失败",operation = "修改角色")
     public ResultVo update(RoleVo roleVo){
         try {
             roleService.update(roleVo);

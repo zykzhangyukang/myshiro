@@ -24,7 +24,7 @@ public enum ResultEnum {
     YOU_NOT_PERMISSION(13,"悲剧了~，权限不足" ),
     LOCK_SUCCESS(14,"成功锁定" ),
     LOCK_FAIL(14,"锁定失败" ),
-    ;
+    SYS_ERROR(15,"系统异常" );
     private Integer code;
     private String msg;
 

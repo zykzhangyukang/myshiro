@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import tk.mybatis.spring.annotation.MapperScan;
 
-@MapperScan("com.coderman.rent.sys.mapper")
+@MapperScan("com.coderman.rent.*.mapper")
 @SpringBootApplication
 public class CarApplication {
 

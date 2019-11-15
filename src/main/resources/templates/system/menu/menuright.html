@@ -23,21 +23,46 @@
     background: #f6ffed;
     border: 1px solid #b7eb8f;
 }
-    .febs-tag-red {
-        color: red;
-        background: #f6ffed;
-        border: 1px solid red;
-    }
-.febs-alert-success {
+    .febs-tag-blue {
+    color: #1890ff;
+    background: #f6ffed;
     border: 1px solid #b7eb8f;
-    background-color: #f6ffed;
 }
-.febs-alert-base {
-    margin: 3px 0 3px 0;
-    display: block;
-    border-radius: 2px;
-    padding: 8px 15px 8px 15px;
+    .febs-tag-green {
+    color: #52c41a;
+    background: #f6ffed;
+    border: 1px solid #b7eb8f;
 }
+    .febs-tag-red {
+        color: #fa541c;
+        background: #f6ffed;
+        border: 1px solid #fa541c;
+    }
+    .febs-tag-blue {
+        color: #1890ff;
+        background: #e6f7ff;
+        border: 1px solid #91d5ff;
+    }
+    .febs-tag-volcano {
+        color: #fa541c;
+        background: #fff2e8;
+        border: 1px solid #ffbb96;
+    }
+    .febs-tag-purple {
+        color: #722ed1;
+        background: #f9f0ff;
+        border: 1px solid #d3adf7;
+    }
+    .febs-tag-geekblue {
+        color: #2f54eb;
+        background: #f0f5ff;
+        border: 1px solid #adc6ff;
+    }
+    .febs-tag-lime {
+        color: #a0d911;
+        background: #fcffe6;
+        border: 1px solid #eaff8f;
+    }
 </style>
 <body class="childrenBody">
 <!--查询条件开始-->
@@ -170,13 +195,13 @@
                 ,{field:'id', title:'ID',align:'center',sort:'true'}
                 ,{field:'menuName', title:'菜单名称',align:'center',sort:'true',width:180}
                 ,{field:'type', title:'类型',align:'center',sort:'true',width:150,templet: function (d) {
-                        return d.type==0?'<font class="layui-badge febs-tag-green">菜单</font>':'<font class="layui-badge febs-tag-red">按钮</font>';
+                        return d.type==0?'<font class="layui-badge febs-tag-geekblue">菜单</font>':'<font class="layui-badge febs-tag-lime">按钮</font>';
                     }}
                 ,{field:'icon', title:'图标',hide:true,align:'center',sort:'true'}
                 ,{field:'perms', title:'编码',align:'center',sort:'true',width:100}
                 ,{field:'orderNum', title:'排序',align:'center',sort:'true'}
                 ,{field:'isOpen', title:'菜单',align:'center',sort:'true',width:80,templet: function (d) {
-                        return d.isOpen==1?'<font class="layui-badge febs-tag-green">展开</font>':'<font class="layui-badge febs-tag-red">关闭</font>';
+                        return d.isOpen==1?'<font class="layui-badge febs-tag-blue">展开</font>':'<font class="layui-badge febs-tag-volcano">关闭</font>';
                     }}
                 ,{field:'available', title:'状态',align:'center',sort:'true',sort:'true',width:100,templet:function (data) {
                         return data.available=="1"?"<span class=\"layui-badge febs-tag-green\">可用</span>":"<span class=\"layui-badge febs-tag-red\">禁用</span>";

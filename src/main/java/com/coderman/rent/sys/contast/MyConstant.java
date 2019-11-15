@@ -62,4 +62,8 @@ public class MyConstant {
      */
     public  static  final  String HOT_MOVIE_URL = "https://api-m.mtime.cn/Showtime/LocationMovies.api?locationId=328";
 
+   /**
+     * 异步线程池名称
+     */
+    public static final String ASYNC_POOL = "RBACAsyncThreadPool";
 }

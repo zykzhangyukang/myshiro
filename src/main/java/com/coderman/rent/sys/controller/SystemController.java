@@ -71,6 +71,15 @@ public class SystemController {
     public String online(){
         return "system/monitor/online";
     }
+
+    /**
+     * 跳转到系统日志管理
+     * @return
+     */
+    @GetMapping("/systemLog")
+    public String systemLog(){
+        return "system/monitor/systemLog";
+    }
     /**
      * 跳转到角色管理页面
      * @return
