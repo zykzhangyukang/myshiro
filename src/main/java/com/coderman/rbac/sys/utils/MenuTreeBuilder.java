@@ -1,6 +1,6 @@
-package com.coderman.rent.sys.utils;
+package com.coderman.rbac.sys.utils;
 
-import com.coderman.rent.sys.bean.MenuNode;
+import com.coderman.rbac.sys.bean.MenuNode;
 
 import java.util.ArrayList;
 import java.util.List;

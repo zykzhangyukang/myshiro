@@ -1,8 +1,8 @@
-package com.coderman.rent.sys.service;
+package com.coderman.rbac.sys.service;
 
-import com.coderman.rent.sys.bean.Role;
-import com.coderman.rent.sys.vo.PageVo;
-import com.coderman.rent.sys.vo.RoleVo;
+import com.coderman.rbac.sys.bean.Role;
+import com.coderman.rbac.sys.vo.PageVo;
+import com.coderman.rbac.sys.vo.RoleVo;
 
 import java.util.List;
 

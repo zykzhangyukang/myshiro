@@ -1,10 +1,10 @@
-package com.coderman.rent.sys.realm;
+package com.coderman.rbac.sys.realm;
 
-import com.coderman.rent.sys.bean.ActiveUser;
-import com.coderman.rent.sys.bean.User;
-import com.coderman.rent.sys.contast.MyConstant;
-import com.coderman.rent.sys.service.MenuService;
-import com.coderman.rent.sys.service.UserService;
+import com.coderman.rbac.sys.bean.ActiveUser;
+import com.coderman.rbac.sys.bean.User;
+import com.coderman.rbac.sys.contast.MyConstant;
+import com.coderman.rbac.sys.service.MenuService;
+import com.coderman.rbac.sys.service.UserService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;

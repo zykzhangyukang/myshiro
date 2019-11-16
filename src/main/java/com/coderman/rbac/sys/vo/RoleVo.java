@@ -1,6 +1,6 @@
-package com.coderman.rent.sys.vo;
+package com.coderman.rbac.sys.vo;
 
-import com.coderman.rent.sys.bean.Role;
+import com.coderman.rbac.sys.bean.Role;
 import lombok.Data;
 
 import java.util.List;

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:shiro="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>在线用户管理</title>
@@ -7,69 +7,7 @@
     <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all" />
     <link rel="stylesheet" href="/resources/css/index.css" media="all" />
 </head>
-<style>
-    .febs-tag-green {
-    color: #52c41a;
-    background: #f6ffed;
-    border: 1px solid #b7eb8f;
-}
-.febs-alert-success {
-    border: 1px solid #b7eb8f;
-    background-color: #f6ffed;
-}
 
-.febs-alert-base {
-    margin: 3px 0 3px 0;
-    display: block;
-    border-radius: 2px;
-    padding: 8px 15px 8px 15px;
-}
-    .febs-tag-green {
-        color: #52c41a;
-        background: #f6ffed;
-        border: 1px solid #b7eb8f;
-    }
-    .febs-tag-blue {
-        color: #1890ff;
-        background: #f6ffed;
-        border: 1px solid #b7eb8f;
-    }
-    .febs-tag-green {
-        color: #52c41a;
-        background: #f6ffed;
-        border: 1px solid #b7eb8f;
-    }
-    .febs-tag-red {
-        color: #fa541c;
-        background: #f6ffed;
-        border: 1px solid #fa541c;
-    }
-    .febs-tag-blue {
-        color: #1890ff;
-        background: #e6f7ff;
-        border: 1px solid #91d5ff;
-    }
-    .febs-tag-volcano {
-        color: #fa541c;
-        background: #fff2e8;
-        border: 1px solid #ffbb96;
-    }
-    .febs-tag-purple {
-        color: #722ed1;
-        background: #f9f0ff;
-        border: 1px solid #d3adf7;
-    }
-    .febs-tag-geekblue {
-        color: #2f54eb;
-        background: #f0f5ff;
-        border: 1px solid #adc6ff;
-    }
-    .febs-tag-lime {
-        color: #a0d911;
-        background: #fcffe6;
-        border: 1px solid #eaff8f;
-    }
-</style>
 <body>
 <div class="layui-fluid">
     <span style="margin-top: 20px;" class="febs-alert-base febs-alert-success" >当前共<strong id="count"> 0 </strong>人在线</span>
@@ -78,8 +16,10 @@
 <table class="layui-hide" id="OnlineTable" lay-filter="OnlineTable"></table>
 <!--行工具条-->
 <script type="text/html" id="lineBar">
-
-    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete"> <i class="layui-icon">&#xe640;</i>踢出</a>
+    <span shiro:lacksPermission="session:user:kickout">
+        <span class="layui-badge-dot febs-bg-orange"></span> 无权限
+    </span>
+    <a shiro:hasPermission="session:user:kickout" class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete"> <i class="layui-icon">&#xe640;</i>踢出</a>
 </script>
 <script type="text/html" id="online-username">
     <div>

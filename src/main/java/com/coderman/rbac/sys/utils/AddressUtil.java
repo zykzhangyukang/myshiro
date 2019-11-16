@@ -1,5 +1,6 @@
-package com.coderman.rent.sys.utils;
+package com.coderman.rbac.sys.utils;
 
+import org.apache.commons.io.FileUtils;
 import org.lionsoul.ip2region.DataBlock;
 import org.lionsoul.ip2region.DbConfig;
 import org.lionsoul.ip2region.DbSearcher;
@@ -19,48 +20,56 @@ public class AddressUtil {
 
     public static String getCityInfo(String ip){
 
-        //db
-        String dbPath = AddressUtil.class.getResource("/ip2region/ip2region.db").getPath();
-
-        File file = new File(dbPath);
-        if ( file.exists() == false ) {
-            System.out.println("Error: Invalid ip2region.db file");
-        }
-
-        //查询算法
-        int algorithm = DbSearcher.BTREE_ALGORITHM; //B-tree
-        //DbSearcher.BINARY_ALGORITHM //Binary
-        //DbSearcher.MEMORY_ALGORITYM //Memory
+        File file;
         try {
-            DbConfig config = new DbConfig();
-            DbSearcher searcher = new DbSearcher(config, dbPath);
-
-            //define the method
-            Method method = null;
-            switch ( algorithm )
-            {
-                case DbSearcher.BTREE_ALGORITHM:
-                    method = searcher.getClass().getMethod("btreeSearch", String.class);
-                    break;
-                case DbSearcher.BINARY_ALGORITHM:
-                    method = searcher.getClass().getMethod("binarySearch", String.class);
-                    break;
-                case DbSearcher.MEMORY_ALGORITYM:
-                    method = searcher.getClass().getMethod("memorySearch", String.class);
-                    break;
+            //db
+            String dbPath = AddressUtil.class.getResource("/ip2region/ip2region.db").getPath();
+             file= new File(dbPath);
+            if (file.exists() == false) {
+                String tmpDir = System.getProperties().getProperty("java.io.tmpdir");
+                dbPath = tmpDir + "ip.db";
+                file = new File(dbPath);
+                FileUtils.copyInputStreamToFile(AddressUtil.class.getClassLoader().getResourceAsStream("classpath:ip2region/ip2region.db"), file);
             }
 
-            DataBlock dataBlock = null;
-            if ( Util.isIpAddress(ip) == false ) {
-                System.out.println("Error: Invalid ip address");
+            //查询算法
+            int algorithm = DbSearcher.BTREE_ALGORITHM; //B-tree
+            //DbSearcher.BINARY_ALGORITHM //Binary
+            //DbSearcher.MEMORY_ALGORITYM //Memory
+            try {
+                DbConfig config = new DbConfig();
+                DbSearcher searcher = new DbSearcher(config, dbPath);
+
+                //define the method
+                Method method = null;
+                switch (algorithm) {
+                    case DbSearcher.BTREE_ALGORITHM:
+                        method = searcher.getClass().getMethod("btreeSearch", String.class);
+                        break;
+                    case DbSearcher.BINARY_ALGORITHM:
+                        method = searcher.getClass().getMethod("binarySearch", String.class);
+                        break;
+                    case DbSearcher.MEMORY_ALGORITYM:
+                        method = searcher.getClass().getMethod("memorySearch", String.class);
+                        break;
+                }
+
+                DataBlock dataBlock = null;
+                if (Util.isIpAddress(ip) == false) {
+                    System.out.println("Error: Invalid ip address");
+                }
+
+                dataBlock = (DataBlock) method.invoke(searcher, ip);
+
+                return dataBlock.getRegion();
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-            dataBlock  = (DataBlock) method.invoke(searcher, ip);
-
-            return dataBlock.getRegion();
-
-        } catch (Exception e) {
+        }catch (Exception e) {
             e.printStackTrace();
+        }finally {
+
         }
 
         return null;

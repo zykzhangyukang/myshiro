@@ -1,4 +1,4 @@
-package com.coderman.rent.sys.bean;
+package com.coderman.rbac.sys.bean;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

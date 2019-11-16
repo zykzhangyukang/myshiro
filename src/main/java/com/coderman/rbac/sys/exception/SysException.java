@@ -1,6 +1,6 @@
-package com.coderman.rent.sys.exception;
+package com.coderman.rbac.sys.exception;
 
-import com.coderman.rent.sys.enums.ResultEnum;
+import com.coderman.rbac.sys.enums.ResultEnum;
 import lombok.Data;
 
 /**

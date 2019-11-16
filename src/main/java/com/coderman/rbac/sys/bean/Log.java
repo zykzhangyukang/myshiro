@@ -1,4 +1,4 @@
-package com.coderman.rent.sys.bean;
+package com.coderman.rbac.sys.bean;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;

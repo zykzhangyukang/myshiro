@@ -37,7 +37,7 @@ spring:
 #配置mybatisplus
 mybatis:
   #实体类所做包
-  type-aliases-package: com.coderman.rent.*.modal
+  type-aliases-package: com.coderman.rbac.*.modal
   #mapper.xml所在位置
   mapper-locations: classpath:mapper/*Mapper.xml
 

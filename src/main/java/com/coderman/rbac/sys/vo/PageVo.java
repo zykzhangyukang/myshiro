@@ -1,4 +1,4 @@
-package com.coderman.rent.sys.vo;
+package com.coderman.rbac.sys.vo;
 
 import lombok.Data;
 
@@ -16,6 +16,11 @@ public class PageVo<T> {
 
     public PageVo(long count, List<T> data) {
         this.count = count;
+        this.data = data;
+    }
+
+    public PageVo(List<T> data) {
+        this.count = 0;
         this.data = data;
     }
 }

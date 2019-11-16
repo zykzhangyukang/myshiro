@@ -1,10 +1,10 @@
-package com.coderman.rent.sys.aspect;
+package com.coderman.rbac.sys.aspect;
 
-import com.coderman.rent.sys.annotation.ControllerEndpoint;
-import com.coderman.rent.sys.enums.ResultEnum;
-import com.coderman.rent.sys.service.LogService;
-import com.coderman.rent.sys.utils.WebUtil;
-import com.coderman.rent.sys.vo.ResultVo;
+import com.coderman.rbac.sys.annotation.ControllerEndpoint;
+import com.coderman.rbac.sys.enums.ResultEnum;
+import com.coderman.rbac.sys.service.LogService;
+import com.coderman.rbac.sys.utils.WebUtil;
+import com.coderman.rbac.sys.vo.ResultVo;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -26,7 +26,7 @@ public class ControllerEndpointAspect extends AspectSupport {
     @Autowired
     private LogService logService;
 
-    @Pointcut("@annotation(com.coderman.rent.sys.annotation.ControllerEndpoint)")
+    @Pointcut("@annotation(com.coderman.rbac.sys.annotation.ControllerEndpoint)")
     public void pointcut() {
     }
 

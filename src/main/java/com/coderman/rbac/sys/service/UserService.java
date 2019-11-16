@@ -1,11 +1,11 @@
-package com.coderman.rent.sys.service;
+package com.coderman.rbac.sys.service;
 
-import com.coderman.rent.sys.bean.ActiveUser;
-import com.coderman.rent.sys.bean.Role;
-import com.coderman.rent.sys.bean.User;
-import com.coderman.rent.sys.dto.UserDTO;
-import com.coderman.rent.sys.vo.PageVo;
-import com.coderman.rent.sys.vo.UserVo;
+import com.coderman.rbac.sys.bean.ActiveUser;
+import com.coderman.rbac.sys.bean.Role;
+import com.coderman.rbac.sys.bean.User;
+import com.coderman.rbac.sys.dto.UserDTO;
+import com.coderman.rbac.sys.vo.PageVo;
+import com.coderman.rbac.sys.vo.UserVo;
 
 import java.util.List;
 import java.util.Map;

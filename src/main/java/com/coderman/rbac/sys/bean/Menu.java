@@ -1,4 +1,4 @@
-package com.coderman.rent.sys.bean;
+package com.coderman.rbac.sys.bean;
 
 import javax.persistence.Id;
 import javax.persistence.Table;

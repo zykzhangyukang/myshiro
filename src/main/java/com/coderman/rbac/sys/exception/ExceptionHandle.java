@@ -1,7 +1,7 @@
-package com.coderman.rent.sys.exception;
+package com.coderman.rbac.sys.exception;
 
-import com.coderman.rent.sys.enums.ResultEnum;
-import com.coderman.rent.sys.vo.ResultVo;
+import com.coderman.rbac.sys.enums.ResultEnum;
+import com.coderman.rbac.sys.vo.ResultVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;

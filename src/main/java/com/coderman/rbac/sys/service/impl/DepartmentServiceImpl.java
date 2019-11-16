@@ -1,15 +1,13 @@
-package com.coderman.rent.sys.service.impl;
+package com.coderman.rbac.sys.service.impl;
 
-import com.coderman.rent.sys.bean.DeptDTreeJson;
-import com.coderman.rent.sys.bean.MenuDTreeJson;
-import com.coderman.rent.sys.bean.Department;
-import com.coderman.rent.sys.mapper.DepartmentMapper;
-import com.coderman.rent.sys.service.DepartmentService;
-import com.coderman.rent.sys.vo.DepartmentVo;
-import com.coderman.rent.sys.vo.PageVo;
+import com.coderman.rbac.sys.bean.Department;
+import com.coderman.rbac.sys.bean.DeptDTreeJson;
+import com.coderman.rbac.sys.mapper.DepartmentMapper;
+import com.coderman.rbac.sys.service.DepartmentService;
+import com.coderman.rbac.sys.vo.DepartmentVo;
+import com.coderman.rbac.sys.vo.PageVo;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.sun.deploy.resources.Deployment_de;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,6 +60,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     public void add(DepartmentVo departmentVo) {
         Department department = new Department();
         BeanUtils.copyProperties(departmentVo,department);
+        department.setCreateTime(new Date());
+        department.setModifiedTime(new Date());
         if(department.getParentId()==null||"".equals(departmentVo.getParentId())){
             department.setParentId(0L);
         }

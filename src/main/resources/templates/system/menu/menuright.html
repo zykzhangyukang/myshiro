@@ -116,7 +116,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">菜单图标</label>
             <div class="layui-input-block">
-                <input type="text" name="icon" lay-verify="required" placeholder="请输入图标" autocomplete="off" class="layui-input">
+                <input type="text" name="icon"  placeholder="请输入图标" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
@@ -194,18 +194,20 @@
             ,cols: [ [
                 ,{field:'id', title:'ID',align:'center',sort:'true'}
                 ,{field:'menuName', title:'菜单名称',align:'center',sort:'true',width:180}
-                ,{field:'type', title:'类型',align:'center',sort:'true',width:150,templet: function (d) {
+                ,{field:'perms', title:'编码',align:'center',sort:'true',width:150}
+                ,{field:'type', title:'类型',align:'center',sort:'true',width:100,templet: function (d) {
                         return d.type==0?'<font class="layui-badge febs-tag-geekblue">菜单</font>':'<font class="layui-badge febs-tag-lime">按钮</font>';
                     }}
                 ,{field:'icon', title:'图标',hide:true,align:'center',sort:'true'}
-                ,{field:'perms', title:'编码',align:'center',sort:'true',width:100}
-                ,{field:'orderNum', title:'排序',align:'center',sort:'true'}
+
                 ,{field:'isOpen', title:'菜单',align:'center',sort:'true',width:80,templet: function (d) {
                         return d.isOpen==1?'<font class="layui-badge febs-tag-blue">展开</font>':'<font class="layui-badge febs-tag-volcano">关闭</font>';
                     }}
                 ,{field:'available', title:'状态',align:'center',sort:'true',sort:'true',width:100,templet:function (data) {
                         return data.available=="1"?"<span class=\"layui-badge febs-tag-green\">可用</span>":"<span class=\"layui-badge febs-tag-red\">禁用</span>";
                     }}
+
+                ,{field:'orderNum', title:'排序',align:'center',sort:'true'}
                 ,{field:'url', title:'连接地址',align:'center',sort:'true',width:150}
                 ,{fixed: 'right', title:'操作',  toolbar: '#menuRowBar',align:'center',width:200}
             ] ]
@@ -311,7 +313,6 @@
         });
         //删除单记录
         function deletemenu(data){
-            alert(data.id)
             layer.confirm('你确定要删除['+data.menuName+']这个菜单吗?', {icon: 3, title:'提示'}, function(index){
                 $.post("/menu/delete",{id:data.id},function(res){
                     if(res.code==0){

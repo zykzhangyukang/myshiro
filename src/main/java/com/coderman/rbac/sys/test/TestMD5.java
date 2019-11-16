@@ -1,4 +1,4 @@
-package com.coderman.rent.sys.test;
+package com.coderman.rbac.sys.test;
 
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;

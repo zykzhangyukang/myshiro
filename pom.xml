@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.coderman</groupId>
-	<artifactId>car</artifactId>
+	<artifactId>RBAC</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>car</name>
+	<name>rbac</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
@@ -24,6 +24,11 @@
 		<lang3.version>3.9</lang3.version>
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.3.1</version>
+		</dependency>
 		<dependency>
 			<groupId>com.squareup.okhttp3</groupId>
 			<artifactId>okhttp</artifactId>

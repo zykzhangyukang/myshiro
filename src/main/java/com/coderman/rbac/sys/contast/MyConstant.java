@@ -1,4 +1,4 @@
-package com.coderman.rent.sys.contast;
+package com.coderman.rbac.sys.contast;
 
 /**
  * Created by zhangyukang on 2019/11/10 12:07

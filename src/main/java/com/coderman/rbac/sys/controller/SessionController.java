@@ -1,9 +1,9 @@
-package com.coderman.rent.sys.controller;
+package com.coderman.rbac.sys.controller;
 
-import com.coderman.rent.sys.bean.ActiveUser;
-import com.coderman.rent.sys.enums.ResultEnum;
-import com.coderman.rent.sys.service.SessionService;
-import com.coderman.rent.sys.vo.ResultVo;
+import com.coderman.rbac.sys.bean.ActiveUser;
+import com.coderman.rbac.sys.enums.ResultEnum;
+import com.coderman.rbac.sys.service.SessionService;
+import com.coderman.rbac.sys.vo.ResultVo;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

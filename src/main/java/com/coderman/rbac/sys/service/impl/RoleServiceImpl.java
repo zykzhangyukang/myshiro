@@ -1,15 +1,15 @@
-package com.coderman.rent.sys.service.impl;
+package com.coderman.rbac.sys.service.impl;
 
-import com.coderman.rent.sys.bean.Role;
-import com.coderman.rent.sys.bean.RoleMenu;
-import com.coderman.rent.sys.bean.UserRole;
-import com.coderman.rent.sys.mapper.RoleExtMapper;
-import com.coderman.rent.sys.mapper.RoleMapper;
-import com.coderman.rent.sys.mapper.RoleMenuMapper;
-import com.coderman.rent.sys.mapper.UserRoleMapper;
-import com.coderman.rent.sys.service.RoleService;
-import com.coderman.rent.sys.vo.PageVo;
-import com.coderman.rent.sys.vo.RoleVo;
+import com.coderman.rbac.sys.bean.Role;
+import com.coderman.rbac.sys.bean.RoleMenu;
+import com.coderman.rbac.sys.bean.UserRole;
+import com.coderman.rbac.sys.mapper.RoleExtMapper;
+import com.coderman.rbac.sys.mapper.RoleMapper;
+import com.coderman.rbac.sys.mapper.RoleMenuMapper;
+import com.coderman.rbac.sys.mapper.UserRoleMapper;
+import com.coderman.rbac.sys.service.RoleService;
+import com.coderman.rbac.sys.vo.PageVo;
+import com.coderman.rbac.sys.vo.RoleVo;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;

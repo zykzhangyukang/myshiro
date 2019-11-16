@@ -1,4 +1,4 @@
-package com.coderman.rent.sys.utils;
+package com.coderman.rbac.sys.utils;
 
 import javax.servlet.http.HttpServletRequest;
 

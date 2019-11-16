@@ -1,8 +1,8 @@
-package com.coderman.rent.sys.service;
+package com.coderman.rbac.sys.service;
 
-import com.coderman.rent.sys.bean.LoginLog;
-import com.coderman.rent.sys.vo.LoginLogVo;
-import com.coderman.rent.sys.vo.PageVo;
+import com.coderman.rbac.sys.bean.LoginLog;
+import com.coderman.rbac.sys.vo.LoginLogVo;
+import com.coderman.rbac.sys.vo.PageVo;
 
 /**
  * Created by zhangyukang on 2019/11/10 15:06

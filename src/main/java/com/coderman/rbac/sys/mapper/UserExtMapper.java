@@ -1,7 +1,7 @@
-package com.coderman.rent.sys.mapper;
+package com.coderman.rbac.sys.mapper;
 
-import com.coderman.rent.sys.dto.UserDTO;
-import com.coderman.rent.sys.vo.UserVo;
+import com.coderman.rbac.sys.dto.UserDTO;
+import com.coderman.rbac.sys.vo.UserVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

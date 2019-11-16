@@ -1,9 +1,9 @@
-package com.coderman.rent.sys.test;
+package com.coderman.rbac.sys.test;
 
-import com.coderman.rent.sys.bean.Role;
-import com.coderman.rent.sys.mapper.RoleExtMapper;
-import com.coderman.rent.sys.service.RoleService;
-import com.coderman.rent.sys.vo.RoleVo;
+import com.coderman.rbac.sys.bean.Role;
+import com.coderman.rbac.sys.mapper.RoleExtMapper;
+import com.coderman.rbac.sys.service.RoleService;
+import com.coderman.rbac.sys.vo.RoleVo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,16 +1,16 @@
-package com.coderman.rent.sys.service.impl;
+package com.coderman.rbac.sys.service.impl;
 
-import com.coderman.rent.sys.bean.ActiveUser;
-import com.coderman.rent.sys.bean.Role;
-import com.coderman.rent.sys.bean.User;
-import com.coderman.rent.sys.bean.UserRole;
-import com.coderman.rent.sys.contast.MyConstant;
-import com.coderman.rent.sys.dto.UserDTO;
-import com.coderman.rent.sys.mapper.*;
-import com.coderman.rent.sys.service.UserService;
-import com.coderman.rent.sys.utils.MD5Util;
-import com.coderman.rent.sys.vo.PageVo;
-import com.coderman.rent.sys.vo.UserVo;
+import com.coderman.rbac.sys.bean.ActiveUser;
+import com.coderman.rbac.sys.bean.Role;
+import com.coderman.rbac.sys.bean.User;
+import com.coderman.rbac.sys.bean.UserRole;
+import com.coderman.rbac.sys.contast.MyConstant;
+import com.coderman.rbac.sys.dto.UserDTO;
+import com.coderman.rbac.sys.mapper.*;
+import com.coderman.rbac.sys.service.UserService;
+import com.coderman.rbac.sys.utils.MD5Util;
+import com.coderman.rbac.sys.vo.PageVo;
+import com.coderman.rbac.sys.vo.UserVo;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
             PageInfo<UserDTO> info=new PageInfo<>(users);
             return new PageVo<>(info.getTotal(),info.getList());
         }
-        return null;
+        return new PageVo<>(null);
     }
 
     @Override

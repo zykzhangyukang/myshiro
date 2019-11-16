@@ -1,4 +1,4 @@
-package com.coderman.rent.sys.enums;
+package com.coderman.rbac.sys.enums;
 
 /**
  * 用户类型

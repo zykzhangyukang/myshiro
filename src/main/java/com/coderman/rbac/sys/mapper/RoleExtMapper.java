@@ -1,6 +1,6 @@
-package com.coderman.rent.sys.mapper;
+package com.coderman.rbac.sys.mapper;
 
-import com.coderman.rent.sys.bean.Role;
+import com.coderman.rbac.sys.bean.Role;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

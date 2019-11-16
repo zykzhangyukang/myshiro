@@ -1,4 +1,4 @@
-package com.coderman.rent.sys.enums;
+package com.coderman.rbac.sys.enums;
 
 /**
  * Created by zhangyukang on 2019/11/10 10:22

@@ -1,6 +1,6 @@
-package com.coderman.rent.sys.test;
+package com.coderman.rbac.sys.test;
 
-import com.coderman.rent.sys.converter.TimeConverter;
+import com.coderman.rbac.sys.converter.TimeConverter;
 import org.junit.Test;
 
 import java.util.Map;

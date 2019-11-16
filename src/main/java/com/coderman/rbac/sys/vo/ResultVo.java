@@ -1,6 +1,6 @@
-package com.coderman.rent.sys.vo;
+package com.coderman.rbac.sys.vo;
 
-import com.coderman.rent.sys.enums.ResultEnum;
+import com.coderman.rbac.sys.enums.ResultEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

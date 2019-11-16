@@ -1,4 +1,4 @@
-package com.coderman.rent.sys.dto;
+package com.coderman.rbac.sys.dto;
 
 import lombok.Data;
 

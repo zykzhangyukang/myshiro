@@ -1,4 +1,4 @@
-package com.coderman.rent.sys.utils;
+package com.coderman.rbac.sys.utils;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.crypto.hash.SimpleHash;

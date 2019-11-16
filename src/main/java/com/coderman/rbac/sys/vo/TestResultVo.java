@@ -1,4 +1,4 @@
-package com.coderman.rent.sys.vo;
+package com.coderman.rbac.sys.vo;
 
 import org.junit.Test;
 

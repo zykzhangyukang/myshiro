@@ -1,4 +1,4 @@
-package com.coderman.rent.sys.aspect;
+package com.coderman.rbac.sys.aspect;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;

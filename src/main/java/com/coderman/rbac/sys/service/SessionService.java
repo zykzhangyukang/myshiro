@@ -1,6 +1,6 @@
-package com.coderman.rent.sys.service;
+package com.coderman.rbac.sys.service;
 
-import com.coderman.rent.sys.bean.ActiveUser;
+import com.coderman.rbac.sys.bean.ActiveUser;
 
 import java.util.List;
 

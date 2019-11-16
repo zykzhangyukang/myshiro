@@ -1,12 +1,12 @@
-package com.coderman.rent.sys.service.impl;
+package com.coderman.rbac.sys.service.impl;
 
-import com.coderman.rent.sys.bean.LoginLog;
-import com.coderman.rent.sys.contast.MyConstant;
-import com.coderman.rent.sys.converter.TimeConverter;
-import com.coderman.rent.sys.mapper.LoginLogMapper;
-import com.coderman.rent.sys.service.LoginLogService;
-import com.coderman.rent.sys.vo.LoginLogVo;
-import com.coderman.rent.sys.vo.PageVo;
+import com.coderman.rbac.sys.bean.LoginLog;
+import com.coderman.rbac.sys.contast.MyConstant;
+import com.coderman.rbac.sys.converter.TimeConverter;
+import com.coderman.rbac.sys.mapper.LoginLogMapper;
+import com.coderman.rbac.sys.service.LoginLogService;
+import com.coderman.rbac.sys.vo.LoginLogVo;
+import com.coderman.rbac.sys.vo.PageVo;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;

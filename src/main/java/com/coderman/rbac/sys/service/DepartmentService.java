@@ -1,9 +1,9 @@
-package com.coderman.rent.sys.service;
+package com.coderman.rbac.sys.service;
 
-import com.coderman.rent.sys.bean.DeptDTreeJson;
-import com.coderman.rent.sys.bean.MenuDTreeJson;
-import com.coderman.rent.sys.vo.DepartmentVo;
-import com.coderman.rent.sys.vo.PageVo;
+import com.coderman.rbac.sys.bean.DeptDTreeJson;
+import com.coderman.rbac.sys.bean.MenuDTreeJson;
+import com.coderman.rbac.sys.vo.DepartmentVo;
+import com.coderman.rbac.sys.vo.PageVo;
 
 import java.util.List;
 

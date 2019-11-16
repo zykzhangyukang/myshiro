@@ -1,8 +1,8 @@
-package com.coderman.rent.sys.config;
+package com.coderman.rbac.sys.config;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
-import com.coderman.rent.sys.realm.UserRealm;
-import com.coderman.rent.sys.utils.MySessionDAO;
+import com.coderman.rbac.sys.realm.UserRealm;
+import com.coderman.rbac.sys.utils.MySessionDAO;
 import lombok.Data;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
@@ -179,4 +179,6 @@ public class ShiroAutoConfiguration {
 		sessionManager.setSessionDAO(mySessionDAO);
 		return sessionManager;
 	}
+
+
 }

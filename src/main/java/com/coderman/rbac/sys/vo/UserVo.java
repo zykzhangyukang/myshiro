@@ -1,6 +1,6 @@
-package com.coderman.rent.sys.vo;
+package com.coderman.rbac.sys.vo;
 
-import com.coderman.rent.sys.bean.User;
+import com.coderman.rbac.sys.bean.User;
 import lombok.Data;
 
 /**

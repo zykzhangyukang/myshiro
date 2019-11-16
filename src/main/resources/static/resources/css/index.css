@@ -156,3 +156,65 @@ iframe{ position:absolute; height:100%; width:100%; border:none;}
 .header .layui-nav .layui-nav-item,.header .layui-nav .layui-nav-item>a,.header,.logo{ line-height:50px !important; max-height:50px; !important;}
 .mobileTopLevelMenus{ float:left;}
 .hideMenu{ margin-top: 10px;}
+
+.febs-tag-green {
+	color: #52c41a;
+	background: #f6ffed;
+	border: 1px solid #b7eb8f;
+}
+.febs-alert-success {
+	border: 1px solid #b7eb8f;
+	background-color: #f6ffed;
+}
+
+.febs-alert-base {
+	margin: 3px 0 3px 0;
+	display: block;
+	border-radius: 2px;
+	padding: 8px 15px 8px 15px;
+}
+.febs-tag-green {
+	color: #52c41a;
+	background: #f6ffed;
+	border: 1px solid #b7eb8f;
+}
+.febs-tag-blue {
+	color: #1890ff;
+	background: #f6ffed;
+	border: 1px solid #b7eb8f;
+}
+.febs-tag-green {
+	color: #52c41a;
+	background: #f6ffed;
+	border: 1px solid #b7eb8f;
+}
+.febs-tag-red {
+	color: #fa541c;
+	background: #f6ffed;
+	border: 1px solid #fa541c;
+}
+.febs-tag-blue {
+	color: #1890ff;
+	background: #e6f7ff;
+	border: 1px solid #91d5ff;
+}
+.febs-tag-volcano {
+	color: #fa541c;
+	background: #fff2e8;
+	border: 1px solid #ffbb96;
+}
+.febs-tag-purple {
+	color: #722ed1;
+	background: #f9f0ff;
+	border: 1px solid #d3adf7;
+}
+.febs-tag-geekblue {
+	color: #2f54eb;
+	background: #f0f5ff;
+	border: 1px solid #adc6ff;
+}
+.febs-tag-lime {
+	color: #a0d911;
+	background: #fcffe6;
+	border: 1px solid #eaff8f;
+}

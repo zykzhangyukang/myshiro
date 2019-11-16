@@ -1,13 +1,13 @@
-package com.coderman.rent.sys.controller;
+package com.coderman.rbac.sys.controller;
 
-import com.coderman.rent.sys.annotation.ControllerEndpoint;
-import com.coderman.rent.sys.dto.UserDTO;
-import com.coderman.rent.sys.enums.ResultEnum;
-import com.coderman.rent.sys.service.UserService;
-import com.coderman.rent.sys.utils.WebUtil;
-import com.coderman.rent.sys.vo.PageVo;
-import com.coderman.rent.sys.vo.ResultVo;
-import com.coderman.rent.sys.vo.UserVo;
+import com.coderman.rbac.sys.annotation.ControllerEndpoint;
+import com.coderman.rbac.sys.dto.UserDTO;
+import com.coderman.rbac.sys.enums.ResultEnum;
+import com.coderman.rbac.sys.service.UserService;
+import com.coderman.rbac.sys.utils.WebUtil;
+import com.coderman.rbac.sys.vo.PageVo;
+import com.coderman.rbac.sys.vo.ResultVo;
+import com.coderman.rbac.sys.vo.UserVo;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Repeat;

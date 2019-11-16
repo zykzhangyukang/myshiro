@@ -1,4 +1,4 @@
-package com.coderman.rent.sys.annotation;
+package com.coderman.rbac.sys.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

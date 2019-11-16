@@ -1,15 +1,15 @@
-package com.coderman.rent.sys.test;
+package com.coderman.rbac.sys.test;
 
-//import com.coderman.rent.sys.mapper.UserMapper;
+//import com.coderman.rbac.sys.mapper.UserMapper;
 
 import ch.qos.logback.core.net.SyslogOutputStream;
-import com.coderman.rent.sys.bean.Menu;
-import com.coderman.rent.sys.bean.User;
-import com.coderman.rent.sys.dto.UserDTO;
-import com.coderman.rent.sys.mapper.UserExtMapper;
-import com.coderman.rent.sys.mapper.UserMapper;
-import com.coderman.rent.sys.service.MenuService;
-import com.coderman.rent.sys.vo.UserVo;
+import com.coderman.rbac.sys.bean.Menu;
+import com.coderman.rbac.sys.bean.User;
+import com.coderman.rbac.sys.dto.UserDTO;
+import com.coderman.rbac.sys.mapper.UserExtMapper;
+import com.coderman.rbac.sys.mapper.UserMapper;
+import com.coderman.rbac.sys.service.MenuService;
+import com.coderman.rbac.sys.vo.UserVo;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;

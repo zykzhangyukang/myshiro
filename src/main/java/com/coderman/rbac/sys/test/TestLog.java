@@ -1,7 +1,7 @@
-package com.coderman.rent.sys.test;
+package com.coderman.rbac.sys.test;
 
-import com.coderman.rent.sys.bean.Log;
-import com.coderman.rent.sys.mapper.LogMapper;
+import com.coderman.rbac.sys.bean.Log;
+import com.coderman.rbac.sys.mapper.LogMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

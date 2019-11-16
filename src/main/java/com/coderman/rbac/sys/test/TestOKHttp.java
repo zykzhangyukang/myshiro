@@ -1,7 +1,7 @@
-package com.coderman.rent.sys.test;
+package com.coderman.rbac.sys.test;
 
 import com.alibaba.fastjson.JSON;
-import com.coderman.rent.sys.dto.HotMovieDTO;
+import com.coderman.rbac.sys.dto.HotMovieDTO;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

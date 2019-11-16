@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.coderman.rent.sys.mapper.UserExtMapper">
-    <select id="findAllWithDepartment" parameterType="com.coderman.rent.sys.vo.UserVo" resultType="com.coderman.rent.sys.dto.UserDTO">
+<mapper namespace="com.coderman.rbac.sys.mapper.UserExtMapper">
+    <select id="findAllWithDepartment" parameterType="com.coderman.rbac.sys.vo.UserVo" resultType="com.coderman.rbac.sys.dto.UserDTO">
       SELECT u.id,u.user_name,u.dept_id,u.email,u.phone_number,u.status,u.create_time,u.modified_time,u.last_login_time,
             u.description,u.sex,u.type,d.dept_name,u.avatar FROM sys_user u ,sys_dept d
             WHERE u.`dept_id`=d.`id` and u.type !=0
@@ -14,12 +14,13 @@
             <if test="sex!=null and sex!=''">
                 and sex =#{sex}
             </if>
-            <if test="deptName!=null and deptName!=''">
-                and d.dept_name like concat('%',#{deptName}, '%')
-            </if>
             <if test="status!=null and status!=''">
                 and u.status=#{status}
             </if>
+            <if test="deptName!=null and deptName!=''">
+                and d.dept_name like concat('%',#{deptName}, '%')
+            </if>
+
     </select>
     <insert id="insertUserWithRoles" >
         INSERT  into sys_user_role(user_id,role_id)

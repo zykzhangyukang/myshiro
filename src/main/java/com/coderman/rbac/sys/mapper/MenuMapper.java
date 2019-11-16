@@ -1,6 +1,6 @@
-package com.coderman.rent.sys.mapper;
+package com.coderman.rbac.sys.mapper;
 
-import com.coderman.rent.sys.bean.Menu;
+import com.coderman.rbac.sys.bean.Menu;
 import tk.mybatis.mapper.common.Mapper;
 
 /**

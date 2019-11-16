@@ -1,1 +1,1 @@
-package com.coderman.rent;
+package com.coderman.rbac;

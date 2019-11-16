@@ -1,4 +1,4 @@
-package com.coderman.rent.sys.test;
+package com.coderman.rbac.sys.test;
 
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.config.Configuration;

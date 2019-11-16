@@ -1,4 +1,4 @@
-package com.coderman.rent.sys.utils;
+package com.coderman.rbac.sys.utils;
 
 import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
 import org.springframework.stereotype.Component;

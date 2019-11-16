@@ -1,4 +1,4 @@
-package com.coderman.rent.sys.controller;
+package com.coderman.rbac.sys.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
