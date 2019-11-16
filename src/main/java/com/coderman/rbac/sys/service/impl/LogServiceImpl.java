@@ -1,6 +1,5 @@
 package com.coderman.rent.sys.service.impl;
 
-import ch.qos.logback.core.LogbackException;
 import com.coderman.rent.sys.bean.ActiveUser;
 import com.coderman.rent.sys.bean.Log;
 import com.coderman.rent.sys.bean.LoginLog;
@@ -44,6 +43,7 @@ public class LogServiceImpl implements LogService {
     public PageVo<Log> findPage(LogVo logVo) {
         PageHelper.startPage(logVo.getPage(),logVo.getLimit());
         Example example = new Example(Log.class);
+        example.setOrderByClause("create_time "+ MyConstant.ORDER_DESC);
         Example.Criteria criteria = example.createCriteria();
         if(logVo!=null){
             if(logVo.getUserName()!=null&&!"".equals(logVo.getUserName())){

@@ -39,7 +39,7 @@ public class SessionController {
      * @param id
      * @return
      */
-    @RequiresPermissions({"user:kickout"})
+    @RequiresPermissions({"session:user:kickout"})
     @GetMapping("delete/{id}")
     public ResultVo forceLogout(@PathVariable String id) {
         try {

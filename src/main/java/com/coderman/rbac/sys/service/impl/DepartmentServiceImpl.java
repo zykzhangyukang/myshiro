@@ -62,8 +62,9 @@ public class DepartmentServiceImpl implements DepartmentService {
     public void add(DepartmentVo departmentVo) {
         Department department = new Department();
         BeanUtils.copyProperties(departmentVo,department);
-        if(department.getParentId()==null&&"".equals(departmentVo.getParentId()))
-        department.setParentId(0L);
+        if(department.getParentId()==null||"".equals(departmentVo.getParentId())){
+            department.setParentId(0L);
+        }
         departmentMapper.insertSelective(department);
     }
     @Override
