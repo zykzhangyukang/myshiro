@@ -93,7 +93,7 @@
 </div>
 <!--单行操作工具栏--->
 <div id="menuRowBar" style="display: none;">
-    <button    type="button" lay-event="edit"  class="layui-btn   layui-btn-xs"><span class="layui-icon layui-icon-edit"></span>修改</button>
+    <button    type="button" lay-event="edit"  class="layui-btn layui-btn-primary  layui-btn-xs"><span class="layui-icon layui-icon-edit"></span>修改</button>
     <button    type="button" lay-event="delete"  class="layui-btn layui-btn-xs layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>
 </div>
 
@@ -206,7 +206,6 @@
                 ,{field:'available', title:'状态',align:'center',sort:'true',sort:'true',width:100,templet:function (data) {
                         return data.available=="1"?"<span class=\"layui-badge febs-tag-green\">可用</span>":"<span class=\"layui-badge febs-tag-red\">禁用</span>";
                     }}
-
                 ,{field:'orderNum', title:'排序',align:'center',sort:'true'}
                 ,{field:'url', title:'连接地址',align:'center',sort:'true',width:150}
                 ,{fixed: 'right', title:'操作',  toolbar: '#menuRowBar',align:'center',width:200}

@@ -92,9 +92,10 @@ form input.layui-input[disabled]{ background:#f2f2f2; color:#595963!important; }
 h2.method{ font-size:18px; line-height:45px; padding-left:5px;}
 /*登录*/
 .loginHtml,.loginBody{ height:100%;}
-.loginBody{ background:url("../images/login_bg.jpg") no-repeat center center;}
-.loginBody form.layui-form{ padding:0 20px; width:300px; height:335px; position:absolute; left:50%; top:50%; margin:-150px 0 0 -150px; -webkit-box-sizing:border-box;-moz-box-sizing:border-box; -o-box-sizing:border-box; box-sizing:border-box; background:#fff;-webkit-border-radius:5px; -moz-border-radius:5px; border-radius:5px; box-shadow:0 0 50px #009688;}
-.login_face{ margin:-55px auto 20px; width:100px; height:100px; -webkit-border-radius:50%; -moz-border-radius:50%; border-radius:50%; border:5px solid #fff; overflow:hidden;box-shadow:0 0 30px #009688;}
+.loginBody{ background:url("../images/background.svg") no-repeat center center;}
+.loginBody form.layui-form{ padding:30px 20px; width:380px; height:395px; position:absolute; left:50%; top:50%; margin:-160px 0 0 -190px; -webkit-box-sizing:border-box;-moz-box-sizing:border-box; -o-box-sizing:border-box; box-sizing:border-box; background:#fff;-webkit-border-radius:5px; -moz-border-radius:5px;     border-radius: 0;
+    box-shadow: 2px 1px 3px 3px #ccc;}
+.login_face{ margin:-55px auto 20px; width:100px; height:100px; border:5px solid #fff; overflow:hidden;box-shadow:0 0 10px #1E9FFF;}
 .login_face img{ width:100%;}
 .loginBody .layui-form-item{ position:relative;}
 .loginBody .layui-form-item label{ position:absolute; color:#757575; left:10px; top:9px; line-height:20px; background:#fff; padding:0 5px; font-size:14px; cursor:text;}

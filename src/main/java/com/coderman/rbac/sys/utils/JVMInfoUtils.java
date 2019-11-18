@@ -1,5 +1,9 @@
 package com.coderman.rbac.sys.utils;
 
+import cn.hutool.system.JvmInfo;
+import org.apache.ibatis.javassist.tools.reflect.Sample;
+
+import javax.sound.midi.Soundbank;
 import java.lang.management.ClassLoadingMXBean;
 import java.lang.management.CompilationMXBean;
 import java.lang.management.GarbageCollectorMXBean;
@@ -22,36 +26,44 @@ public class JVMInfoUtils {
     static final long MB = 1024 * 1024;
 
     public static void main(String[] args) {
-        //打印系统信息
-        System.out.println("===========打印系统信息==========");
-        printOperatingSystemInfo();
-        //打印编译信息
-        System.out.println("===========打印编译信息==========");
-        printCompilationInfo();
-        //打印类加载信息
-        System.out.println("===========打印类加载信息==========");
-        printClassLoadingInfo();
-        //打印运行时信息
-        System.out.println("===========打印运行时信息==========");
-        printRuntimeInfo();
-        //打印内存管理器信息
-        System.out.println("===========打印内存管理器信息==========");
-        printMemoryManagerInfo();
-        //打印垃圾回收信息
-        System.out.println("===========打印垃圾回收信息==========");
-        printGarbageCollectorInfo();
-        //打印vm内存
-        System.out.println("===========打印vm内存信息==========");
-        printMemoryInfo();
-        //打印vm各内存区信息
-        System.out.println("===========打印vm各内存区信息==========");
-        printMemoryPoolInfo();
-        //打印线程信息
-        System.out.println("===========打印线程==========");
-        printThreadInfo();
+        JvmInfo jvmInfo = new JvmInfo();
+        System.out.println(jvmInfo);
+        String info = jvmInfo.getInfo();
+        System.out.println(info);
+        //        //打印系统信息
+//        System.out.println("===========打印系统信息==========");
+//        printOperatingSystemInfo();
+//        //打印编译信息
+//        System.out.println("===========打印编译信息==========");
+//        printCompilationInfo();
+//        //打印类加载信息
+//        System.out.println("===========打印类加载信息==========");
+//        printClassLoadingInfo();
+//        //打印运行时信息
+//        System.out.println("===========打印运行时信息==========");
+//        printRuntimeInfo();
+//        //打印内存管理器信息
+//        System.out.println("===========打印内存管理器信息==========");
+//        printMemoryManagerInfo();
+//        //打印垃圾回收信息
+//        System.out.println("===========打印垃圾回收信息==========");
+//        printGarbageCollectorInfo();
+//        //打印vm内存
+//        System.out.println("===========打印vm内存信息==========");
+//        printMemoryInfo();
+//        //打印vm各内存区信息
+//        System.out.println("===========打印vm各内存区信息==========");
+//        printMemoryPoolInfo();
+//        //打印线程信息
+//        System.out.println("===========打印线程==========");
+//        printThreadInfo();
 
     }
 
+    public JvmInfo getJvmInfoFromMetricData() {
+        JvmInfo jvmInfo = new JvmInfo();
+        return jvmInfo;
+    }
 
     private static void printOperatingSystemInfo() {
         OperatingSystemMXBean system = ManagementFactory.getOperatingSystemMXBean();

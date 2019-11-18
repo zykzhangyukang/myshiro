@@ -79,4 +79,10 @@ public interface UserService {
      * @param integers
      */
     void giveUserRoles(UserVo userVo, List<Integer> integers);
+
+    /**
+     * 批量重置用户的密码
+     * @param userVo
+     */
+    void reSetUser(UserVo userVo);
 }

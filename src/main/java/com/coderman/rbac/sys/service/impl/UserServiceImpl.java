@@ -6,7 +6,10 @@ import com.coderman.rbac.sys.bean.User;
 import com.coderman.rbac.sys.bean.UserRole;
 import com.coderman.rbac.sys.contast.MyConstant;
 import com.coderman.rbac.sys.dto.UserDTO;
-import com.coderman.rbac.sys.mapper.*;
+import com.coderman.rbac.sys.mapper.RoleMapper;
+import com.coderman.rbac.sys.mapper.UserExtMapper;
+import com.coderman.rbac.sys.mapper.UserMapper;
+import com.coderman.rbac.sys.mapper.UserRoleMapper;
 import com.coderman.rbac.sys.service.UserService;
 import com.coderman.rbac.sys.utils.MD5Util;
 import com.coderman.rbac.sys.vo.PageVo;
@@ -20,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
+import java.time.chrono.IsoEra;
 import java.util.*;
 
 /**
@@ -165,6 +169,34 @@ public class UserServiceImpl implements UserService {
         userRoleMapper.deleteByExample(o);
         if(!CollectionUtils.isEmpty(rids)){
             userExtMapper.insertUserWithRoles(userId,rids);
+        }
+    }
+
+    @Override
+    public void reSetUser(UserVo userVo) {
+        String ids = userVo.getIds();
+        List<Long> idlist=new ArrayList<>();
+        if(ids.contains(",")){
+           idlist=new ArrayList<>();
+            String[] idstr = ids.split(",");
+            for (String s : idstr) {
+                idlist.add(Long.parseLong(s));
+            }
+        }else {
+            idlist.add(Long.parseLong(ids));
+        }
+        //重置
+        if(!CollectionUtils.isEmpty(idlist)){
+            for (Long id : idlist) {
+                String salt=UUID.randomUUID().toString().toUpperCase();
+                String password = MD5Util.encrypt(salt, MyConstant.DEFAULT_PWD);
+                User user = new User();
+                user.setId(id);
+                user.setModifiedTime(new Date());
+                user.setSalt(salt);
+                user.setPassWord(password);
+                userMapper.updateByPrimaryKeySelective(user);
+            }
         }
     }
 }

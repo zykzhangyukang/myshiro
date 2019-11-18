@@ -31,6 +31,22 @@ public class UserController {
 
 
     /**
+     * 重置用户(密码)
+     * @return
+     */
+    @RequiresPermissions("user:reSet")
+    @GetMapping("/reSetUser")
+    @ControllerEndpoint(exceptionMessage = "重置用户失败",operation ="重置用户")
+    public ResultVo reSetUser(UserVo userVo){
+        try {
+            userService.reSetUser(userVo);
+            return ResultVo.OK(ResultEnum.RESET_PWD_SUCCESS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVo.ERROR(ResultEnum.RESET_PWD_FAIL);
+        }
+    }
+    /**
      * 给用户分配权限
      * @param rids
      * @param userVo
@@ -38,6 +54,7 @@ public class UserController {
      */
     @RequiresPermissions({"user:giveUserRoles"})
     @GetMapping("/giveUserRoles")
+    @ControllerEndpoint(exceptionMessage = "分配角色失败",operation ="分配角色")
     public ResultVo giveUserRoles(Integer rids[],UserVo userVo){
         try {
             List<Integer> list=new ArrayList<>();
