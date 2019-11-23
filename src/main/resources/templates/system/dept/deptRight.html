@@ -56,7 +56,7 @@
 
 <!-- 添加和修改的弹出层开始 -->
 <div style="display: none;padding: 10px" id="addOrUpdateModal">
-    <form action="" method="post" class="layui-form layui-form-pane" id="dataFrm" lay-filter="dataFrm">
+    <form action="" method="post" class="layui-form" id="dataFrm" lay-filter="dataFrm">
         <div class="layui-form-item">
             <label class="layui-form-label">父级部门</label>
             <div class="layui-input-block">
@@ -64,20 +64,32 @@
                 <ul id="selectTree" class="dtree" data-id="0" ></ul></div>
             </div>
         <div class="layui-form-item">
+            <div class="layui-inline">
             <label class="layui-form-label">部门名称</label>
             <div class="layui-input-inline">
                 <input type="hidden" id="key" name="id">
                 <input type="text" name="deptName" lay-verify="required" placeholder="请输入部门名称" autocomplete="off" class="layui-input">
             </div>
+            </div>
+            <div class="layui-inline">
             <label class="layui-form-label">部门地址</label>
             <div class="layui-input-inline">
                 <input type="text" name="address" lay-verify="required" placeholder="请输入部门地址" autocomplete="off" class="layui-input">
             </div>
+            </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">电话号码</label>
-            <div class="layui-input-block">
-                <input type="text" name="phone" lay-verify="phone" placeholder="请输入电话号码" autocomplete="off" class="layui-input">
+            <div class="layui-inline">
+                <label class="layui-form-label">部门编号</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="deptNum" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">联系方式</label>
+                <div class="layui-input-inline">
+                    <input type="tel" name="phone" lay-verify="required|phone" autocomplete="off" class="layui-input">
+                </div>
             </div>
         </div>
 
@@ -87,19 +99,23 @@
                 <textarea name="remark"  lay-verify="required" placeholder="请输入内容" class="layui-textarea"></textarea>
             </div>
         </div>
-        <div class="layui-form-item" pane="">
+        <div class="layui-form-item">
+            <div class="layui-inline">
             <label class="layui-form-label">菜单</label>
             <div class="layui-input-block">
                 <input type="radio" name="isOpen" value="1" title="展开" checked=""><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><div>男</div></div>
                 <input type="radio" name="isOpen" value="0" title="关闭"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>女</div></div>
             </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">排序号</label>
-            <div class="layui-input-block">
-                <input type="text" name="orderNumber"　lay-verify="required|number" placeholder="请输入排序号" autocomplete="off" class="layui-input">
+            </div>
+
+            <div class="layui-inline">
+                <label class="layui-form-label">排序号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="orderNumber"　lay-verify="required|number" placeholder="请输入排序号" autocomplete="off" class="layui-input">
+                </div>
             </div>
         </div>
+
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <button type="button" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="doSubmit" id="doSubmit">立即提交</button>
@@ -135,6 +151,7 @@
             ,page: true
             ,cols: [ [
                 ,{field:'id', title:'ID',align:'center',sort:'true'}
+                ,{field:'deptNum', title:'部门编号',align:'center',sort:'true',width:90}
                  ,{field:'deptName', title:'名称',align:'center',sort:'true',width:90}
                 ,{field:'parentId', title:'父ID',align:'center',sort:'true',width:90}
                 ,{field:'phone', title:'联系方式',align:'center',sort:'true',width:120}
@@ -189,7 +206,7 @@
             mainIndex=layer.open({
                 type:1,
                 content: $("#addOrUpdateModal"),
-                area:['800px','520px'],
+                area:['750px','560'],
                 title:'添加部门',
                 success:function(){
                     $("#dataFrm")[0].reset();
@@ -213,7 +230,7 @@
             mainIndex=layer.open({
                 type:1,
                 content:$("#addOrUpdateModal"),
-                area:['800px','550'],
+                area:['750px','560'],
                 title:'修改部门信息',
                 success:function(){
                     $("#dataFrm")[0].reset();

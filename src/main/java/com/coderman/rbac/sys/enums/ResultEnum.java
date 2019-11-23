@@ -26,7 +26,11 @@ public enum ResultEnum {
     LOCK_FAIL(14,"锁定失败" ),
     SYS_ERROR(15,"系统异常" ),
     RESET_PWD_SUCCESS(16,"重置密码成功" ),
-    RESET_PWD_FAIL(16,"重置密码失败" );
+    RESET_PWD_FAIL(16,"重置密码失败" ),
+    PUBLISH_MESSAGE_SUCCESS(17,"留言成功" ),
+    PUBLISH_MESSAGE_FAIL(18,"留言失败" ),
+    UPLOAD_IMAGE_SUCCESS(19, "图片上传成功"),
+    UPLOAD_IMAGE_FAIL(20, "图片上传失败");
     private Integer code;
     private String msg;
 

@@ -13,6 +13,9 @@ public class Department {
     @Id
     private Long id;
 
+    /**部门编号**/
+    private String deptNum;
+
     private Long parentId;
 
     private String deptName;
