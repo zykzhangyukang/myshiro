@@ -56,4 +56,10 @@ public class UserDTO {
 
     /**用户所在部门**/
     private String deptName;
+
+    /**上级领导名字**/
+    private String managerName;
+
+    /**上级领导Id**/
+    private Long mgrId;
 }

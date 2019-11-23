@@ -1,6 +1,7 @@
 package com.coderman.rbac.sys.controller;
 
 import com.coderman.rbac.sys.annotation.ControllerEndpoint;
+import com.coderman.rbac.sys.bean.User;
 import com.coderman.rbac.sys.dto.UserDTO;
 import com.coderman.rbac.sys.enums.ResultEnum;
 import com.coderman.rbac.sys.service.UserService;
@@ -29,6 +30,27 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+
+    /**
+     * 根据id查询用户
+     * @param userVo
+     * @return
+     */
+    @GetMapping("/findUserById")
+    public ResultVo findUserById(UserVo userVo){
+        User user =userService.findUserById(userVo);
+        return ResultVo.OK(user);
+    }
+
+    /**
+     * 加载父级领导通过父级部门ID
+     * @return
+     */
+    @PostMapping("/loadManagersByParentDeptId")
+    public ResultVo loadManagersByParentDeptId(UserVo userVo){
+        List<User> managerList=userService.loadManagersByParentDeptId(userVo);
+        return ResultVo.OK(managerList);
+    }
 
     /**
      * 重置用户(密码)

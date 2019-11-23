@@ -1,15 +1,10 @@
 package com.coderman.rbac.sys.service.impl;
 
-import com.coderman.rbac.sys.bean.ActiveUser;
-import com.coderman.rbac.sys.bean.Role;
-import com.coderman.rbac.sys.bean.User;
-import com.coderman.rbac.sys.bean.UserRole;
+import com.coderman.rbac.sys.bean.*;
 import com.coderman.rbac.sys.contast.MyConstant;
 import com.coderman.rbac.sys.dto.UserDTO;
-import com.coderman.rbac.sys.mapper.RoleMapper;
-import com.coderman.rbac.sys.mapper.UserExtMapper;
-import com.coderman.rbac.sys.mapper.UserMapper;
-import com.coderman.rbac.sys.mapper.UserRoleMapper;
+import com.coderman.rbac.sys.mapper.*;
+import com.coderman.rbac.sys.service.DepartmentService;
 import com.coderman.rbac.sys.service.UserService;
 import com.coderman.rbac.sys.utils.MD5Util;
 import com.coderman.rbac.sys.vo.PageVo;
@@ -43,6 +38,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private RoleMapper roleMapper;
+
 
 
     @Override
@@ -198,5 +194,20 @@ public class UserServiceImpl implements UserService {
                 userMapper.updateByPrimaryKeySelective(user);
             }
         }
+    }
+
+    @Override
+    public List<User> loadManagersByParentDeptId(UserVo userVo) {
+        Long parentDeptId = userVo.getParentDeptId();
+        Example o = new Example(User.class);
+        o.createCriteria().andEqualTo("deptId",parentDeptId);
+        List<User> users = userMapper.selectByExample(o);
+        return users;
+    }
+
+    @Override
+    public User findUserById(UserVo userVo) {
+        User user=userExtMapper.findUserById(userVo);
+        return user;
     }
 }

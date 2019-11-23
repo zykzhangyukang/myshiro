@@ -7,13 +7,16 @@ import com.coderman.rbac.sys.enums.ResultEnum;
 import com.coderman.rbac.sys.service.LoginLogService;
 import com.coderman.rbac.sys.service.UserService;
 import com.coderman.rbac.sys.utils.AddressUtil;
-import com.coderman.rbac.sys.utils.IPUtil;
 import com.coderman.rbac.sys.utils.BrowserUtil;
+import com.coderman.rbac.sys.utils.IPUtil;
 import com.coderman.rbac.sys.utils.WebUtil;
 import com.coderman.rbac.sys.vo.LoginLogVo;
 import com.coderman.rbac.sys.vo.PageVo;
 import com.coderman.rbac.sys.vo.ResultVo;
 import com.coderman.rbac.sys.vo.UserVo;
+import eu.bitwalker.useragentutils.Browser;
+import eu.bitwalker.useragentutils.OperatingSystem;
+import eu.bitwalker.useragentutils.UserAgent;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -29,9 +32,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.sound.midi.Soundbank;
 import java.util.Date;
-import java.util.List;
 
 /**
  * 用户登入控制器
@@ -69,8 +70,12 @@ public class LoginController {
             loginLog.setUserName(activeUser.getUser().getUserName());
             loginLog.setIp(IPUtil.getIpAddr(request));
             loginLog.setLocation(AddressUtil.getCityInfo(IPUtil.getIpAddr(request)));
-            loginLog.setSystem(System.getProperty("os.name"));
-            loginLog.setBrowser(BrowserUtil.getRequestBrowserInfo(request));
+            // 获取客户端操作系统
+            UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("User-Agent"));
+            Browser browser = userAgent.getBrowser();
+            OperatingSystem os = userAgent.getOperatingSystem();
+            loginLog.setSystem(os.getName());
+            loginLog.setBrowser(browser.getName());
             loginLog.setLoginTime(new Date());
             loginLogService.saveLog(loginLog);
             //更新最新登入时间

@@ -13,5 +13,9 @@ public class UserVo extends User{
     private String range;
     private String ids;
 
+    /**父级部门Id**/
+    private Long parentDeptId;
+
+
     private String deptName;
 }

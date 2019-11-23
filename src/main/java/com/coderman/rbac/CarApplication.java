@@ -6,7 +6,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 
 
 @MapperScan("com.coderman.rbac.*.mapper")
-@SpringBootApplication
+@SpringBootApplication()
 public class CarApplication {
 
 	public static void main(String[] args) {

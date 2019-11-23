@@ -2,26 +2,33 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.coderman.rbac.sys.mapper.UserExtMapper">
     <select id="findAllWithDepartment" parameterType="com.coderman.rbac.sys.vo.UserVo" resultType="com.coderman.rbac.sys.dto.UserDTO">
-      SELECT u.id,u.user_name,u.dept_id,u.email,u.phone_number,u.status,u.create_time,u.modified_time,u.last_login_time,
-            u.description,u.sex,u.type,d.dept_name,u.avatar FROM sys_user u ,sys_dept d
-            WHERE u.`dept_id`=d.`id` and u.type !=0
+        SELECT u.id,u.user_name,u.dept_id,u.email,u.phone_number,u.status,u.create_time,u.modified_time,u.last_login_time,
+        u.description,u.sex,u.type,d.dept_name,u.avatar,u.mgr_id,u2.user_name managerName  FROM sys_user u LEFT JOIN sys_user u2 ON u.`mgr_id`=u2.`id`  LEFT JOIN sys_dept d
+        ON u.`dept_id`=d.`id`
+        WHERE u.type!=0
             <if test="userName!=null and userName!=''">
-                and user_name like concat('%',#{userName}, '%')
+                and u.user_name like concat('%',#{userName}, '%')
             </if>
             <if test="email!=null and email!=''">
-                and email like concat('%',#{email}, '%')
+                and u.email like concat('%',#{email}, '%')
             </if>
             <if test="sex!=null and sex!=''">
-                and sex =#{sex}
+                and u.sex =#{sex}
             </if>
             <if test="status!=null and status!=''">
                 and u.status=#{status}
             </if>
             <if test="deptName!=null and deptName!=''">
-                and d.dept_name like concat('%',#{deptName}, '%')
+                and u.dept_name like concat('%',#{deptName}, '%')
             </if>
-
     </select>
+
+    <select id="findUserById" parameterType="com.coderman.rbac.sys.vo.UserVo" resultType="com.coderman.rbac.sys.bean.User">
+         SELECT u.id,u.user_name,u.dept_id,u.email,u.phone_number,u.status,u.create_time,u.modified_time,u.last_login_time,
+        u.description,u.sex,u.type,u.avatar,u.mgr_id FROM sys_user u
+        WHERE u.id=#{id}
+    </select>
+
     <insert id="insertUserWithRoles" >
         INSERT  into sys_user_role(user_id,role_id)
         values

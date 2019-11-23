@@ -3,7 +3,7 @@ spring:
   datasource:
     druid:
       driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://127.0.0.1:3306/bookrent
+      url: jdbc:mysql://127.0.0.1:3306/RBAC
       username: root
       password: zhangyukang
       type: com.alibaba.druid.pool.DruidDataSource

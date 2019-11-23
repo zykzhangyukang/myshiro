@@ -85,4 +85,18 @@ public interface UserService {
      * @param userVo
      */
     void reSetUser(UserVo userVo);
+
+    /**
+     * 加载父级领导
+     * @param userVo
+     * @return
+     */
+    List<User> loadManagersByParentDeptId(UserVo userVo);
+
+    /**
+     * 根据Id查询用户
+     * @param userVo
+     * @return
+     */
+    User findUserById(UserVo userVo);
 }

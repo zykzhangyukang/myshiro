@@ -29,7 +29,6 @@ public class Department {
 
     private String phone;
 
-    private Long count;
 
     private String address;
 

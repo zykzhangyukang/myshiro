@@ -125,15 +125,46 @@
                 <input type="hidden" name="deptId" id="pid">
                 <ul id="selectTree" class="dtree" data-id="0" ></ul></div>
         </div>
-        <div class="layui-form-item layui-row layui-col-xs12">
-            <label class="layui-form-label">邮箱</label>
-            <div class="layui-input-block">
-                <input type="text" name="email" class="layui-input" lay-verify="email" placeholder="请输入邮箱">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">上级部门</label>
+            <div class="layui-input-inline">
+                <ul id="pselectTree" class="dtree" data-id="0" ></ul></div>
+            <label class="layui-form-label">部门领导</label>
+            <div class="layui-input-inline">
+                <select name="mgrId" id="manger" lay-verify="required" lay-search="">
+                    <option value="">直接选择或搜索选择</option>
+                    <option value="1">layer</option>
+                    <option value="2">form</option>
+                    <option value="3">layim</option>
+                    <option value="4">element</option>
+                    <option value="5">laytpl</option>
+                    <option value="6">upload</option>
+                    <option value="7">laydate</option>
+                    <option value="8">laypage</option>
+                    <option value="9">flow</option>
+                    <option value="10">util</option>
+                    <option value="11">code</option>
+                    <option value="12">tree</option>
+                    <option value="13">layedit</option>
+                    <option value="14">nav</option>
+                    <option value="15">tab</option>
+                    <option value="16">table</option>
+                    <option value="17">select</option>
+                    <option value="18">checkbox</option>
+                    <option value="19">switch</option>
+                    <option value="20">radio</option>
+                </select>
             </div>
         </div>
+
         <div class="layui-form-item layui-row layui-col-xs12">
+            <label class="layui-form-label">邮箱</label>
+            <div class="layui-input-inline">
+                <input type="text" name="email" class="layui-input" lay-verify="email" placeholder="请输入邮箱">
+            </div>
             <label class="layui-form-label">电话号码</label>
-            <div class="layui-input-block">
+            <div class="layui-input-inline">
                 <input type="text" name="phoneNumber" class="layui-input" lay-verify="phone" placeholder="请输入电话号码">
             </div>
         </div>
@@ -157,7 +188,7 @@
         </div>
         <div class="layui-form-item layui-row layui-col-xs12">
             <div class="layui-input-block">
-                <button type="button" class="layui-btn layui-btn" lay-submit="" lay-filter="doSubmit">提交</button>
+                <button type="button" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="doSubmit">提交</button>
                 <button type="reset" class="layui-btn layui-btn layui-btn-primary">重置</button>
             </div>
         </div>
@@ -165,7 +196,7 @@
 </div>
 
 <!--查看用户弹出框--->
-<div id="userInfoModal">
+<div id="userInfoModal" style="display: none">
     <div id="febs-user-detail">
         <div id="user-info-wrapper">
             <div id="user-img">
@@ -224,7 +255,33 @@
             skin:'zdy',
             response:{message:"msg",statusCode:0},  //修改response中返回数据的定义
             url: "/dept/loadDeptTree", // 使用url加载（可与data加载同时存在）
+        });
+        //父级部门下拉树
+        var pselectTree;
+        pselectTree=dtree.renderSelect({
+            elem: "#pselectTree",
+            width: "100%", // 可以在这里指定树的宽度来填满div
+            dataStyle: "layuiStyle",  //使用layui风格的数据格式
+            dataFormat: "list",  //配置data的风格为list
+            menubar:true,
+            skin:'zdy',
+            response:{message:"msg",statusCode:0},
+            url: "/dept/loadDeptTree",
 
+        });
+        // 父级部门节点触发回调，其中obj内包含丰富的数据，打开浏览器F12查看！
+        dtree.on("node(pselectTree)" ,function(obj){
+            var parentDeptId=obj.param.nodeId;
+            //加载父级该部门下的所有员工
+            $.post("/user/loadManagersByParentDeptId",{"parentDeptId":parentDeptId},function (res) {
+               var managerSelect= $("#manger");
+               var html='<option value=0>请选择领导姓名</option>';
+               $.each(res.data,function (index, item) {
+                   html+="<option value='"+item.id+"'>"+item.userName+"</option>"
+               })
+                managerSelect.html(html);
+                form.render('select');
+            })
         });
         // 点击节点触发回调，其中obj内包含丰富的数据，打开浏览器F12查看！
         dtree.on("node(selectTree)" ,function(obj){
@@ -244,7 +301,11 @@
                 ,{field: 'id', title: 'ID',hide:true, width:80, sort: true, fixed: 'left', totalRowText: '合计：'}
                 ,{field: 'userName', title: '用户名'}
                 ,{field: 'deptName', title: '所在部门'}
-                ,{field: 'avatar',title: '头像'}
+                ,{field: 'mgrId', title: '领导Id',hide:true}
+                ,{field: 'managerName', title: '上级大佬',templet:function (d) {
+                        return (d.managerName==""|| d.managerName==null)? "<span class=\"layui-badge layui-bg-gray\">无</span>上级领导":d.managerName;
+                    }}
+                ,{field: 'avatar',title: '头像',hide:true}
                 ,{field: 'email', title: '邮箱', sort: true, totalRow: true}
                 ,{field: 'phoneNumber', title: '电话号码', sort: true}
                 ,{field: 'description', title: '描述'}
@@ -278,11 +339,6 @@
                     break;
             };
         });
-        //重置用户
-        function reSetUser(data) {
-
-        }
-
         //监听行工具条的事件
         table.on("tool(userTable)",function(obj){
             var data = obj.data; //获得当前行数据
@@ -435,8 +491,28 @@
                 title:'修改用户',
                 success:function(){
                     form.val("dataFrm",data);
+                    //选择部门
                     dtree.dataInit("selectTree", data.deptId);
                     dtree.setSelectValue("selectTree");
+                    //选中领导部门
+                    var leaderId=data.mgrId;
+                    $.get("/user/findUserById",{"id":leaderId},function (res) {
+                        dtree.dataInit("pselectTree",res.data.deptId);
+                        dtree.setSelectValue("pselectTree");
+                        //选择父级领导
+                        $.post("/user/loadManagersByParentDeptId",{"parentDeptId":res.data.deptId},function (res) {
+                            var managerSelect= $("#manger");
+                            var html='<option value=0>请选择领导姓名</option>';
+                            $.each(res.data,function (index, item) {
+                                html+="<option value='"+item.id+"'>"+item.userName+"</option>"
+                            })
+                            managerSelect.html(html);
+                            //选中
+                            managerSelect.val(leaderId);
+                            form.render('select');
+                        })
+                    });
+
                     url="/user/update";
                 }
             });

@@ -137,7 +137,7 @@ public class MenuController {
             //超级管理员
             List<Menu> menus = menuService.loadAllMenu();
             menuListToMenuNodeList(menuNodeList, menus);
-        }else {
+        }else if (user.getType().equals(UserTypeEnum.COMMON_USER)){
             //普通用户(根据用户的角色查询权限获取用户的菜单)
             List<Menu> menus=menuService.loadAllMenuByUserId(user.getId());
             menuListToMenuNodeList(menuNodeList, menus);

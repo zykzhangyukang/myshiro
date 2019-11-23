@@ -53,4 +53,7 @@ public class User {
 
     /**用户类型 0:超级管理员，1：系统普通用户，默认为普通用户**/
     private Integer type;
+
+    /**上级领导**/
+    private Long mgrId;
 }
