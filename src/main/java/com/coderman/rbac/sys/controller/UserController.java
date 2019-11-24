@@ -32,6 +32,18 @@ public class UserController {
 
 
     /**
+     * 查询用户数量
+     * @return
+     */
+    @GetMapping("/count")
+    public Map<String,Object> count(){
+        Long  count=userService.count();
+        Map<String,Object> map=new HashMap<>();
+        map.put("count",count-1);//减去超级用户不显示
+        return map;
+    }
+
+    /**
      * 根据id查询用户
      * @param userVo
      * @return
@@ -133,7 +145,6 @@ public class UserController {
             return ResultVo.OK(ResultEnum.DELETE_FAIL);
         }
     }
-
     /**
      * 查询用户
      * @param userVo
@@ -144,8 +155,6 @@ public class UserController {
         PageVo<UserDTO> page = userService.findPage(userVo);
         return page;
     }
-
-
     /**
      * 锁定用户
      * @return
@@ -167,7 +176,6 @@ public class UserController {
      * @param userVo
      * @return
      */
-
     @RequiresPermissions({"user:update"})
     @PostMapping("/update")
     @ControllerEndpoint(exceptionMessage = "修改用户失败",operation ="修改用户")

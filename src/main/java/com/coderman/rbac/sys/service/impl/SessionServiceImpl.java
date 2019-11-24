@@ -58,6 +58,8 @@ public class SessionServiceImpl implements SessionService {
             activeUser.setTimeout(timeout);
             if (StringUtils.equals(currentSessionId, activeUser.getId())) {
                 activeUser.setCurrent(true);
+            }else {
+                activeUser.setCurrent(false);
             }
             if (!StringUtils.isBlank(username)) {
                 list.add(activeUser);

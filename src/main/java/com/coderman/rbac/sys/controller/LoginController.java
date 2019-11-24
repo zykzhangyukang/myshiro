@@ -64,6 +64,7 @@ public class LoginController {
             ActiveUser activeUser= (ActiveUser) subject.getPrincipal();
             //把用户放到session中
             WebUtil.getSession().setAttribute(MyConstant.USER,activeUser.getUser());
+            WebUtil.getSession().setAttribute("ActiveUser",activeUser);
             //记录登入日志
             HttpServletRequest request = WebUtil.getRequest();
             LoginLog loginLog=new LoginLog();
@@ -80,7 +81,6 @@ public class LoginController {
             loginLogService.saveLog(loginLog);
             //更新最新登入时间
             userService.updateLastLoginTime(activeUser);
-
             log.info("【登入成功】 user={}",WebUtil.getSession().getAttribute(MyConstant.USER));
             return ResultVo.OK();
         }catch (IncorrectCredentialsException e){

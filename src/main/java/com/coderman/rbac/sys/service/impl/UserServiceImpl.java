@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         BeanUtils.copyProperties(userVo,user);
         user.setCreateTime(new Date());
-        String salt= UUID.randomUUID().toString()+user.getUserName().toUpperCase();
+        String salt= UUID.randomUUID().toString();
         user.setPassWord(MD5Util.encrypt(salt, MyConstant.DEFAULT_PWD));
         user.setSalt(salt);
         user.setModifiedTime(new Date());
@@ -209,5 +209,11 @@ public class UserServiceImpl implements UserService {
     public User findUserById(UserVo userVo) {
         User user=userExtMapper.findUserById(userVo);
         return user;
+    }
+
+    @Override
+    public Long count() {
+        Long count= Long.valueOf(userMapper.selectCountByExample(null));
+        return count;
     }
 }

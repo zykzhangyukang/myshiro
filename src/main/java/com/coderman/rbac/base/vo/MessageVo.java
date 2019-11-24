@@ -11,4 +11,5 @@ public class MessageVo extends Message {
     private int page;
     private int limit;
     private String range;
+    private String styleTime;
 }

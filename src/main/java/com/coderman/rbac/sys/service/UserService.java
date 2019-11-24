@@ -99,4 +99,11 @@ public interface UserService {
      * @return
      */
     User findUserById(UserVo userVo);
+
+    /**
+     * 查询用户数量
+     * @return
+     */
+    Long count();
+
 }

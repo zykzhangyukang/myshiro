@@ -4,7 +4,6 @@ import com.coderman.rbac.base.bean.Message;
 import com.coderman.rbac.base.mapper.MessageMapper;
 import com.coderman.rbac.base.service.MessageService;
 import com.coderman.rbac.base.vo.MessageVo;
-import com.coderman.rbac.sys.bean.ActiveUser;
 import com.coderman.rbac.sys.bean.User;
 import com.coderman.rbac.sys.contast.MyConstant;
 import com.coderman.rbac.sys.converter.TimeConverter;
@@ -14,8 +13,6 @@ import com.coderman.rbac.sys.utils.WebUtil;
 import com.coderman.rbac.sys.vo.PageVo;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.apache.shiro.SecurityUtils;
-import org.aspectj.lang.reflect.MemberSignature;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,6 +37,7 @@ public class MessageServiceImpl implements MessageService {
         PageHelper.startPage(messageVo.getPage(),messageVo.getLimit());
         Example o = new Example(Message.class);
         Example.Criteria criteria = o.createCriteria();
+        o.setOrderByClause("create_time desc");
         if(messageVo!=null){
             if(messageVo.getTitle()!=null&&!"".equals(messageVo.getTitle())){
                 criteria.andLike("title","%"+messageVo.getTitle()+"%");

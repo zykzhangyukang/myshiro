@@ -3,12 +3,12 @@
 	"version": "v2.0",
 	"author": "章宇康",
 	"homePage": "/system/index",
-	"server": "windows",
-	"dataBase": "8.00.2039",
+	"server": "CentOS",
+	"dataBase": "MySql 5.7",
 	"maxUpload": "2M",
 	"userRights": "超级管理员",
-	"description": "这是马哥闲来无事做的一套基于layui的cms模版，纯静态页面，不包含数据库",
-	"powerby": "copyright @2017 驊驊龔頾",
+	"description": "这是小章鱼闲来无事做的一套基于SpringBoot，Shiro，权限管理系统",
+	"powerby": "copyright @2019 小章鱼",
 	"record": "京ICP备14040xxx号-1",
-	"keywords": "章哥,coderman.0,图书借阅系统,请叫我小章鱼"
+	"keywords": "章哥,coderman.0,RBAC权限系统,请叫我小章鱼"
 }

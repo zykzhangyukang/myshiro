@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/base")
 public class BaseController {
 
+
     /**
      * 跳转到图标管理
      * @return

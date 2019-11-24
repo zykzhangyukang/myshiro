@@ -13,6 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class SystemController {
 
     /**
+     * 用户个人信息
+     * @return
+     */
+    @GetMapping("/userInfo")
+    public String userInfo(){
+        return "system/user/userInfo";
+    }
+    /**
      * 跳转到部门管理页面(左边)
      * @return
      */

@@ -65,5 +65,5 @@ public class ActiveUser {
     /**
      * 是否为当前登录用户
      */
-    private boolean current;
+    private Boolean current;
 }

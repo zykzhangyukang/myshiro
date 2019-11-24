@@ -39,6 +39,4 @@ public class Message {
 
     /**留言内容**/
     private String content;
-
-
 }
