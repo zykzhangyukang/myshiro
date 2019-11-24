@@ -13,7 +13,7 @@
 	<link rel="stylesheet" href="/resources/css/public.css" media="all" />
 </head>
 <body class="childrenBody">
-<form class="layui-form layui-row">
+<form class="layui-form layui-row" id="userInfo" lay-filter="userInfo">
 	<div class="layui-col-md3 layui-col-xs12 user_right">
 		<div class="layui-upload-list">
 			<img class="layui-upload-img layui-circle userFaceBtn userAvatar" id="userFace">
@@ -24,73 +24,52 @@
 	<div class="layui-col-md6 layui-col-xs12">
 		<div class="layui-form-item">
 			<label class="layui-form-label">用户名</label>
+			<input type="hidden" th:value="${session.user.id}" id="userId" name="id">
 			<div class="layui-input-block">
-				<input type="text"  value="" disabled class="layui-input layui-disabled">
+				<input type="text" name="userName" id="userName" value=""  class="layui-input">
 			</div>
 		</div>
 		<div class="layui-form-item">
 			<label class="layui-form-label">性别</label>
 			<div class="layui-input-block">
-				<input type="radio" name="sex" value="男" title="男" checked="">
-				<input type="radio" name="sex" value="女" title="女">
-				<input type="radio" name="sex" value="保密" title="保密">
+				<input type="radio" name="sex" value="0" title="男" checked="">
+				<input type="radio" name="sex" value="1" title="女">
 			</div>
 		</div>
 		<div class="layui-form-item">
 			<label class="layui-form-label">出生年月</label>
 			<div class="layui-input-block">
-				<input type="text" value="" placeholder="请输入出生年月" lay-verify="userBirthday" readonly class="layui-input userBirthday">
-			</div>
-		</div>
-		<div class="layui-form-item userAddress">
-			<label class="layui-form-label">家庭住址</label>
-			<div class="layui-input-inline">
-				<select name="province" lay-filter="province" class="province">
-					<option value="">请选择市</option>
-				</select>
-			</div>
-			<div class="layui-input-inline">
-				<select name="city" lay-filter="city" disabled>
-					<option value="">请选择市</option>
-				</select>
-			</div>
-			<div class="layui-input-inline">
-				<select name="area" lay-filter="area" disabled>
-					<option value="">请选择县/区</option>
-				</select>
+				<input type="text" name="birth" id="birth" value="" placeholder="请输入出生年月" lay-verify="userBirthday" readonly class="layui-input userBirthday">
 			</div>
 		</div>
 		<div class="layui-form-item">
-			<label class="layui-form-label">掌握技术</label>
-			<div class="layui-input-block userHobby">
-				<input type="checkbox" name="like[javascript]" title="Javascript">
-				<input type="checkbox" name="like[C#]" title="C#">
-				<input type="checkbox" name="like[php]" title="PHP">
-				<input type="checkbox" name="like[html]" title="HTML(5)">
-				<input type="checkbox" name="like[css]" title="CSS(3)">
-				<input type="checkbox" name="like[.net]" title=".net">
-				<input type="checkbox" name="like[ASP]" title="ASP">
-				<input type="checkbox" name="like[Angular]" title="Angular">
-				<input type="checkbox" name="like[VUE]" title="VUE">
-				<input type="checkbox" name="like[XML]" title="XML">
+			<label class="layui-form-label">电话号码</label>
+			<div class="layui-input-block">
+				<input type="text" name="phoneNumber" id="phoneNumber"   value="" placeholder="请输入电话号码" lay-verify="phone" class="layui-input userEmail">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">所属部门</label>
+			<div class="layui-input-block">
+				<input type="text" name="deptName" id="deptName" disabled  value="" placeholder="所属部门"  class="layui-input userEmail">
 			</div>
 		</div>
 		<div class="layui-form-item">
 			<label class="layui-form-label">邮箱</label>
 			<div class="layui-input-block">
-				<input type="text"  value="" placeholder="请输入邮箱" lay-verify="email" class="layui-input userEmail">
+				<input type="text" name="email" id="email"  value="" placeholder="请输入邮箱" lay-verify="email" class="layui-input userEmail">
 			</div>
 		</div>
 		<div class="layui-form-item">
 			<label class="layui-form-label">自我评价</label>
 			<div class="layui-input-block">
-				<textarea  placeholder="请输入内容" class="layui-textarea myself"></textarea>
+				<textarea name="description" id="description"  placeholder="请输入内容" class="layui-textarea myself"></textarea>
 			</div>
 		</div>
 		<div class="layui-form-item">
 			<div class="layui-input-block">
 				<button class="layui-btn" lay-submit="" lay-filter="changeUser">立即提交</button>
-				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				<button type="button" id="reset" class="layui-btn layui-btn-primary">重置</button>
 			</div>
 		</div>
 	</div>
@@ -99,10 +78,84 @@
 <script  type="text/javascript">
     layui.extend({
         dtree: '/resources/layui_ext/dtree/dtree'   // {/}的意思即代表采用自有路径，即不跟随 base 路径
-    }).use(['laydate','layer','form','dtree'], function(){
+    }).use(['laydate','layer','form','upload','dtree'], function(){
         var laydate = layui.laydate //日期
         var form=layui.form;
+        var　upload=layui.upload;
         var $=layui.jquery;
+		var id=$("#userId").val();
+        //上传头像
+        upload.render({
+            elem: '.userFaceBtn',
+            url: '/user/changeAvatar?id='+id,
+            method : "post",
+            done: function(res, index, upload){
+                $('#userFace').attr('src',res.data.src);
+                layer.confirm('用户头像已更新，是否刷新页面', {icon: 3, title:'提示'}, function(index){
+                    $.get("/session/flush",{id:id},function(res){
+                        window.sessionStorage.clear();
+                        parent.location.reload();
+                    })
+                    layer.close(index);
+                });
+                window.sessionStorage.setItem('userFace',res.data.src);
+            }
+        });
+
+        $("#reset").click(function () {
+            $("#phone").val("");
+            $("#birth").val("");
+            $("#email").val("");
+            $("#description").val("");
+            $("#sex").val("");
+            $("#phoneNumber").val("");
+        })
+        //初始化个人信息
+		$.get("/user/userInfo",{"id":id},function (res) {
+			if(res.code==0){
+			    var user=res.data;
+			    form.val("userInfo",res.data);
+			    $("#userFace").attr("src",user.avatar)
+			}
+        });
+
+        //添加验证规则
+        form.verify({
+            userBirthday : function(value){
+                if(!/^(\d{4})[\u4e00-\u9fa5]|[-\/](\d{1}|0\d{1}|1[0-2])([\u4e00-\u9fa5]|[-\/](\d{1}|0\d{1}|[1-2][0-9]|3[0-1]))*$/.test(value)){
+                    return "出生日期格式不正确！";
+                }
+            }
+        });
+        //选择出生日期
+        laydate.render({
+            elem: '.userBirthday',
+            format: 'yyyy年MM月dd日',
+            trigger: 'click',
+            max : 0,
+            mark : {"0-12-15":"生日"},
+            done: function(value, date){
+
+            }
+        });
+        //更新
+        form.on('submit(changeUser)',function (data) {
+            $.post("/user/update",data.field,function(res){
+                if(res.code==0){
+                    layer.confirm('用户信息已改变，刷新后立即生效', {icon: 3, title:'提示'}, function(index){
+                        $.get("/session/flush",{id:id},function(res){
+                            layer.msg(res.msg);
+                            window.sessionStorage.clear();
+                            parent.location.reload();
+                        })
+                        layer.close(index);
+                    });
+                }else {
+                    layer.msg(res.msg);
+                }
+            })
+            return false;
+        })
     });
 </script>
 </body>

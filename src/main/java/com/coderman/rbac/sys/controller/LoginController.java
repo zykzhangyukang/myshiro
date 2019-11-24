@@ -82,7 +82,7 @@ public class LoginController {
             //更新最新登入时间
             userService.updateLastLoginTime(activeUser);
             log.info("【登入成功】 user={}",WebUtil.getSession().getAttribute(MyConstant.USER));
-            return ResultVo.OK();
+            return ResultVo.OK(ResultEnum.LOGIN_SUCCESS);
         }catch (IncorrectCredentialsException e){
             log.error("【登入失败】 message={}",e.getMessage());
             return ResultVo.ERROR(ResultEnum.PWD_ERROR);

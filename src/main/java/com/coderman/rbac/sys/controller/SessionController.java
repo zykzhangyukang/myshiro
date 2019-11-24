@@ -1,9 +1,14 @@
 package com.coderman.rbac.sys.controller;
 
 import com.coderman.rbac.sys.bean.ActiveUser;
+import com.coderman.rbac.sys.bean.User;
+import com.coderman.rbac.sys.contast.MyConstant;
 import com.coderman.rbac.sys.enums.ResultEnum;
 import com.coderman.rbac.sys.service.SessionService;
+import com.coderman.rbac.sys.service.UserService;
+import com.coderman.rbac.sys.utils.WebUtil;
 import com.coderman.rbac.sys.vo.ResultVo;
+import com.coderman.rbac.sys.vo.UserVo;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +27,25 @@ public class SessionController {
 
     @Autowired
     private SessionService sessionService;
+
+    @Autowired
+    private UserService userService;
+
+    @GetMapping("/flush")
+    public ResultVo flush(UserVo userVo){
+        User userById = userService.findUserById(userVo);
+        if(userById!=null){
+            try {
+                WebUtil.getSession().setAttribute(MyConstant.USER,userById);
+                return ResultVo.OK(ResultEnum.FLUSH_SUCCESS);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResultVo.OK(ResultEnum.FLUSH_ERROR);
+            }
+        }else {
+            return ResultVo.OK(ResultEnum.FLUSH_ERROR);
+        }
+    }
 
     /**
      * 获取当前在线人数

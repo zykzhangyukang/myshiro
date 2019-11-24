@@ -1,5 +1,6 @@
 package com.coderman.rbac.sys.controller;
 
+import com.coderman.rbac.base.vo.ResultFileVo;
 import com.coderman.rbac.sys.annotation.ControllerEndpoint;
 import com.coderman.rbac.sys.bean.User;
 import com.coderman.rbac.sys.dto.UserDTO;
@@ -10,13 +11,14 @@ import com.coderman.rbac.sys.vo.PageVo;
 import com.coderman.rbac.sys.vo.ResultVo;
 import com.coderman.rbac.sys.vo.UserVo;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.omg.PortableInterceptor.USER_EXCEPTION;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Repeat;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -31,6 +33,29 @@ public class UserController {
     private UserService userService;
 
 
+
+    /**
+     * 用户更换头像
+     * @return
+     */
+    @PostMapping("/changeAvatar")
+    public ResultFileVo changAvatar(MultipartFile file,UserVo userVo){
+        try {
+            return  userService.changAvatar(file,userVo);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultFileVo.ERROR();
+        }
+    }
+    /**
+     * 用户信息
+     * @return
+     */
+    @GetMapping("/userInfo")
+    public ResultVo userInfo(UserVo userVo){
+       UserDTO user= userService.userInfo(userVo);
+       return ResultVo.OK(user);
+    }
     /**
      * 查询用户数量
      * @return

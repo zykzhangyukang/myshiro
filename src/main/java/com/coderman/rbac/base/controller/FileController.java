@@ -23,11 +23,8 @@ import java.util.Map;
 @Slf4j
 @RequestMapping("/file")
 public class FileController {
-
-
     @Autowired
     private OssUploadImgProvider ossUploadImgProvider;
-
     /**
      * 留言板图片上传
      * @return

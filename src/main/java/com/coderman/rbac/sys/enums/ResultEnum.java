@@ -30,7 +30,10 @@ public enum ResultEnum {
     PUBLISH_MESSAGE_SUCCESS(17,"留言成功" ),
     PUBLISH_MESSAGE_FAIL(18,"留言失败" ),
     UPLOAD_IMAGE_SUCCESS(19, "图片上传成功"),
-    UPLOAD_IMAGE_FAIL(20, "图片上传失败");
+    UPLOAD_IMAGE_FAIL(20, "图片上传失败"),
+    LOGIN_SUCCESS(21, "登入成功"),
+    FLUSH_SUCCESS(22,"刷新成功" ),
+    FLUSH_ERROR(23,"刷新失败" );
     private Integer code;
     private String msg;
 

@@ -1,5 +1,6 @@
 package com.coderman.rbac.sys.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.util.Date;
@@ -62,4 +63,6 @@ public class UserDTO {
 
     /**上级领导Id**/
     private Long mgrId;
+
+    private String birth;
 }

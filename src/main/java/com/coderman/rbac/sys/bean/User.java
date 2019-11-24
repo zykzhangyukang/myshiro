@@ -56,4 +56,7 @@ public class User {
 
     /**上级领导**/
     private Long mgrId;
+
+    /**生日**/
+    private String birth;
 }

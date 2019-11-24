@@ -17,4 +17,6 @@ public interface UserExtMapper {
     void insertUserWithRoles(@Param("userId") Long userId, @Param("roles") List<Integer> rids);
 
     User findUserById(UserVo userVo);
+
+    UserDTO userInfo(UserVo userVo);
 }

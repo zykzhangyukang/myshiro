@@ -1,11 +1,13 @@
 package com.coderman.rbac.sys.service;
 
+import com.coderman.rbac.base.vo.ResultFileVo;
 import com.coderman.rbac.sys.bean.ActiveUser;
 import com.coderman.rbac.sys.bean.Role;
 import com.coderman.rbac.sys.bean.User;
 import com.coderman.rbac.sys.dto.UserDTO;
 import com.coderman.rbac.sys.vo.PageVo;
 import com.coderman.rbac.sys.vo.UserVo;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -106,4 +108,17 @@ public interface UserService {
      */
     Long count();
 
+    /**
+     * 用户资料
+     * @param userVo
+     * @return
+     */
+    UserDTO userInfo(UserVo userVo);
+
+    /**
+     * 用户更换头像
+     * @param file
+     * @param userVo
+     */
+    ResultFileVo changAvatar(MultipartFile file, UserVo userVo);
 }

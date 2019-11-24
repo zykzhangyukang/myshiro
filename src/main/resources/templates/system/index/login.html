@@ -65,16 +65,7 @@
         //登录按钮
         form.on("submit(login)",function(data){
             var btn =  $(this);
-            var num = show_num.join("");
-            if($("#code").val()==null||$("#code").val()==""){
-                //验证码校验
-                layer.msg("请输入验证码");
-                return false;
-            }
-            if($("#code").val().toLowerCase()!=num){
-                layer.msg("验证码不正确");
-                return false;
-            }
+            if(!codeVaildation()) return false;
             $(this).text("登录中...").attr("disabled","disabled").addClass("layui-disabled");
             $.post("/login/login",data.field,function(rs){
                 //设置登录按钮 恢复可点击   在前端防止 重复点击
@@ -89,7 +80,25 @@
                 }
             });
             return false;
-        })
+        });
+
+        /**
+		 * 验证码验证
+         * @returns {boolean}
+         */
+        function codeVaildation() {
+            var num = show_num.join("");
+            if($("#code").val()==null||$("#code").val()==""){
+                //验证码校验
+                layer.msg("请输入验证码");
+                return false;
+            }
+            if($("#code").val().toLowerCase()!=num){
+                layer.msg("验证码不正确");
+                return false;
+            }
+            return true;
+        }
 
         //表单输入效果
         $(".loginBody .input-item").click(function(e){
