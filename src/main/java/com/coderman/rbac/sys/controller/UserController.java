@@ -38,6 +38,7 @@ public class UserController {
      * 用户更换头像
      * @return
      */
+    @ControllerEndpoint(exceptionMessage = "更换头像失败",operation ="更换头像")
     @PostMapping("/changeAvatar")
     public ResultFileVo changAvatar(MultipartFile file,UserVo userVo){
         try {

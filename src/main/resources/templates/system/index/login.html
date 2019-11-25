@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="loginHtml">
+<html class="loginHtml" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="utf-8">
 	<title>登录--章鱼权限管理系统</title>
@@ -42,7 +42,7 @@
 			<button class="layui-btn layui-btn-normal layui-block" lay-filter="login" lay-submit>登录</button>
 		</div>
 		<div class="layui-form-item layui-row">
-			<a href="javascript:;" class="seraph icon-qq layui-col-xs4 layui-col-sm4 layui-col-md4 layui-col-lg4"></a>
+			<a th:href="${#request.getServletContext().getAttribute('gitHubLoginUrl')}" href="javascript:;" class="seraph icon-github layui-col-xs4 layui-col-sm4 layui-col-md4 layui-col-lg4"></a>
 			<a href="javascript:;" class="seraph icon-wechat layui-col-xs4 layui-col-sm4 layui-col-md4 layui-col-lg4"></a>
 			<a href="javascript:;" class="seraph icon-sina layui-col-xs4 layui-col-sm4 layui-col-md4 layui-col-lg4"></a>
 		</div>
@@ -55,13 +55,6 @@
             layer = parent.layer === undefined ? layui.layer : top.layer
         $ = layui.jquery;
         var show_num=[];
-
-        $(".loginBody .seraph").click(function(){
-            layer.msg("这只是做个样式，至于功能，你见过哪个后台能这样登录的？还是老老实实的找管理员去注册吧",{
-                time:5000
-            });
-        })
-
         //登录按钮
         form.on("submit(login)",function(data){
             var btn =  $(this);

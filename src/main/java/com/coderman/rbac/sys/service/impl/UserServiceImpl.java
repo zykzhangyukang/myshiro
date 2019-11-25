@@ -2,13 +2,20 @@ package com.coderman.rbac.sys.service.impl;
 
 import com.coderman.rbac.base.utils.OssUploadImgProvider;
 import com.coderman.rbac.base.vo.ResultFileVo;
-import com.coderman.rbac.sys.bean.*;
+import com.coderman.rbac.sys.bean.ActiveUser;
+import com.coderman.rbac.sys.bean.Role;
+import com.coderman.rbac.sys.bean.User;
+import com.coderman.rbac.sys.bean.UserRole;
 import com.coderman.rbac.sys.contast.MyConstant;
 import com.coderman.rbac.sys.dto.UserDTO;
-import com.coderman.rbac.sys.mapper.*;
-import com.coderman.rbac.sys.service.DepartmentService;
+import com.coderman.rbac.sys.enums.UserTypeEnum;
+import com.coderman.rbac.sys.mapper.RoleMapper;
+import com.coderman.rbac.sys.mapper.UserExtMapper;
+import com.coderman.rbac.sys.mapper.UserMapper;
+import com.coderman.rbac.sys.mapper.UserRoleMapper;
 import com.coderman.rbac.sys.service.UserService;
 import com.coderman.rbac.sys.utils.MD5Util;
+import com.coderman.rbac.sys.utils.RandomValue;
 import com.coderman.rbac.sys.vo.PageVo;
 import com.coderman.rbac.sys.vo.UserVo;
 import com.github.pagehelper.PageHelper;
@@ -18,13 +25,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 import tk.mybatis.mapper.entity.Example;
 
 import java.io.IOException;
-import java.sql.Ref;
-import java.time.chrono.IsoEra;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -44,6 +49,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private RoleMapper roleMapper;
+
 
 
     @Override
@@ -248,6 +254,50 @@ public class UserServiceImpl implements UserService {
         } catch (IOException e) {
             e.printStackTrace();
             return ResultFileVo.ERROR();
+        }
+    }
+
+    private static  SimpleDateFormat  simpleDateFormat=new SimpleDateFormat("yyyy年MM月dd日");
+
+    @Transactional
+    @Override
+    public User saveOrUpdate(User user) {
+        String userName = user.getUserName();
+        Example o = new Example(User.class);
+        o.createCriteria().andEqualTo("userName",userName);
+        List<User> users = userMapper.selectByExample(o);
+        if(!CollectionUtils.isEmpty(users)){
+            User dbUser = users.get(0);
+            dbUser.setCreateTime(new Date());
+            BeanUtils.copyProperties(dbUser,user);
+            userMapper.updateByPrimaryKeySelective(user);
+            return null;
+        }else{
+            if(user.getUserName()==null||"".equals(user.getUserName())){user.setUserName(RandomValue.getChineseName());}
+            user.setCreateTime(new Date());
+            user.setModifiedTime(new Date());
+            String salt= UUID.randomUUID().toString().toUpperCase();
+            user.setSalt(salt);
+            user.setSex(MyConstant.SEX_MAN);
+            user.setDeptId(1L);//默认部门
+            user.setType(UserTypeEnum.GITHUB_USER.getCode());
+            user.setStatus(MyConstant.UN_LOCKED);
+            user.setPassWord(MD5Util.encrypt(salt,MyConstant.DEFAULT_PWD));
+            user.setEmail(RandomValue.getEmail(10,13));
+            user.setBirth(simpleDateFormat.format(new Date()));
+            user.setPhoneNumber(RandomValue.getTel());
+            userExtMapper.insertUserReturnUser(user);
+            //设置Github用户登入的默认角色
+            UserRole t = new UserRole();
+            t.setUserId(user.getId());
+            Example o1 = new Example(Role.class);
+            o1.createCriteria().andEqualTo("roleName",MyConstant.GITHUB_ROLE);
+            List<Role> roles = roleMapper.selectByExample(o1);
+            if(!CollectionUtils.isEmpty(roles)){
+                t.setRoleId(roles.get(0).getId());
+                userRoleMapper.insertSelective(t);
+            }
+            return user;
         }
     }
 }

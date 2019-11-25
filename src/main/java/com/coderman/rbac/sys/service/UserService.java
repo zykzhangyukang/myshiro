@@ -121,4 +121,10 @@ public interface UserService {
      * @param userVo
      */
     ResultFileVo changAvatar(MultipartFile file, UserVo userVo);
+
+    /**
+     * 保存或更新用户
+     * @param user
+     */
+    User saveOrUpdate(User user);
 }

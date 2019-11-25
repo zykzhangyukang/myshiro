@@ -19,4 +19,6 @@ public interface UserExtMapper {
     User findUserById(UserVo userVo);
 
     UserDTO userInfo(UserVo userVo);
+
+    Long insertUserReturnUser(User user);
 }

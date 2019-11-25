@@ -20,7 +20,7 @@ public class MD5Util {
     private static final int HASH_ITERATIONS = 1024;
 
     public static String encrypt(String salt, String password) {
-        password = StringUtils.upperCase(password);
+        salt = StringUtils.upperCase(salt);
         return new SimpleHash(ALGORITH_NAME, password, ByteSource.Util.bytes(salt), HASH_ITERATIONS).toHex();
     }
 }

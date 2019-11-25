@@ -121,7 +121,7 @@
 				</tr>
 				<tr>
 					<td>当前用户权限</td>
-					<td class="userRights" th:text="${session.ActiveUser.roles}"></td>
+					<td class="userRights"></td>
 				</tr>
 				</tbody>
 			</table>
@@ -153,8 +153,20 @@
 						<i class="layui-icon layui-timeline-axis">&#xe63f;</i>
 						<div class="layui-timeline-content layui-text">
 							<div class="layui-timeline-title">
+								<h3 class="layui-inline">接入github用户登入 2019年 11月25日</h3>
+								<span class="layui-badge-rim">2019年 11月25日</span>
+							</div>
+							<ul>
+								<li>最新更新内容：接入github用户登入</li>
+							</ul>
+						</div>
+					</li>
+					<li class="layui-timeline-item">
+						<i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+						<div class="layui-timeline-content layui-text">
+							<div class="layui-timeline-title">
 								<h3 class="layui-inline">完成用户个人资料 2019年 11月24日</h3>
-								<span class="layui-badge-rim">2019年 10月13日</span>
+								<span class="layui-badge-rim">2019年 10月24日</span>
 							</div>
 							<ul>
 								<li>完成用户个人资料，更换头像等。~</li>
@@ -225,7 +237,7 @@
             var second = dateObj.getSeconds(); //当前系统时间的秒钟值
             var timeValue = "" +((hour >= 12) ? (hour >= 18) ? "晚上" : "下午" : "上午" ); //当前时间属于上午、晚上还是下午
             newDate = dateFilter(year)+"年"+dateFilter(month)+"月"+dateFilter(date)+"日 "+" "+dateFilter(hour)+":"+dateFilter(minute)+":"+dateFilter(second);
-            document.getElementById("nowTime").innerHTML = "我最亲爱的：[[${session.user.userName}]]，"+timeValue+"好！ 欢迎使用图书借阅。当前时间为： "+newDate+"　"+week;
+            document.getElementById("nowTime").innerHTML = "我最亲爱的：[[${session.user.userName}]]，"+timeValue+"好！ 欢迎使用章鱼权限系统。当前时间为： "+newDate+"　"+week;
             setTimeout("getLangDate()",1000);
         }
 

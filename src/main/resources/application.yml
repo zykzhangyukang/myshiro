@@ -47,6 +47,7 @@ shiro:
   hash-algorithm-name: md5
   hash-iterations: 1024
   anon-urls:
+  - /githubCallBack
   - /index.html*
   - /system/toLogin*
   - /login/login*

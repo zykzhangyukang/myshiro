@@ -57,4 +57,25 @@
             (#{userId},#{rid})
         </foreach>
     </insert>
+    <insert id="insertUserReturnUser" parameterType="com.coderman.rbac.sys.bean.User" useGeneratedKeys="true" keyProperty="id" >
+        insert into sys_user(user_name,pass_word,dept_id,email,phone_number,status,create_time,modified_time,salt,sex,avatar
+        ,description,type,mgr_id,birth)
+        values
+         (#{userName},#{passWord}
+        ,#{deptId}
+        ,#{email}
+        ,#{phoneNumber}
+        ,#{status}
+        ,#{createTime}
+        ,#{modifiedTime}
+        ,#{salt}
+        ,#{sex}
+        ,#{avatar}
+        ,#{description}
+        ,#{type}
+        ,#{mgrId}
+        ,#{birth})
+
+    </insert>
+
 </mapper>

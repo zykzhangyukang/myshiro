@@ -66,4 +66,8 @@ public class MyConstant {
      * 异步线程池名称
      */
     public static final String ASYNC_POOL = "RBACAsyncThreadPool";
+    /**
+     * 第三方用户角色
+     */
+    public static final String GITHUB_ROLE = "GitHub用户";
 }

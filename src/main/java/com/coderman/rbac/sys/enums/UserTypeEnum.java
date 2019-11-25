@@ -7,7 +7,7 @@ package com.coderman.rbac.sys.enums;
 public enum  UserTypeEnum {
 
     SYSTEM_USER(0,"系统用户"),
-    COMMON_USER(1,"普通用户");
+    COMMON_USER(1,"普通用户"), GITHUB_USER(2,"第三方Github用户");
 
     UserTypeEnum(Integer code, String msg) {
         this.code = code;

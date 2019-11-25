@@ -59,20 +59,23 @@ public class MenuServiceImpl implements MenuService {
             }
         }
         //根据角色rId集合获取菜单
-        Example o1 = new Example(RoleMenu.class);
-        o1.createCriteria().andEqualTo("roleId",roleIdList);
-        List<RoleMenu> roleMenus = roleMenuMapper.selectByExample(o1);
-        Set<Long> menuIds=new HashSet<>();
-        if(!CollectionUtils.isEmpty(roleMenus)){
-           menuIds=new HashSet<>();
-            for (RoleMenu roleMenu : roleMenus) {
-                menuIds.add(roleMenu.getMenuId());
+        List<Menu> menus=new ArrayList<>();
+        if(!CollectionUtils.isEmpty(roleIdList)){
+            Example o1 = new Example(RoleMenu.class);
+            o1.createCriteria().andEqualTo("roleId",roleIdList);
+            List<RoleMenu> roleMenus = roleMenuMapper.selectByExample(o1);
+            Set<Long> menuIds=new HashSet<>();
+            if(!CollectionUtils.isEmpty(roleMenus)){
+                menuIds=new HashSet<>();
+                for (RoleMenu roleMenu : roleMenus) {
+                    menuIds.add(roleMenu.getMenuId());
+                }
             }
+            //查询菜单
+            Example o2 = new Example(Menu.class);
+            o2.createCriteria().andIn("id",menuIds);
+            menus= menuMapper.selectByExample(o2);
         }
-        //查询菜单
-        Example o2 = new Example(Menu.class);
-        o2.createCriteria().andIn("id",menuIds);
-        List<Menu> menus = menuMapper.selectByExample(o2);
         return menus;
     }
 

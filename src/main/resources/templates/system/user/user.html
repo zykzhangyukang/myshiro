@@ -279,13 +279,14 @@
             ,cols: [ [
                 {type: 'checkbox', fixed: 'left'}
                 ,{field: 'id', title: 'ID',hide:true, width:80, sort: true, fixed: 'left', totalRowText: '合计：'}
+                ,{field: 'avatar',align:'center',title: '头像',templet: '<div><img id="headimage" style="cursor: pointer;height:22px;width:22px;border-radius:50%;line-height:50px!important;" src="{{ d.avatar}}"></div>'}
                 ,{field: 'userName', title: '用户名'}
                 ,{field: 'deptName', title: '所在部门'}
                 ,{field: 'mgrId', title: '领导Id',hide:true}
                 ,{field: 'managerName', title: '上级大佬',templet:function (d) {
                         return (d.managerName==""|| d.managerName==null)? "<span class=\"layui-badge layui-bg-gray\">无</span>上级领导":d.managerName;
                     }}
-                ,{field: 'avatar',title: '头像',hide:true}
+
                 ,{field: 'email', title: '邮箱', sort: true, totalRow: true}
                 ,{field: 'phoneNumber', title: '电话号码', sort: true}
                 ,{field: 'description', title: '描述'}
@@ -344,9 +345,9 @@
             console.log(data)
             userInfoModal=layer.open({
                 type:1,
-                title:'用户信息',
+                title:'【'+data.userName+'】的资料卡',
                 content: $("#userInfoModal"),
-                area:['650px','200px'],
+                area:['650px','250px'],
                 success:function(){
                     console.log( $("#user-info-wrapper").find("#userName"))
                     $("#user-info-wrapper").find("#userName").html(data.userName);
