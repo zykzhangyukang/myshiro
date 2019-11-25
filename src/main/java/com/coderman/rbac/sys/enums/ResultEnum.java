@@ -33,7 +33,9 @@ public enum ResultEnum {
     UPLOAD_IMAGE_FAIL(20, "图片上传失败"),
     LOGIN_SUCCESS(21, "登入成功"),
     FLUSH_SUCCESS(22,"刷新成功" ),
-    FLUSH_ERROR(23,"刷新失败" );
+    FLUSH_ERROR(23,"刷新失败" ), OLD_PWD_WRONG(24,"旧密码错误"),
+    CHANGE_PWD_SUCCESS(25,"更换密码成功"),
+    CHANGE_PWD_ERROR(26,"更换密码失败"), NAME_IS_USED(27,"用户名被占用" );
     private Integer code;
     private String msg;
 

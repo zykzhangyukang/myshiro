@@ -4,10 +4,16 @@ package com.coderman.rbac.base.controller;
 import com.coderman.rbac.base.dto.AccessTokenDTO;
 import com.coderman.rbac.base.dto.GithubUser;
 import com.coderman.rbac.base.provider.GithubProvider;
+import com.coderman.rbac.sys.bean.ActiveUser;
+import com.coderman.rbac.sys.bean.LoginLog;
 import com.coderman.rbac.sys.bean.User;
 import com.coderman.rbac.sys.contast.MyConstant;
+import com.coderman.rbac.sys.controller.LogController;
+import com.coderman.rbac.sys.controller.LoginController;
 import com.coderman.rbac.sys.enums.ResultEnum;
 import com.coderman.rbac.sys.enums.UserTypeEnum;
+import com.coderman.rbac.sys.service.LogService;
+import com.coderman.rbac.sys.service.LoginLogService;
 import com.coderman.rbac.sys.service.UserService;
 import com.coderman.rbac.sys.utils.MD5Util;
 import com.coderman.rbac.sys.utils.WebUtil;
@@ -43,6 +49,9 @@ public class AuthorizeController {
     private String github_RedirectUri;
 
     @Autowired
+    private LoginLogService loginLogService;
+
+    @Autowired
     private UserService userService;
 
     /**
@@ -75,6 +84,10 @@ public class AuthorizeController {
                 subject.login(usernamePasswordToken);
                 logger.info("【第三方用户登入成功】");
                 WebUtil.getSession().setAttribute(MyConstant.USER,user);
+                //记录登入日志
+                ActiveUser activeUser= (ActiveUser) subject.getPrincipal();
+                LoginLog loginLog = LoginController.createLoginLog(activeUser);
+                loginLogService.saveLog(loginLog);
                 return "redirect:/system/index";
             } catch (AuthenticationException e) {
                 e.printStackTrace();

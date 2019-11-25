@@ -3,9 +3,11 @@ package com.coderman.rbac.sys.controller;
 import com.coderman.rbac.base.vo.ResultFileVo;
 import com.coderman.rbac.sys.annotation.ControllerEndpoint;
 import com.coderman.rbac.sys.bean.User;
+import com.coderman.rbac.sys.contast.MyConstant;
 import com.coderman.rbac.sys.dto.UserDTO;
 import com.coderman.rbac.sys.enums.ResultEnum;
 import com.coderman.rbac.sys.service.UserService;
+import com.coderman.rbac.sys.utils.MD5Util;
 import com.coderman.rbac.sys.utils.WebUtil;
 import com.coderman.rbac.sys.vo.PageVo;
 import com.coderman.rbac.sys.vo.ResultVo;
@@ -32,8 +34,27 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-
-
+    /**
+     * 用户更改密码
+     * @return
+     */
+    @PostMapping("/changePwd")
+    public ResultVo changePwd(UserVo userVo){
+        //验证旧密码
+        String oldPassWord = userVo.getOldPassWord();
+        User user = (User) WebUtil.getSession().getAttribute(MyConstant.USER);
+        String encrypt = MD5Util.encrypt(user.getSalt(), oldPassWord);
+        if(!encrypt.equals(user.getPassWord())){
+            return ResultVo.ERROR(ResultEnum.OLD_PWD_WRONG);
+        }
+        try {
+            userService.changePwd(userVo);
+            return ResultVo.OK(ResultEnum.CHANGE_PWD_SUCCESS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVo.OK(ResultEnum.CHANGE_PWD_ERROR);
+        }
+    }
     /**
      * 用户更换头像
      * @return
@@ -54,8 +75,8 @@ public class UserController {
      */
     @GetMapping("/userInfo")
     public ResultVo userInfo(UserVo userVo){
-       UserDTO user= userService.userInfo(userVo);
-       return ResultVo.OK(user);
+            UserDTO user= userService.userInfo(userVo);
+            return ResultVo.OK(user);
     }
     /**
      * 查询用户数量
@@ -207,11 +228,23 @@ public class UserController {
     @ControllerEndpoint(exceptionMessage = "修改用户失败",operation ="修改用户")
     public ResultVo update(UserVo userVo){
         try {
+            //验证用户名是否被占用
+            if(nameIsUsed(userVo)){
+                return ResultVo.ERROR(ResultEnum.NAME_IS_USED);
+            }
             userService.update(userVo);
             return new ResultVo().OK(ResultEnum.UPDATE_SUCCESS);
         } catch (Exception e) {
             return new ResultVo().ERROR(ResultEnum.UPDATE_FAIL);
         }
+    }
+
+    /**
+     * 判断用户名是否被占用
+     * @return
+     */
+    private boolean nameIsUsed(UserVo userVo) {
+        return userService.nameIsUsed(userVo);
     }
 
     /**
@@ -224,6 +257,10 @@ public class UserController {
     @ControllerEndpoint(exceptionMessage = "添加用户失败",operation ="添加用户")
     public ResultVo add(UserVo userVo){
         try {
+            //验证用户名是否被占用
+            if(nameIsUsed(userVo)){
+                return ResultVo.ERROR(ResultEnum.NAME_IS_USED);
+            }
             userService.add(userVo);
             return ResultVo.OK(ResultEnum.ADD_SUCCESS);
         } catch (Exception e) {

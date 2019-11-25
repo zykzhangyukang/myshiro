@@ -127,4 +127,17 @@ public interface UserService {
      * @param user
      */
     User saveOrUpdate(User user);
+
+    /**
+     * 用户更改密码
+     * @param userVo
+     */
+    void changePwd(UserVo userVo);
+
+    /**
+     * 用户名是否被占用
+     * @param userVo
+     * @return
+     */
+    boolean nameIsUsed(UserVo userVo);
 }

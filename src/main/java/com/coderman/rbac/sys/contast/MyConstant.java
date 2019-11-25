@@ -70,4 +70,8 @@ public class MyConstant {
      * 第三方用户角色
      */
     public static final String GITHUB_ROLE = "GitHub用户";
+    /**
+     * 用户默认头像
+     */
+    public static final String DEFAULT_AVATAR = "/resources/images/face.jpg";
 }

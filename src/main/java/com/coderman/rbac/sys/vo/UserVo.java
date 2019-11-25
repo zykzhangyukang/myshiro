@@ -23,4 +23,10 @@ public class UserVo extends User{
 
     private String birth;
 
+    /**新密码**/
+    private String newPassWord;
+
+    /**旧密码**/
+    private String oldPassWord;
+
 }

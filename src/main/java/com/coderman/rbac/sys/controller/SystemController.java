@@ -12,6 +12,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/system")
 public class SystemController {
 
+
+    /**
+     * 跳转到用户更改密码
+     * @return
+     */
+    @GetMapping("/changePwd")
+    public String changePwd(){
+        return "system/user/changePwd";
+    }
     /**
      * 用户个人信息
      * @return

@@ -66,18 +66,7 @@ public class LoginController {
             WebUtil.getSession().setAttribute(MyConstant.USER,activeUser.getUser());
             WebUtil.getSession().setAttribute("ActiveUser",activeUser);
             //记录登入日志
-            HttpServletRequest request = WebUtil.getRequest();
-            LoginLog loginLog=new LoginLog();
-            loginLog.setUserName(activeUser.getUser().getUserName());
-            loginLog.setIp(IPUtil.getIpAddr(request));
-            loginLog.setLocation(AddressUtil.getCityInfo(IPUtil.getIpAddr(request)));
-            // 获取客户端操作系统
-            UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("User-Agent"));
-            Browser browser = userAgent.getBrowser();
-            OperatingSystem os = userAgent.getOperatingSystem();
-            loginLog.setSystem(os.getName());
-            loginLog.setBrowser(browser.getName());
-            loginLog.setLoginTime(new Date());
+            LoginLog loginLog = createLoginLog(activeUser);
             loginLogService.saveLog(loginLog);
             //更新最新登入时间
             userService.updateLastLoginTime(activeUser);
@@ -90,6 +79,27 @@ public class LoginController {
             log.error("【登入失败】 message={}",e.getMessage());
             return ResultVo.ERROR(e.getMessage());
         }
+    }
+
+    /**
+     * 创建登入日志
+     * @param activeUser
+     * @return
+     */
+    public static LoginLog createLoginLog(ActiveUser activeUser) {
+        HttpServletRequest request = WebUtil.getRequest();
+        LoginLog loginLog=new LoginLog();
+        loginLog.setUserName(activeUser.getUser().getUserName());
+        loginLog.setIp(IPUtil.getIpAddr(request));
+        loginLog.setLocation(AddressUtil.getCityInfo(IPUtil.getIpAddr(request)));
+        // 获取客户端操作系统
+        UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("User-Agent"));
+        Browser browser = userAgent.getBrowser();
+        OperatingSystem os = userAgent.getOperatingSystem();
+        loginLog.setSystem(os.getName());
+        loginLog.setBrowser(browser.getName());
+        loginLog.setLoginTime(new Date());
+        return loginLog;
     }
 
     /**

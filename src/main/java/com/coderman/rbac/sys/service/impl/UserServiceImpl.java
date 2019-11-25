@@ -87,9 +87,10 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         BeanUtils.copyProperties(userVo, user);
         user.setCreateTime(new Date());
-        String salt = UUID.randomUUID().toString();
+        String salt = UUID.randomUUID().toString().toUpperCase();
         user.setPassWord(MD5Util.encrypt(salt, MyConstant.DEFAULT_PWD));
         user.setSalt(salt);
+        user.setAvatar(MyConstant.DEFAULT_AVATAR);//设置默认头像
         user.setModifiedTime(new Date());
         userMapper.insertSelective(user);
     }
@@ -298,6 +299,31 @@ public class UserServiceImpl implements UserService {
                 userRoleMapper.insertSelective(t);
             }
             return user;
+        }
+    }
+
+    @Transactional
+    @Override
+    public void changePwd(UserVo userVo) {
+        String newPassWord = userVo.getNewPassWord();
+        String salt=UUID.randomUUID().toString().toUpperCase();
+        String encrypt = MD5Util.encrypt(salt, newPassWord);
+        User user = userMapper.selectByPrimaryKey(userVo.getId());
+        user.setPassWord(encrypt);
+        user.setSalt(salt);
+        userMapper.updateByPrimaryKeySelective(user);
+    }
+
+    @Override
+    public boolean nameIsUsed(UserVo userVo) {
+        Example o = new Example(User.class);
+        o.createCriteria().andEqualTo("userName",userVo.getUserName()).andNotEqualTo("id",userVo.getId());
+        List<User> users = userMapper.selectByExample(o);
+        if(!CollectionUtils.isEmpty(users)){
+            return true;
+        }
+        else{
+            return false;
         }
     }
 }
