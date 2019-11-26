@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coderman.rbac.base.mapper.LoginLogExtMapper">
+
+  <select id="findLastSevenDaysVisitCount" resultType="map" parameterType="com.coderman.rbac.sys.bean.User">
+    select
+    date_format(l.login_time, '%m-%d') days,
+    count(1) count
+    from
+    (
+    select
+    *
+    from
+    sys_login_log
+    where
+    date_sub(curdate(), interval 20 day) &lt;= date(login_time)
+    ) as l where 1 = 1
+    <if test="userName != null and userName != ''">
+      and l.user_name = #{userName}
+    </if>
+    group by
+    days
+  </select>
+
+  <select id="loadLoginLocation" resultType="map">
+   SELECT location, COUNT(*) as count FROM sys_login_log GROUP BY location;
+  </select>
+
+
+
+</mapper>

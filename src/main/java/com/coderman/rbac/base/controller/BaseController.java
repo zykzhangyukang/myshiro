@@ -14,6 +14,23 @@ public class BaseController {
 
 
     /**
+     * 跳转到登入位置统计
+     * @return
+     */
+    @GetMapping("/loginLocationStatistics")
+    public String loginLocationStatistics(){
+        return "/base/statistics/loginLocationStatistics";
+    }
+
+    /**
+     * 跳转到登入日志统计
+     * @return
+     */
+    @GetMapping("/loginLogStatistics")
+    public String loginLogStatistics(){
+        return "/base/statistics/loginLogStatistics";
+    }
+    /**
      * 跳转到图标管理
      * @return
      */

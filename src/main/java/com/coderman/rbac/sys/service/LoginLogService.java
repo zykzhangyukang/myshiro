@@ -1,8 +1,12 @@
 package com.coderman.rbac.sys.service;
 
 import com.coderman.rbac.sys.bean.LoginLog;
+import com.coderman.rbac.sys.bean.User;
 import com.coderman.rbac.sys.vo.LoginLogVo;
 import com.coderman.rbac.sys.vo.PageVo;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhangyukang on 2019/11/10 15:06
@@ -32,4 +36,18 @@ public interface LoginLogService {
      * @param loginLogVo
      */
     void batchDelete(LoginLogVo loginLogVo);
+
+    /**
+     * 登入7天日志统计
+     * @param user
+     * @return
+     */
+    List<Map<String,Object>> findLastSevenDaysVisitCount(User user);
+
+    /**
+     * 登入位置统计
+     * @return
+     */
+    List<Map<String,Object>> loadLoginLocation();
+
 }

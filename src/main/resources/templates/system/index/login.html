@@ -27,11 +27,11 @@
     color: rgba(0,0,0,.85);font-size: 24px;"><span s style="color: #3491ff;">章鱼</span>权限系统</div>
 		<div class="layui-form-item input-item" style="margin-top: 30px;">
 			<label for="userName">用户名</label>
-			<input type="text" placeholder="请输入用户名" value="测试用户" name="userName" autocomplete="off" id="userName" class="layui-input" lay-verify="required">
+			<input type="text" placeholder="请输入用户名" value="zhangyukang" name="userName" autocomplete="off" id="userName" class="layui-input" lay-verify="required">
 		</div>
 		<div class="layui-form-item input-item">
 			<label for="password">密码</label>
-			<input type="password" placeholder="请输入密码" name="passWord" value="zhangyukang" autocomplete="off" id="password" class="layui-input" lay-verify="required">
+			<input type="password" placeholder="请输入密码" name="passWord" value="123456" autocomplete="off" id="password" class="layui-input" lay-verify="required">
 		</div>
 		<div class="layui-form-item input-item" id="imgCode">
 			<label for="code">验证码</label>
@@ -58,7 +58,7 @@
         //登录按钮
         form.on("submit(login)",function(data){
             var btn =  $(this);
-            if(!codeVaildation()) return false;
+            // if(!codeVaildation()) return false;
             $(this).text("登录中...").attr("disabled","disabled").addClass("layui-disabled");
             $.post("/login/login",data.field,function(rs){
                 //设置登录按钮 恢复可点击   在前端防止 重复点击

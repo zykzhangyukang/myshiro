@@ -1,6 +1,8 @@
 package com.coderman.rbac.sys.service.impl;
 
+import com.coderman.rbac.base.mapper.LoginLogExtMapper;
 import com.coderman.rbac.sys.bean.LoginLog;
+import com.coderman.rbac.sys.bean.User;
 import com.coderman.rbac.sys.contast.MyConstant;
 import com.coderman.rbac.sys.converter.TimeConverter;
 import com.coderman.rbac.sys.mapper.LoginLogMapper;
@@ -26,6 +28,9 @@ public class LoginLogServiceImpl implements LoginLogService {
 
     @Autowired
     private LoginLogMapper loginLogMapper;
+
+    @Autowired
+    private LoginLogExtMapper loginLogExtMapper;
 
     @Override
     public PageVo<LoginLog> findPage(LoginLogVo loginLogVo) {
@@ -77,5 +82,15 @@ public class LoginLogServiceImpl implements LoginLogService {
         Example o = new Example(LoginLog.class);
         o.createCriteria().andIn("id",idList);
         loginLogMapper.deleteByExample(o);
+    }
+
+    @Override
+    public List<Map<String, Object>> findLastSevenDaysVisitCount(User user) {
+        return loginLogExtMapper.findLastSevenDaysVisitCount(user);
+    }
+
+    @Override
+    public List<Map<String, Object>> loadLoginLocation() {
+        return loginLogExtMapper.loadLoginLocation();
     }
 }
