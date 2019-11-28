@@ -19,7 +19,7 @@ public class BaseController {
      */
     @GetMapping("/loginLocationStatistics")
     public String loginLocationStatistics(){
-        return "/base/statistics/loginLocationStatistics";
+        return "base/statistics/loginLocationStatistics";
     }
 
     /**
@@ -28,7 +28,7 @@ public class BaseController {
      */
     @GetMapping("/loginLogStatistics")
     public String loginLogStatistics(){
-        return "/base/statistics/loginLogStatistics";
+        return "base/statistics/loginLogStatistics";
     }
     /**
      * 跳转到图标管理

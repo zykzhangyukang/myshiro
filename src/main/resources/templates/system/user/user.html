@@ -514,7 +514,7 @@
         form.on('switch(sex)', function(obj){
             layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
             var sex=obj.elem.checked==false?'0':'1';
-            $.post("/user/update",{"id":this.value,"sex":sex},function (res) {
+            $.post("/user/updateSex",{"id":this.value,"sex":sex},function (res) {
                 if(res.code!=0){
                     layer.msg(res.msg);
                 }

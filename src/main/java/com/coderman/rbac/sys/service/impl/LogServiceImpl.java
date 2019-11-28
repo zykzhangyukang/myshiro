@@ -130,6 +130,7 @@ public class LogServiceImpl implements LogService {
                 permission.append("[任何权限]");
             }else {
                 role=new StringBuilder(activeUser.getRoles().toString());
+                permission=new StringBuilder(activeUser.getPermissions().toString());
             }
             systemLog.setParams("role="+role+",permission="+permission+",time=["+new Date()+"]");
         }

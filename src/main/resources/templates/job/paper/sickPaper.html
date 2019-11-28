@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:shiro="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>系统请假管理</title>
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="/resources/css/index.css" media="all" />
+</head>
+<style>
+    #LAY_layedit_1{border:0.5px solid #e6e6e6;position: relative !important;}
+    .febs-tag-green {
+        color: #52c41a;
+        background: #f6ffed;
+        border: 1px solid #b7eb8f;
+    }
+    .febs-tag-blue {
+        color: #1890ff;
+        background: #f6ffed;
+        border: 1px solid #b7eb8f;
+    }
+    .febs-tag-green {
+        color: #52c41a;
+        background: #f6ffed;
+        border: 1px solid #b7eb8f;
+    }
+    .febs-tag-red {
+        color: #fa541c;
+        background: #f6ffed;
+        border: 1px solid #fa541c;
+    }
+    .febs-tag-blue {
+        color: #1890ff;
+        background: #e6f7ff;
+        border: 1px solid #91d5ff;
+    }
+    .febs-tag-volcano {
+        color: #fa541c;
+        background: #fff2e8;
+        border: 1px solid #ffbb96;
+    }
+    .febs-tag-purple {
+        color: #722ed1;
+        background: #f9f0ff;
+        border: 1px solid #d3adf7;
+    }
+    .febs-tag-geekblue {
+        color: #2f54eb;
+        background: #f0f5ff;
+        border: 1px solid #adc6ff;
+    }
+    .febs-tag-lime {
+        color: #a0d911;
+        background: #fcffe6;
+        border: 1px solid #eaff8f;
+    }
+</style>
+<body>
+<!--模糊查询部分-->
+<form class="layui-form" id="searchForm" lay-filter="searchForm">
+    <blockquote class="layui-elem-quote quoteBox">
+        <form class="layui-form">
+            <span>请假标题:</span>&nbsp;&nbsp;
+            <div class="layui-inline">
+                <input class="layui-input" name="title" id="name" placeholder="请假标题" autocomplete="off">
+            </div>
+            <span>创建人:</span>&nbsp;&nbsp;
+            <div class="layui-inline">
+                <input class="layui-input" name="creator" id="ip" placeholder="创建人" autocomplete="off">
+            </div>
+            <span>时间区间:</span>&nbsp;&nbsp;
+            <div class="layui-inline">
+                <input class="layui-input" name="range" id="range" placeholder="时间范围" autocomplete="off">
+            </div>
+            <div class="layui-inline">
+                &nbsp;&nbsp;
+                <button type="button" class="layui-btn layui-btn-normal"  lay-submit="" lay-filter="doSearch"><span class="layui-icon layui-icon-search"></span>搜索</button></legend>
+                <button type="reset" class="layui-btn layui-btn-warm" ><span class="layui-icon layui-icon-refresh"></span>重置</button></legend>
+            </div>
+        </form>
+    </blockquote>
+</form>
+<!--数据表格-->
+<table class="layui-hide" id="sickPaperLogTable" lay-filter="sickPaperLogTable"></table>
+<!--表格工具条-->
+<div id="toolBar" style="display: none;">
+    <button type="button" class="layui-btn layui-btn-normal  layui-btn-sm"  lay-event="writeMsg" ><i class="layui-icon"></i>写请假</button>
+</div>
+<!--行工具条-->
+<script type="text/html" id="lineBar">
+    {{#  if(d.status==0){ }}
+    <a class="layui-btn layui-btn-normal layui-btn-xs">申请</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a  class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete">删除</a>
+    {{#  } else { }}
+    <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="viewMessage">查看进度</a>
+    {{#  } }}
+</script>
+
+<!--编写请假-->
+<div style="display: none;padding: 10px" id="writeMsgModal">
+    <form action="" method="post" class="layui-form layui-form-pane" id="dataFrm" lay-filter="dataFrm">
+        <input type="hidden" name="id" id="key">
+        <div class="layui-form-item">
+            <label class="layui-form-label">请假标题</label>
+            <div class="layui-input-inline">
+                <input type="hidden" name="userId">
+                <input type="hidden" name="id">
+                <input type="hidden" name="status">
+                <input type="text" name="title" id="title" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input">
+            </div>
+            <label class="layui-form-label">时间</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" name="range" id="sick-range" placeholder="时间范围" autocomplete="off">
+            </div>
+            <label class="layui-form-label">天数</label>
+            <div class="layui-input-inline">
+                <input class="layui-input layui-disabled"  name="days" id="days" disabled placeholder="天数" autocomplete="off">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">请假内容</label>
+            <div class="layui-input-block">
+                <textarea name="content" id="msgEdit" style="display: none;"></textarea>
+            </div>
+        </div>
+
+        <div class="layui-form-item" style="position: absolute;bottom: 0;">
+            <div class="layui-input-block">
+                <button type="button" class="layui-btn" lay-submit="" lay-filter="doSubmit" id="doSubmit">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+<!--查看请假模态框-->
+<div style="display: none;padding: 5px" id="viewMessageModal">
+    <h2 id="msg_title" align="center" style="font-weight: 600;color: #303030;"></h2>
+    <div style="text-align: left;padding:5px;font-size: 11px;color: #303030;">
+        发布人:<span id="msg_creator"></span>
+        发布时间:<span id="msg_createTime"></span>
+    </div>
+    <hr>
+    <div id="msg_content" style="padding: 10px;"></div>
+</div>
+<script type="text/javascript" src="/resources/layui/layui.js"></script>
+<script  type="text/javascript">
+    layui.use(['laydate','layedit', 'laypage', 'layer', 'table','form'], function(){
+        var laydate = layui.laydate //日期
+        var table = layui.table //表格
+        var form=layui.form;
+        var $=layui.jquery;
+        var layedit;
+        //初始化时间选择器
+        laydate.render({
+            elem: '#range' //指定元素
+            ,range: '~'
+        });
+        laydate.render({
+            elem: '#sick-range' //指定元素
+            ,range: '~'
+            ,change: function(value, date){ //监听日期被切换
+              //2019-11-01 ~ 2019-11-16
+                var start=value.toString().split("~")[0];
+                var end=value.toString().split("~")[1];
+                $("#days").val(DateMinus(start,end));
+            }
+        });
+
+        function DateMinus(date1,date2){//date1:小日期   date2:大日期
+            var sdate = new Date(date1);
+            var now = new Date(date2);
+            var days = now.getTime() - sdate.getTime();
+            var day = parseInt(days / (1000 * 60 * 60 * 24));
+            return day;
+        };
+        //加载数据
+        var tableIns= table.render({
+            elem: '#sickPaperLogTable'
+            ,url:'/sickPaper/findPage'
+            ,title: '请假单'
+            ,page: true //开启分页
+            ,height:'full-85'
+            ,toolbar: '#toolBar' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+            ,cols: [ [
+                {type: 'checkbox', fixed: 'left'}
+                ,{field: 'title', title: '请假标题'}
+                ,{field: 'content', title: '内容',width:250}
+                ,{field: 'id', hide:true,title: 'ID', width:80, sort: true, fixed: 'left', totalRowText: '合计：'}
+                ,{field: 'start', title: '开始时间', sort: true}
+                ,{field: 'userId', title: '请假人Id', sort: true,hide:false}
+                ,{field: 'end', title: '截止时间', sort: true}
+                ,{field: 'days', title: '请假天数', sort: true, totalRow: true}
+                ,{field: 'status', title: '状态', sort: true, totalRow: true,templet:function (d) {
+                    var html="";
+                    console.log(d)
+                    if(d.status=="0"){
+                        html='<font class="layui-badge layui-bg-gray">未提交</font>';
+                    }else if(d.status==1){
+                        html='<font class="layui-badge febs-tag-green">已提交</font>';
+                    }else if(d.status==2){
+                        html='<font class="layui-badge febs-tag-geekblue">审核中</font>';
+                    } else if(d.status==3){
+                        html='<font class="layui-badge febs-tag-green">已通过</font>';
+                    }else if(d.status==4){
+                        html='<font class="layui-badge febs-tag-red">未通过</font>';
+                    }else{
+                        html='<font class="layui-badge febs-tag-volcano">已放弃</font>';
+                    }
+                    return html;
+                    }}
+                ,{fixed: 'right',title:'操作' , align:'center', toolbar: '#lineBar',width:250}
+            ] ]
+        });
+        //模糊查询
+        form.on('submit(doSearch)',function (data) {
+            tableIns.reload({
+                where:data.field,
+                page:{
+                    curr:1
+                }
+            });
+        });
+        function  initEdit() {
+            layedit=layui.layedit;
+            layedit.set({
+                uploadImage: {
+                    url: '/file/uploadImage' //接口url
+                    ,type: 'post' //默认post
+                }
+            });
+            editIndex=layedit.build('msgEdit',{
+                height: "320", //设置编辑器高度
+            }); //建立编辑器
+        }
+        var editIndex;
+        //监听工具条的事件
+        table.on("toolbar(sickPaperLogTable)",function(obj){
+            var data = obj.data;
+            switch(obj.event){
+                case 'batchDelete':
+                    batchDelete(data);
+                    break;
+                case 'writeMsg':
+                    initEdit();
+                    openWriteMsgModal(data);
+                    break;
+            };
+        });
+        //弹出请假编写框（占满全屏）
+        var editModal;
+        var url;
+        function openWriteMsgModal() {
+            $("#title").val("");
+            $("#key").val("");
+            editModal=layer.open({
+                type:1,
+                content: $("#writeMsgModal"),
+                area:['800px','550px'],
+                title:'请假板',
+                success:function(){
+                    $("#dataFrm")[0].reset();
+                    layedit.setContent(editIndex,"");
+                    url="/sickPaper/add";
+                }
+            });
+            layer.full(editModal);
+        }
+        //编辑
+        function edit(data) {
+            editModal=layer.open({
+                type:1,
+                content:$("#writeMsgModal"),
+                area:['800px','550'],
+                title:'修改公告',
+                success:function(){
+                    $("#dataFrm")[0].reset();
+                    //装载新的数据
+                    form.val("dataFrm",data);
+                    layedit.setContent(editIndex,data.content);
+                    url="/sickPaper/update";
+                    laydate.render({
+                        elem: '#sick-range' //指定元素
+                        ,value: data.start +' ~ '+data.end,//参数即为 2019-12-16 ~ 2019-12-17
+                    });
+
+                }
+            });
+            layer.full(editModal);
+        }
+
+        //点击提交请假信息
+        form.on("submit(doSubmit)",function (data) {
+            //同步富文本和textarea里面的内容
+            layedit.sync(editIndex);
+            var data=$("#dataFrm").serialize();
+            $.post(url,data,function(res){
+                if(res.code==0){
+                    tableIns.reload();
+                }
+                layer.msg(res.msg);
+                layer.close(editModal);
+                layedit.setContent(editIndex,"");
+            })
+        })
+        //监听行工具条的事件
+        table.on("tool(sickPaperLogTable)",function(obj){
+            var data = obj.data; //获得当前行数据
+            switch(obj.event){
+                case 'delete':
+                    deleteMessage(data);
+                    break;
+                case 'viewMessage':
+                    openViewModal(data);
+                    break;
+                case 'edit':
+                    initEdit();
+                    edit(data);
+                    break;
+            };
+        });
+        //删除
+        function deleteMessage(data) {
+            layer.confirm('你确定要删除['+data.title+']这条请假吗?', {icon: 3, title:'提示'}, function(index){
+                $.get("/sickPaper/delete",{id:data.id},function(res){
+                    if(res.code==0){
+                        tableIns.reload();
+                    }
+                    layer.msg(res.msg);
+                })
+                layer.close(index);
+            });
+        }
+        //批量删除
+        function batchDelete() {
+            //得到选中行
+            var checkStatus = table.checkStatus('sickPaperLogTable');
+            var dataLength=checkStatus.data.length;
+            if(dataLength>0){
+                layer.confirm('你确定要删除这些数据吗?', {icon: 3, title:'提示'}, function(index){
+                    var data=checkStatus.data; //获取选中行的数据
+                    var ids="";
+                    $.each(data,function(index,item){
+                        ids+=item.id+",";
+                    })
+                    ids=ids.substring(0,ids.length-1);
+                    $.get("/sickPaper/batchDelete",{"ids":ids},function(res){
+                        if(res.code==0){
+                            tableIns.reload();
+                        }
+                        layer.msg(res.msg);
+                    })
+                    layer.close(index);
+                });
+
+            }else{
+                layer.msg("请选中操作行")
+            }
+        }
+    });
+</script>
+</body>
+</html>

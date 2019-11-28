@@ -140,4 +140,11 @@ public interface UserService {
      * @return
      */
     boolean nameIsUsed(UserVo userVo);
+
+    /**
+     * 更新性别
+     * @param userVo
+     */
+    void updateSex(UserVo userVo);
+
 }

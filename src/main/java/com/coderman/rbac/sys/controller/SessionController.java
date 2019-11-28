@@ -40,10 +40,10 @@ public class SessionController {
                 return ResultVo.OK(ResultEnum.FLUSH_SUCCESS);
             } catch (Exception e) {
                 e.printStackTrace();
-                return ResultVo.OK(ResultEnum.FLUSH_ERROR);
+                return ResultVo.ERROR(ResultEnum.FLUSH_ERROR);
             }
         }else {
-            return ResultVo.OK(ResultEnum.FLUSH_ERROR);
+            return ResultVo.ERROR(ResultEnum.FLUSH_ERROR);
         }
     }
 

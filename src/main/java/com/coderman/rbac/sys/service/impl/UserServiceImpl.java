@@ -326,4 +326,12 @@ public class UserServiceImpl implements UserService {
             return false;
         }
     }
+
+    @Transactional
+    @Override
+    public void updateSex(UserVo userVo) {
+        User user = userMapper.selectByPrimaryKey(userVo.getId());
+        user.setSex(userVo.getSex());
+        userMapper.updateByPrimaryKeySelective(user);
+    }
 }

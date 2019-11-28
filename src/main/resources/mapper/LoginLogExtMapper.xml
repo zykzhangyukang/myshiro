@@ -15,17 +15,16 @@
     where
     date_sub(curdate(), interval 20 day) &lt;= date(login_time)
     ) as l where 1 = 1
-    <if test="userName != null and userName != ''">
-      and l.user_name = #{userName}
-    </if>
+    <!--<if test="userName != null and userName != ''">-->
+      <!--and l.user_name = #{userName}-->
+    <!--</if>-->
     group by
     days
   </select>
 
   <select id="loadLoginLocation" resultType="map">
-   SELECT location, COUNT(*) as count FROM sys_login_log GROUP BY location;
+    SELECT location, COUNT(*) as count FROM sys_login_log GROUP BY location;
   </select>
-
 
 
 </mapper>

@@ -218,6 +218,24 @@ public class UserController {
             return new ResultVo().ERROR(ResultEnum.LOCK_FAIL);
         }
     }
+
+    /**
+     * 更新用户的性别
+     * @return
+     */
+    @RequiresPermissions({"user:update:sex"})
+    @ControllerEndpoint(exceptionMessage = "更新用户性别失败",operation ="更新用户性别")
+    @PostMapping("/updateSex")
+    public ResultVo updateSex(UserVo userVo){
+        try {
+            userService.updateSex(userVo);
+            return new ResultVo().OK(ResultEnum.UPDATE_SUCCESS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResultVo().ERROR(ResultEnum.UPDATE_FAIL);
+        }
+    }
+
     /**
      * 更新用户
      * @param userVo

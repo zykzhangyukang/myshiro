@@ -42,6 +42,7 @@ mybatis:
   mapper-locations: classpath:mapper/*Mapper.xml
 
 
+
 #shiro的配置
 shiro:
   hash-algorithm-name: md5
