@@ -7,6 +7,11 @@ import lombok.Data;
  */
 @Data
 public class WorkFlowVo {
+
+    private String id;
+
+    private String ids;
+
     private int page;
     private int limit;
 

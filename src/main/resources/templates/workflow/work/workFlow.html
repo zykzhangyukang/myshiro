@@ -1,10 +1,245 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:shiro="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>流程部署管理</title>
+    <title>系统请假管理</title>
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="/resources/css/index.css" media="all" />
 </head>
+<style>
+    #LAY_layedit_1{border:0.5px solid #e6e6e6;position: relative !important;}
+    .febs-tag-green {
+        color: #52c41a;
+        background: #f6ffed;
+        border: 1px solid #b7eb8f;
+    }
+    .febs-tag-blue {
+        color: #1890ff;
+        background: #f6ffed;
+        border: 1px solid #b7eb8f;
+    }
+    .febs-tag-green {
+        color: #52c41a;
+        background: #f6ffed;
+        border: 1px solid #b7eb8f;
+    }
+    .febs-tag-red {
+        color: #fa541c;
+        background: #f6ffed;
+        border: 1px solid #fa541c;
+    }
+    .febs-tag-blue {
+        color: #1890ff;
+        background: #e6f7ff;
+        border: 1px solid #91d5ff;
+    }
+    .febs-tag-volcano {
+        color: #fa541c;
+        background: #fff2e8;
+        border: 1px solid #ffbb96;
+    }
+    .febs-tag-purple {
+        color: #722ed1;
+        background: #f9f0ff;
+        border: 1px solid #d3adf7;
+    }
+    .febs-tag-geekblue {
+        color: #2f54eb;
+        background: #f0f5ff;
+        border: 1px solid #adc6ff;
+    }
+    .febs-tag-lime {
+        color: #a0d911;
+        background: #fcffe6;
+        border: 1px solid #eaff8f;
+    }
+</style>
 <body>
-<h1>流程部署管理</h1>
+<!--模糊查询部分-->
+<form class="layui-form" id="searchForm" lay-filter="searchForm">
+    <blockquote class="layui-elem-quote quoteBox">
+        <form class="layui-form">
+            <span>流程部署名称:</span>&nbsp;&nbsp;
+            <div class="layui-inline">
+                <input class="layui-input" name="deployName" id="name" placeholder="流程部署名称" autocomplete="off">
+            </div>
+            <div class="layui-inline">
+                &nbsp;&nbsp;
+                <button type="button" class="layui-btn layui-btn-normal"  lay-submit="" lay-filter="doSearch"><span class="layui-icon layui-icon-search"></span>搜索</button></legend>
+                <button type="reset" class="layui-btn layui-btn-warm" ><span class="layui-icon layui-icon-refresh"></span>重置</button></legend>
+            </div>
+        </form>
+    </blockquote>
+</form>
+<!--数据表格-->
+<table class="layui-hide" id="workFlowTable" lay-filter="workFlowTable"></table>
+<!--数据表格2-->
+<table class="layui-hide" id="workFlowDefTable" lay-filter="workFlowDefTable"></table>
+<!--表格工具条-->
+<div id="toolBar" style="display: none;">
+    <button type="button" class="layui-btn layui-btn-normal  layui-btn-xs"  lay-event="addProcess" >添加部署</button>
+    <button type="button" class="layui-btn layui-btn-danger  layui-btn-xs"  lay-event="batchDelete" ><i class="layui-icon"></i>批量删除</button>
+</div>
+<!--行工具条-->
+<script type="text/html" id="lineBar">
+    <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="showImage">查看流程图</a>
+    <a  class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete">删除流程</a>
+</script>
+<script type="text/javascript" src="/resources/layui/layui.js"></script>
+<script  type="text/javascript">
+    var tableIns;
+    var tableIns2;
+    var AddProcessModal;
+    layui.use(['layedit', 'laypage', 'layer', 'table','form'], function(){
+        var table = layui.table //表格
+        var form=layui.form;
+        var $=layui.jquery;
+        //加载数据
+        tableIns= table.render({
+            elem: '#workFlowTable'
+            ,url:'/workFlow/listAllProcessDeploy'
+            ,title: '流程部署信息'
+            ,page: true //开启分页
+            ,height:'full-300'
+            ,limit:4
+            ,limits:[4,10,15,20]
+            ,toolbar: '#toolBar' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+            ,cols: [ [
+                {type: 'checkbox', fixed: 'left'}
+                ,{field: 'id', title: '流程部署ID', sort: true,hide:false}
+                ,{field: 'name', title: '流程部署名'}
+                ,{field: 'deploymentTime', title: '部署时间',width:250}
+                ,{fixed: 'right',title:'操作' , align:'center', toolbar: '#lineBar',width:250}
+            ] ]
+        });
+        //加载数据
+        tableIns2= table.render({
+            elem: '#workFlowDefTable'
+            ,url:'/workFlow/listAllProcessDefine'
+            ,title: '流程定义信息'
+            ,page: true //开启分页
+            ,limit:3
+            ,limits:[3,10,15,20]
+            ,height:'full-400'
+            ,cols: [ [
+                {type: 'checkbox', fixed: 'left'}
+                ,{field: 'id', title: '流程定义ID', sort: true,hide:false}
+                ,{field: 'name', title: '流程定义名'}
+                ,{field: 'key', title: '流程定义Key'}
+                ,{field: 'deploymentId', title: '部署ID'}
+                ,{field: 'resourceName', title: '资源名'}
+                ,{field: 'diagramResourceName', title: '流程图'}
+                ,{field: 'version', title: '版本'}
+            ] ]
+        });
+        //模糊查询
+        form.on('submit(doSearch)',function (data) {
+            tableIns.reload({
+                where:data.field,
+                page:{
+                    curr:1
+                }
+            });
+            tableIns2.reload({
+                where:data.field,
+                page:{
+                    curr:1
+                }
+            });
+        });
+        //监听工具条的事件
+        table.on("toolbar(workFlowTable)",function(obj){
+            var data = obj.data;
+            switch(obj.event){
+                case 'batchDelete':
+                    batchDelete(data);
+                    break;
+                case 'addProcess':
+                    oPenAddProcessModal(data);
+                    break;
+            };
+        });
+
+        /**
+         * 弹出部署流程模态框
+         */
+        function oPenAddProcessModal() {
+            AddProcessModal=layer.open({
+                type: 2
+                ,shade: 0.8,
+                title: '添加流程部署信息。',
+                shadeClose: true,
+                maxmin: true, //开启最大化最小化按钮
+                area: ['793px', '250px'],
+                content: '/workFlow/workFlowAdd'
+            });
+        }
+
+        function showImage(data) {
+            layer.open({
+                type: 2
+                ,shade: 0.8,
+                title: '流程图',
+                shadeClose: true,
+                maxmin: true, //开启最大化最小化按钮
+                area: ['793px', '560px'],
+                content: '/workFlow/processImage?id='+data.id,
+            });
+        }
+        //监听行工具条的事件
+        table.on("tool(workFlowTable)",function(obj){
+            var data = obj.data; //获得当前行数据
+            switch(obj.event){
+                case 'delete':
+                    deleteProcess(data);
+                    break;
+                case 'showImage':
+                    showImage(data);
+                    break;
+            };
+        });
+        //删除
+        function deleteProcess(data) {
+            layer.confirm('你确定要删除['+data.name+']这条请假吗?', {icon: 3, title:'提示'}, function(index){
+                $.get("/workFlow/delete",{id:data.id},function(res){
+                    if(res.code==0){
+                        tableIns.reload();
+                        tableIns2.reload();
+                    }
+                    layer.msg(res.msg);
+                })
+                layer.close(index);
+            });
+        }
+        //批量删除
+        function batchDelete() {
+            //得到选中行
+            var checkStatus = table.checkStatus('workFlowTable');
+            var dataLength=checkStatus.data.length;
+            if(dataLength>0){
+                layer.confirm('你确定要删除这些数据吗?', {icon: 3, title:'提示'}, function(index){
+                    var data=checkStatus.data; //获取选中行的数据
+                    var ids="";
+                    $.each(data,function(index,item){
+                        ids+=item.id+",";
+                    })
+                    ids=ids.substring(0,ids.length-1);
+                    $.get("/workFlow/batchDelete",{"ids":ids},function(res){
+                        if(res.code==0){
+                            tableIns.reload();
+                            tableIns2.reload();
+                        }
+                        layer.msg(res.msg);
+                    })
+                    layer.close(index);
+                });
+
+            }else{
+                layer.msg("请选中操作行")
+            }
+        }
+    });
+</script>
 </body>
 </html>

@@ -35,7 +35,10 @@ public enum ResultEnum {
     FLUSH_SUCCESS(22,"刷新成功" ),
     FLUSH_ERROR(23,"刷新失败" ), OLD_PWD_WRONG(24,"旧密码错误"),
     CHANGE_PWD_SUCCESS(25,"更换密码成功"),
-    CHANGE_PWD_ERROR(26,"更换密码失败"), NAME_IS_USED(27,"用户名被占用" );
+    CHANGE_PWD_ERROR(26,"更换密码失败"),
+    NAME_IS_USED(27,"用户名被占用" ),
+    DEPLOY_PROCESS_SUCCESS(28,"流程部署成功" ),
+    DEPLOY_PROCESS_FAIL(29,"流程部署失败" );
     private Integer code;
     private String msg;
 

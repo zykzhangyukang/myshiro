@@ -512,7 +512,6 @@
 
         //更新性别
         form.on('switch(sex)', function(obj){
-            layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
             var sex=obj.elem.checked==false?'0':'1';
             $.post("/user/updateSex",{"id":this.value,"sex":sex},function (res) {
                 if(res.code!=0){
@@ -523,14 +522,15 @@
         });
         //更新锁定状态
         form.on('checkbox(status)', function(obj){
-            layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
-            var status=obj.elem.checked==true?'0':'1';
-            $.post("/user/lock",{"id":this.value,"status":status},function (res) {
-                if(res.code!=0){
-                    layer.msg(res.msg);
-                }
-                tableIns.reload();
-            })
+
+                layer.tips(this.value + ' ' + this.name + '：' + obj.elem.checked, obj.othis);
+                var status = obj.elem.checked == true ? '0' : '1';
+                $.post("/user/lock", {"id": this.value, "status": status}, function (res) {
+                    if (res.code != 0) {
+                        layer.msg(res.msg);
+                    }
+                    tableIns.reload();
+                })
         });
         //删除
         function deleteUser(data) {

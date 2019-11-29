@@ -84,7 +84,7 @@
 <table class="layui-hide" id="sickPaperLogTable" lay-filter="sickPaperLogTable"></table>
 <!--表格工具条-->
 <div id="toolBar" style="display: none;">
-    <button type="button" class="layui-btn layui-btn-normal  layui-btn-sm"  lay-event="writeMsg" ><i class="layui-icon"></i>写请假</button>
+    <button type="button" class="layui-btn layui-btn-normal  layui-btn-sm"  lay-event="writePaper" ><i class="layui-icon"></i>写请假</button>
 </div>
 <!--行工具条-->
 <script type="text/html" id="lineBar">
@@ -98,7 +98,7 @@
 </script>
 
 <!--编写请假-->
-<div style="display: none;padding: 10px" id="writeMsgModal">
+<div style="display: none;padding: 10px" id="writePaperModal">
     <form action="" method="post" class="layui-form layui-form-pane" id="dataFrm" lay-filter="dataFrm">
         <input type="hidden" name="id" id="key">
         <div class="layui-form-item">
@@ -241,21 +241,21 @@
                 case 'batchDelete':
                     batchDelete(data);
                     break;
-                case 'writeMsg':
+                case 'writePaper':
                     initEdit();
-                    openWriteMsgModal(data);
+                    openWritePaperModal(data);
                     break;
             };
         });
         //弹出请假编写框（占满全屏）
         var editModal;
         var url;
-        function openWriteMsgModal() {
+        function openWritePaperModal() {
             $("#title").val("");
             $("#key").val("");
             editModal=layer.open({
                 type:1,
-                content: $("#writeMsgModal"),
+                content: $("#writePaperModal"),
                 area:['800px','550px'],
                 title:'请假板',
                 success:function(){
@@ -270,7 +270,7 @@
         function edit(data) {
             editModal=layer.open({
                 type:1,
-                content:$("#writeMsgModal"),
+                content:$("#writePaperModal"),
                 area:['800px','550'],
                 title:'修改公告',
                 success:function(){

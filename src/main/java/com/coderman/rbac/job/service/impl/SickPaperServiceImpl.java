@@ -37,6 +37,7 @@ public class SickPaperServiceImpl implements SickPaperService {
         PageHelper.startPage(sickPaperVo.getPage(),sickPaperVo.getLimit());
         Example example = new Example(SickPaper.class);
         Example.Criteria criteria = example.createCriteria();
+        User user = (User) WebUtil.getSession().getAttribute(MyConstant.USER);
         if(sickPaperVo!=null){
             if(sickPaperVo.getTitle()!=null&&!"".equals(sickPaperVo.getTitle())){
                 criteria.andLike("title","%"+sickPaperVo.getTitle()+"%");
@@ -50,6 +51,7 @@ public class SickPaperServiceImpl implements SickPaperService {
                 criteria.andLessThanOrEqualTo("end",timeListByRange.get(MyConstant.END_TIME));
             }
         }
+        criteria.andEqualTo("userId",user.getId());
         List<SickPaper> sickPapers = sickPaperMapper.selectByExample(example);
         PageInfo pageInfo=new PageInfo(sickPapers);
         return new PageVo<>(pageInfo.getTotal(),pageInfo.getList());

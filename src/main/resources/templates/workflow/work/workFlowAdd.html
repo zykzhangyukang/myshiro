@@ -2,9 +2,71 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>$Title$</title>
+    <title>部署流程</title>
+    <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="/resources/css/index.css" media="all" />
 </head>
 <body>
-$END$
+<form class="layui-form" id="addProcessForm" lay-filter="addProcessForm" style="padding: 20px;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">流程部署名</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" id="name" lay-verify="title" autocomplete="off" placeholder="流程部署名" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+        <div class="layui-upload">
+            <button type="button" class="layui-btn layui-btn-primary" id="test8"><span class="layui-icon ">&#xe681;</span>选择文件</button><input class="layui-upload-file" type="file" accept="" name="file">
+        </div>
+        </div>
+    </div>
+    <div class="layui-form-item" style="text-align: center;margin-top: 20px;">
+        <div class="layui-input-block">
+            <button type="button" class="layui-btn layui-btn-normal" lay-submit="" id="doAddProcess" lay-filter="doAddProcess">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+<script type="text/javascript" src="/resources/layui/layui.js"></script>
+<script>
+    layui.use(['layer', 'table','form','upload','jquery'], function(){
+        var upload=layui.upload;
+        var $=layui.jquery;
+        //选完文件后不自动上传
+        upload.render({
+            elem: '#test8'
+            ,url: '/workFlow/deployProcess'
+            ,acceptMime:"application/zip"
+            ,exts:'zip'
+            ,auto: false
+            //,multiple: true
+            ,bindAction: '#doAddProcess'
+            ,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+                layer.load(); //上传loading
+            }
+            ,done: function(res){
+                //关闭部署的弹出层
+                var addIndex=parent.layer.getFrameIndex(window.name);
+                window.parent.layer.close(addIndex);
+                layer.msg(res.msg);
+                //刷新表格
+                window.parent.tableIns.reload();
+                window.parent.tableIns2.reload();
+                layer.closeAll('loading'); //关闭loading
+            }
+            ,data: {
+                name: function(){
+                    return $('#name').val();
+                }
+            }
+            ,error: function (res) {
+                layer.msg(res.msg);
+                layer.closeAll('loading'); //关闭loading
+            }
+        });
+
+    })
+</script>
 </body>
 </html>

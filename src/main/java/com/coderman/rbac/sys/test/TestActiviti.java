@@ -42,7 +42,7 @@ public class TestActiviti {
     @Test
     public void deploy2(){
         Deployment deploy = repositoryService.createDeployment().name("流程HelloWord")
-                .addClasspathResource("process/HelloWord.bpmn").addClasspathResource("process/HelloWord.png").deploy();
+                .addClasspathResource("process/HelloWord.xml").addClasspathResource("process/HelloWord.png").deploy();
         System.out.println("流程部署成功"+deploy);
     }
 

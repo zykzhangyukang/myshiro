@@ -8,6 +8,7 @@ import lombok.Data;
  */
 @Data
 public class ProcessDefinitionEntityVo {
+    private String id;
     private  String name;
     private  String description;
     private  String key;
