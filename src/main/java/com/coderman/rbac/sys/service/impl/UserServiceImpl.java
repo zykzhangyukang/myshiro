@@ -50,8 +50,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private RoleMapper roleMapper;
 
-
-
     @Override
     public User findUserByName(String userName) {
         Example example = new Example(User.class);

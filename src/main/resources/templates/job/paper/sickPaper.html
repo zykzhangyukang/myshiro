@@ -89,7 +89,7 @@
 <!--行工具条-->
 <script type="text/html" id="lineBar">
     {{#  if(d.status==0){ }}
-    <a class="layui-btn layui-btn-normal layui-btn-xs">申请</a>
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="apply">申请</a>
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a  class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete">删除</a>
     {{#  } else { }}
@@ -310,8 +310,8 @@
                 case 'delete':
                     deleteMessage(data);
                     break;
-                case 'viewMessage':
-                    openViewModal(data);
+                case 'apply':
+                    apply(data);
                     break;
                 case 'edit':
                     initEdit();
@@ -319,6 +319,17 @@
                     break;
             };
         });
+        //提交申请
+        function apply(data) {
+            layer.confirm('你确定申请['+data.title+']这条请假吗?', {icon: 3, title:'提示'}, function(index) {
+                $.get("/workFlow/apply", {"sickPaperId": data.id}, function (res) {
+                    if(res.code==0){
+                        tableIns.reload();
+                    }
+                    layer.msg(res.msg);
+                })
+            });
+        }
         //删除
         function deleteMessage(data) {
             layer.confirm('你确定要删除['+data.title+']这条请假吗?', {icon: 3, title:'提示'}, function(index){

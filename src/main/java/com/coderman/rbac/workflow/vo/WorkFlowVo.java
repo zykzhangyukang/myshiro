@@ -13,8 +13,16 @@ public class WorkFlowVo {
     private String ids;
 
     private int page;
+
     private int limit;
 
     /**流程部署名**/
     private String deployName;
+
+    /**任务办理人**/
+    private String assignee;
+
+    /**请假单ID**/
+    private String sickPaperId;
+
 }

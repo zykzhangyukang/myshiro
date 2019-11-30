@@ -24,6 +24,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.ZipInputStream;
 
@@ -48,14 +49,32 @@ public class WorkFlowController {
         return "workflow/work/workFlow";
     }
 
-
+    /**
+     * 跳转到添加流程
+     * @return
+     */
     @RequestMapping(value = "/workFlowAdd",method = RequestMethod.GET)
     public String workFlowAdd(){return "workflow/work/workFlowAdd";}
 
+    /**
+     * 跳转到查看流程图
+     * @param id
+     * @param map
+     * @return
+     */
     @RequestMapping(value = "/processImage",method = RequestMethod.GET)
     public String workFlowImage(String id,Map<String,Object> map){
         map.put("deployId",id);
         return "workflow/work/processImage";
+    }
+
+    /**
+     * 跳转到我的代办任务
+     * @return
+     */
+    @RequestMapping(value = "/myTask",method = RequestMethod.GET)
+    public String myTask(){
+        return "workflow/work/myTask";
     }
 
     /**
@@ -81,7 +100,21 @@ public class WorkFlowController {
         PageVo pageVo = workFlowService.listAllProcessDefine(workFlowVo);
         return pageVo;
     }
-
+    /**
+     * 查看代办任务
+     * @param workFlowVo
+     * @return
+     */
+    @GetMapping("/queryTaskByName")
+    public ResultVo queryTaskByName(WorkFlowVo workFlowVo){
+        try {
+            workFlowService.queryTask(workFlowVo.getAssignee());
+            return ResultVo.OK();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVo.ERROR();
+        }
+    }
     /**
      * 流程部署
      * @param file
@@ -142,7 +175,6 @@ public class WorkFlowController {
             return ResultVo.ERROR(ResultEnum.DELETE_FAIL);
         }
     }
-
     /**
      * 流程图
      * @param workFlowVo
@@ -158,6 +190,45 @@ public class WorkFlowController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 提交请假申请
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/apply",method = RequestMethod.GET)
+    public ResultVo apply(WorkFlowVo workFlowVo){
+        try {
+            workFlowService.apply(workFlowVo);
+            return ResultVo.OK(ResultEnum.APPLY_SUCCESS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVo.ERROR(ResultEnum.APPLY_FAIL);
+        }
+    }
+
+    /**
+     * 我的代办任务
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/listAllTasks",method = RequestMethod.GET)
+    public PageVo listAllTasks(WorkFlowVo workFlowVo){
+       return  workFlowService.listAllTasks(workFlowVo);
+    }
+
+    /**
+     * 我的任务数
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/countTask",method = RequestMethod.GET)
+    public Map<String,Object> countTask(){
+        Long count=workFlowService.countTask();
+        Map<String,Object> map=new HashMap<>();
+        map.put("count",count);
+        return map;
     }
 
 }

@@ -74,4 +74,13 @@ public class MyConstant {
      * 用户默认头像
      */
     public static final String DEFAULT_AVATAR = "/resources/images/face.jpg";
+    /**
+     * 请假流程相关
+     */
+    public static final Integer SICK_STATUS_APPLY = 1;//提交申请
+    public static final Integer SICK_STATUS_DEALING = 2;//申请中
+    public static final Integer SICK_STATUS_PASS = 3;//申请通过
+    public static final Integer SICK_STATUS_UNPASS = 4;//申请不通过
+    public static final Integer SICK_STATUS_QUIT = 5;//放弃申请
+    public static final String PROCESS_KEY = "员工请假流程";
 }

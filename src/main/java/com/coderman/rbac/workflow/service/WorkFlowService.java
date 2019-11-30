@@ -4,9 +4,11 @@ import com.coderman.rbac.sys.vo.PageVo;
 import com.coderman.rbac.workflow.vo.DeploymentEntityVo;
 import com.coderman.rbac.workflow.vo.ProcessDefinitionEntityVo;
 import com.coderman.rbac.workflow.vo.WorkFlowVo;
+import javafx.concurrent.Task;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.zip.ZipInputStream;
 
 /**
@@ -27,6 +29,11 @@ public interface WorkFlowService {
     PageVo<ProcessDefinitionEntityVo> listAllProcessDefine(WorkFlowVo workFlowVo);
 
 
+    /**
+     * 部署流程
+     * @param zipInputStream
+     * @param name
+     */
     void deployProcess(ZipInputStream zipInputStream,String name);
 
     /**
@@ -47,5 +54,31 @@ public interface WorkFlowService {
      * @return
      */
     InputStream workFlowImage(WorkFlowVo workFlowVo) throws IOException;
+
+
+    /**
+     * 查询代办任务
+     * @param name
+     * @return
+     */
+     List<Task> queryTask(String name);
+
+    /**
+     * 提交申请，启动流程
+     * @param workFlowVo
+     */
+    void apply(WorkFlowVo workFlowVo);
+
+    /**
+     * 代办任务
+     * @return
+     */
+    PageVo listAllTasks(WorkFlowVo workFlowVo);
+
+    /**
+     * 我的任务数
+     * @return
+     */
+    Long countTask();
 
 }

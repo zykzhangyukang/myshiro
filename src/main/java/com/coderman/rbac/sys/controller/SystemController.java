@@ -115,7 +115,7 @@ public class SystemController {
     }
 
     /**
-     * 跳转到y用户管理
+     * 跳转到用户管理
      * @return
      */
     @GetMapping("/user")

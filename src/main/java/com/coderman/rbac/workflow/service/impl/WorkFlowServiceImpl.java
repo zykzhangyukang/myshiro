@@ -1,9 +1,16 @@
 package com.coderman.rbac.workflow.service.impl;
 
+import com.coderman.rbac.job.bean.SickPaper;
+import com.coderman.rbac.job.mapper.SickPaperMapper;
+import com.coderman.rbac.sys.bean.User;
+import com.coderman.rbac.sys.contast.MyConstant;
+import com.coderman.rbac.sys.realm.UserRealm;
+import com.coderman.rbac.sys.utils.WebUtil;
 import com.coderman.rbac.sys.vo.PageVo;
 import com.coderman.rbac.workflow.service.WorkFlowService;
 import com.coderman.rbac.workflow.vo.DeploymentEntityVo;
 import com.coderman.rbac.workflow.vo.ProcessDefinitionEntityVo;
+import com.coderman.rbac.workflow.vo.TaskEntityVo;
 import com.coderman.rbac.workflow.vo.WorkFlowVo;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.engine.RepositoryService;
@@ -11,6 +18,7 @@ import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
+import org.activiti.engine.task.Task;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,10 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.zip.ZipInputStream;
 
 /**
@@ -40,11 +45,15 @@ public class WorkFlowServiceImpl implements WorkFlowService {
     @Autowired
     private TaskService taskService;
 
+    @Autowired
+    private SickPaperMapper sickPaperMapper;
+
     /**
      * 查询流程部署信息
      * @param workFlowVo
      * @return
      */
+    @Transactional
     @Override
     public PageVo<DeploymentEntityVo> listAllProcessDeploy(WorkFlowVo workFlowVo) {
         long count = repositoryService.createDeploymentQuery().count();
@@ -120,7 +129,7 @@ public class WorkFlowServiceImpl implements WorkFlowService {
     @Transactional
     @Override
     public void delete(WorkFlowVo workFlowVo) {
-        repositoryService.deleteDeployment(workFlowVo.getId());
+        repositoryService.deleteDeployment(workFlowVo.getId(),true);
     }
 
     @Transactional
@@ -136,16 +145,60 @@ public class WorkFlowServiceImpl implements WorkFlowService {
         }
         if(!CollectionUtils.isEmpty(idList)){
             for (String id : idList) {
-                repositoryService.deleteDeployment(id);
+                repositoryService.deleteDeployment(id,true);
             }
         }
     }
-
     @Override
     public InputStream workFlowImage(WorkFlowVo workFlowVo) {
         String deployId = workFlowVo.getId();//流程部署ID；
         ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().deploymentId(deployId).singleResult();
         InputStream inputStream = repositoryService.getProcessDiagram(processDefinition.getId());
         return inputStream;
+    }
+
+    @Override
+    public List queryTask(String name) {
+        List<Task> list = taskService.createTaskQuery().taskAssignee(name).list();
+        return list;
+    }
+
+    @Transactional
+    @Override
+    public void apply(WorkFlowVo workFlowVo) {
+        String key= MyConstant.PROCESS_KEY;
+        Map<String, Object> map=new HashMap<>();
+        User user = (User) WebUtil.getSession().getAttribute(MyConstant.USER);
+        map.put("userName",user.getUserName());
+        runtimeService.startProcessInstanceByKey(key,key+"=>"+workFlowVo.getSickPaperId(),map);
+        //修改请假单的状态
+        SickPaper sickPaper = sickPaperMapper.selectByPrimaryKey(workFlowVo.getSickPaperId());
+        sickPaper.setStatus(MyConstant.SICK_STATUS_APPLY);
+        sickPaperMapper.updateByPrimaryKeySelective(sickPaper);
+    }
+    @Transactional
+    @Override
+    public PageVo<TaskEntityVo> listAllTasks(WorkFlowVo workFlowVo) {
+        User user = (User) WebUtil.getSession().getAttribute(MyConstant.USER);
+        long count = taskService.createTaskQuery().taskAssignee(user.getUserName()).count();
+        int i=(workFlowVo.getPage()-1)*workFlowVo.getLimit();
+        int j=workFlowVo.getLimit();
+        List<Task> tasks = taskService.createTaskQuery().taskAssignee(user.getUserName()).listPage(i, j);
+        List<TaskEntityVo> taskEntityVos=new ArrayList<>();
+        if(!CollectionUtils.isEmpty(tasks)){
+            for (Task task : tasks) {
+                TaskEntityVo taskEntityVo = new TaskEntityVo();
+                BeanUtils.copyProperties(task,taskEntityVo);
+                taskEntityVos.add(taskEntityVo);
+            }
+        }
+        return new PageVo<>(count,taskEntityVos);
+    }
+
+    @Override
+    public Long countTask() {
+        User user = (User) WebUtil.getSession().getAttribute(MyConstant.USER);
+        long count = taskService.createTaskQuery().taskAssignee(user.getUserName()).count();
+        return count;
     }
 }

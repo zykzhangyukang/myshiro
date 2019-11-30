@@ -24,6 +24,9 @@
 				<a href="javascript:;" class="seraph hideMenu icon-caidan"></a>
 			    <!-- 顶部右侧菜单 -->
 			    <ul class="layui-nav top_menu">
+					<li class="layui-nav-item">
+						<a href="javascript:;" id="myTask" data-url="/workFlow/myTask"><cite>代办任务</cite><span id="taskCount"></span></a>
+					</li>
 					<li class="layui-nav-item" pc>
 						<a href="javascript:;" class="clearCache"><i class="layui-icon" data-icon="&#xe640;">&#xe640;</i><cite>清除缓存</cite><span class="layui-badge-dot"></span></a>
 					</li>
@@ -116,7 +119,15 @@
             openTabNum : "50",  //最大可打开窗口数量
             url : "/menu/loadLeftMenu" //获取菜单json地址
         });
-
+        //加载我的任务数
+		$.get("/workFlow/countTask",function (res) {
+		    var count=res.count;
+		    if(count>0) $("#taskCount").html("<span  id=\"\" class=\"layui-badge\">"+count+"</span>");
+		    else $("#taskCount").css({display:'none'})
+        })
+		$("#myTask").click(function (res) {
+			$("#taskCount").fadeOut();
+        })
         //通过顶部菜单获取左侧二三级菜单   注：此处只做演示之用，实际开发中通过接口传参的方式获取导航数据
         function getData(json){
             $.getJSON(tab.tabConfig.url,function(data){

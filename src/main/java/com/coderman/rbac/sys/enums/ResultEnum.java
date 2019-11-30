@@ -38,7 +38,9 @@ public enum ResultEnum {
     CHANGE_PWD_ERROR(26,"更换密码失败"),
     NAME_IS_USED(27,"用户名被占用" ),
     DEPLOY_PROCESS_SUCCESS(28,"流程部署成功" ),
-    DEPLOY_PROCESS_FAIL(29,"流程部署失败" );
+    DEPLOY_PROCESS_FAIL(29,"流程部署失败" ),
+    APPLY_SUCCESS(30,"提交成功" ),
+    APPLY_FAIL(31,"提交失败" );
     private Integer code;
     private String msg;
 
