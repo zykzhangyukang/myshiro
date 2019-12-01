@@ -83,4 +83,6 @@ public class MyConstant {
     public static final Integer SICK_STATUS_UNPASS = 4;//申请不通过
     public static final Integer SICK_STATUS_QUIT = 5;//放弃申请
     public static final String PROCESS_KEY = "员工请假流程";
+    public static final String STRING_QUIT = "申请人放弃";
+    public static final String STRING_SICK_PAPER_ID = "sickPaperId";
 }

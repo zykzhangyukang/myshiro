@@ -1,6 +1,8 @@
 package com.coderman.rbac.workflow.service;
 
+import com.coderman.rbac.job.bean.SickPaper;
 import com.coderman.rbac.sys.vo.PageVo;
+import com.coderman.rbac.workflow.vo.CommentEntityVo;
 import com.coderman.rbac.workflow.vo.DeploymentEntityVo;
 import com.coderman.rbac.workflow.vo.ProcessDefinitionEntityVo;
 import com.coderman.rbac.workflow.vo.WorkFlowVo;
@@ -81,4 +83,29 @@ public interface WorkFlowService {
      */
     Long countTask();
 
+    /**
+     * 加载请假单的信息
+     * @param workFlowVo
+     * @return
+     */
+    SickPaper loadSickPaperByTaskId(WorkFlowVo workFlowVo);
+
+    /**
+     * 加载连线信息
+     * @param workFlowVo
+     * @return
+     */
+    List<String> loadProcessWaysByTaskId(WorkFlowVo workFlowVo);
+
+    /**
+     * 加载批注信息
+     * @param workFlowVo
+     */
+    List<CommentEntityVo> loadCommentByTaskId(WorkFlowVo workFlowVo);
+
+    /**
+     * 完成任务
+     * @param workFlowVo
+     */
+    void doTask(WorkFlowVo workFlowVo);
 }

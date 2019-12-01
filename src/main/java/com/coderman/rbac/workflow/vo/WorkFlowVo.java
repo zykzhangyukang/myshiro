@@ -8,6 +8,7 @@ import lombok.Data;
 @Data
 public class WorkFlowVo {
 
+    /**流程部署ID**/
     private String id;
 
     private String ids;
@@ -24,5 +25,14 @@ public class WorkFlowVo {
 
     /**请假单ID**/
     private String sickPaperId;
+
+    /**任务ID**/
+    private String taskId;
+
+    /**任务完成去向**/
+    private String outCome;
+
+    /**任务批注信息**/
+    private String remark;
 
 }

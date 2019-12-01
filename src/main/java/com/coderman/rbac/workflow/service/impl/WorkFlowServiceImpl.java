@@ -4,20 +4,24 @@ import com.coderman.rbac.job.bean.SickPaper;
 import com.coderman.rbac.job.mapper.SickPaperMapper;
 import com.coderman.rbac.sys.bean.User;
 import com.coderman.rbac.sys.contast.MyConstant;
-import com.coderman.rbac.sys.realm.UserRealm;
 import com.coderman.rbac.sys.utils.WebUtil;
 import com.coderman.rbac.sys.vo.PageVo;
 import com.coderman.rbac.workflow.service.WorkFlowService;
-import com.coderman.rbac.workflow.vo.DeploymentEntityVo;
-import com.coderman.rbac.workflow.vo.ProcessDefinitionEntityVo;
-import com.coderman.rbac.workflow.vo.TaskEntityVo;
-import com.coderman.rbac.workflow.vo.WorkFlowVo;
+import com.coderman.rbac.workflow.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.impl.identity.Authentication;
+import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
+import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import org.activiti.engine.impl.persistence.entity.TaskEntity;
+import org.activiti.engine.impl.pvm.PvmTransition;
+import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
+import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +57,7 @@ public class WorkFlowServiceImpl implements WorkFlowService {
      * @param workFlowVo
      * @return
      */
-    @Transactional
+    @Transactional(rollbackFor=Exception.class)
     @Override
     public PageVo<DeploymentEntityVo> listAllProcessDeploy(WorkFlowVo workFlowVo) {
         long count = repositoryService.createDeploymentQuery().count();
@@ -129,10 +133,10 @@ public class WorkFlowServiceImpl implements WorkFlowService {
     @Transactional
     @Override
     public void delete(WorkFlowVo workFlowVo) {
-        repositoryService.deleteDeployment(workFlowVo.getId(),true);
+      repositoryService.deleteDeployment(workFlowVo.getId());
     }
 
-    @Transactional
+    @Transactional(rollbackFor=Exception.class)
     @Override
     public void batchDelete(WorkFlowVo workFlowVo) {
         String ids = workFlowVo.getIds();
@@ -145,7 +149,7 @@ public class WorkFlowServiceImpl implements WorkFlowService {
         }
         if(!CollectionUtils.isEmpty(idList)){
             for (String id : idList) {
-                repositoryService.deleteDeployment(id,true);
+                repositoryService.deleteDeployment(id);
             }
         }
     }
@@ -176,7 +180,7 @@ public class WorkFlowServiceImpl implements WorkFlowService {
         sickPaper.setStatus(MyConstant.SICK_STATUS_APPLY);
         sickPaperMapper.updateByPrimaryKeySelective(sickPaper);
     }
-    @Transactional
+    @Transactional(rollbackFor=Exception.class)
     @Override
     public PageVo<TaskEntityVo> listAllTasks(WorkFlowVo workFlowVo) {
         User user = (User) WebUtil.getSession().getAttribute(MyConstant.USER);
@@ -200,5 +204,84 @@ public class WorkFlowServiceImpl implements WorkFlowService {
         User user = (User) WebUtil.getSession().getAttribute(MyConstant.USER);
         long count = taskService.createTaskQuery().taskAssignee(user.getUserName()).count();
         return count;
+    }
+
+    @Override
+    public SickPaper loadSickPaperByTaskId(WorkFlowVo workFlowVo) {
+        String businessKey;
+        TaskEntity task = (TaskEntity) taskService.createTaskQuery().taskId(workFlowVo.getTaskId()).singleResult();
+        ExecutionEntity execution = (ExecutionEntity) runtimeService.createExecutionQuery().executionId(task.getExecutionId()).singleResult();
+        if(null==execution.getParentId()){
+            businessKey= execution.getBusinessKey();
+        }else{
+            ExecutionEntity execution1 = (ExecutionEntity) runtimeService.createExecutionQuery().executionId(execution.getParentId()).singleResult();
+            businessKey=execution1.getBusinessKey();
+        }
+        String sickPaperId=businessKey.split("=>")[1];
+        return  sickPaperMapper.selectByPrimaryKey(sickPaperId);
+    }
+
+    @Override
+    public List<String> loadProcessWaysByTaskId(WorkFlowVo workFlowVo) {
+        TaskEntity task = (TaskEntity) taskService.createTaskQuery().taskId(workFlowVo.getTaskId()).singleResult();
+        ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(task.getProcessInstanceId()).singleResult();
+        ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) repositoryService.getProcessDefinition(task.getProcessDefinitionId());
+        ActivityImpl activity = processDefinitionEntity.findActivity(processInstance.getActivityId());
+        List<PvmTransition> outgoingTransitions = activity.getOutgoingTransitions();
+        List<String> ways=new ArrayList<>();
+        if(!CollectionUtils.isEmpty(outgoingTransitions)){
+            for (PvmTransition outgoingTransition : outgoingTransitions) {
+                ways.add(outgoingTransition.getProperty("name").toString());
+            }
+        }
+        return ways;
+    }
+
+    @Override
+    public List<CommentEntityVo> loadCommentByTaskId(WorkFlowVo workFlowVo) {
+        String processInstanceId = taskService.createTaskQuery().taskId(workFlowVo.getTaskId())
+                .singleResult().getProcessInstanceId();
+        List<Comment> comments = taskService.getProcessInstanceComments(processInstanceId);
+        List<CommentEntityVo> commentEntityVos=new ArrayList<>();
+        if(!CollectionUtils.isEmpty(comments)){
+            for (Comment comment : comments) {
+                CommentEntityVo commentEntityVo = new CommentEntityVo();
+                BeanUtils.copyProperties(comment,commentEntityVo);
+                commentEntityVos.add(commentEntityVo);
+            }
+        }
+        return commentEntityVos;
+    }
+
+    @Override
+    @Transactional(rollbackFor=Exception.class)
+    public void doTask(WorkFlowVo workFlowVo) {
+        String taskId = workFlowVo.getTaskId();
+        String outCome = workFlowVo.getOutCome();
+        String sickPaperId = workFlowVo.getSickPaperId();
+        String remark = workFlowVo.getRemark();
+        WebUtil.getSession().setAttribute(MyConstant.STRING_SICK_PAPER_ID,sickPaperId);
+        //批注信息
+        User user = (User) WebUtil.getSession().getAttribute(MyConstant.USER);
+        Authentication.setAuthenticatedUserId("【"+user.getUserName()+"】");
+        String processInstanceId = taskService.createTaskQuery().taskId(taskId).singleResult().getProcessInstanceId();
+        taskService.addComment(taskId,processInstanceId,remark);
+        //任务完成
+        Map<String, Object> map=new HashMap<>();
+        map.put("outcome",outCome);
+        taskService.complete(taskId,map);
+        //判断流程是否完成
+        ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+        if(processInstance==null){
+            //流程结束
+            SickPaper sickPaper = new SickPaper();
+            sickPaper.setId(Long.parseLong(sickPaperId));
+            if(outCome.equals(MyConstant.STRING_QUIT)){
+                sickPaper.setStatus(MyConstant.SICK_STATUS_QUIT);
+            }else{
+                sickPaper.setStatus(MyConstant.SICK_STATUS_PASS);
+            }
+            sickPaperMapper.updateByPrimaryKeySelective(sickPaper);
+        }
     }
 }

@@ -40,7 +40,10 @@ public enum ResultEnum {
     DEPLOY_PROCESS_SUCCESS(28,"流程部署成功" ),
     DEPLOY_PROCESS_FAIL(29,"流程部署失败" ),
     APPLY_SUCCESS(30,"提交成功" ),
-    APPLY_FAIL(31,"提交失败" );
+    APPLY_FAIL(31,"提交失败" ),
+    PROCESS_DELETE_FAIL(32,"流程删除失败，流程还有实例在运行" ),
+    DO_TASK_SUCCESS(33,"完成任务成功" ),
+    DO_TASK_FAIL(34,"完成任务失败" );
     private Integer code;
     private String msg;
 

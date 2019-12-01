@@ -1,10 +1,12 @@
 package com.coderman.rbac.workflow.controller;
 
+import com.coderman.rbac.job.bean.SickPaper;
 import com.coderman.rbac.sys.enums.ResultEnum;
 import com.coderman.rbac.sys.vo.LoginLogVo;
 import com.coderman.rbac.sys.vo.PageVo;
 import com.coderman.rbac.sys.vo.ResultVo;
 import com.coderman.rbac.workflow.service.WorkFlowService;
+import com.coderman.rbac.workflow.vo.CommentEntityVo;
 import com.coderman.rbac.workflow.vo.DeploymentEntityVo;
 import com.coderman.rbac.workflow.vo.WorkFlowVo;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +27,7 @@ import java.awt.image.RenderedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipInputStream;
 
@@ -138,7 +141,6 @@ public class WorkFlowController {
             inputStream.close();
         }
     }
-
     /**
      * 删除流程
      * @param workFlowVo
@@ -153,12 +155,10 @@ public class WorkFlowController {
             workFlowService.delete(workFlowVo);
             return ResultVo.OK(ResultEnum.DELETE_SUCCESS);
         } catch (Exception e) {
-            e.printStackTrace();
             log.info("【删除流程失败】=【流程正在运行中】");
-            return ResultVo.ERROR(ResultEnum.DELETE_FAIL);
+            return ResultVo.ERROR(ResultEnum.PROCESS_DELETE_FAIL);
         }
     }
-
     /**
      * 批量删除登入日志
      * @param workFlowVo
@@ -172,7 +172,7 @@ public class WorkFlowController {
             return ResultVo.OK(ResultEnum.DELETE_SUCCESS);
         } catch (Exception e) {
             log.info("【删除流程失败】=【流程正在运行中】");
-            return ResultVo.ERROR(ResultEnum.DELETE_FAIL);
+            return ResultVo.ERROR(ResultEnum.PROCESS_DELETE_FAIL);
         }
     }
     /**
@@ -191,7 +191,6 @@ public class WorkFlowController {
             e.printStackTrace();
         }
     }
-
     /**
      * 提交请假申请
      * @return
@@ -207,7 +206,6 @@ public class WorkFlowController {
             return ResultVo.ERROR(ResultEnum.APPLY_FAIL);
         }
     }
-
     /**
      * 我的代办任务
      * @return
@@ -229,6 +227,50 @@ public class WorkFlowController {
         Map<String,Object> map=new HashMap<>();
         map.put("count",count);
         return map;
+    }
+
+    /**
+     * 通过任务Id获取请假单的信息
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/loadSickPaperByTaskId",method = RequestMethod.GET)
+    public ResultVo loadSickPaperByTaskId(WorkFlowVo workFlowVo){
+        SickPaper sickPaper=workFlowService.loadSickPaperByTaskId(workFlowVo);
+        Map<String,Object> map=new HashMap<>();
+        map.put("sickPaper",sickPaper);
+        //加载连线信息
+        List<String> ways=workFlowService.loadProcessWaysByTaskId(workFlowVo);
+        map.put("ways",ways);
+        return ResultVo.OK(map);
+    }
+
+    /**
+     * 加载批注
+     * @param workFlowVo
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/loadCommentByTaskId",method = RequestMethod.GET)
+    public ResultVo loadCommentByTaskId(WorkFlowVo workFlowVo){
+        List<CommentEntityVo> commentEntityVo = workFlowService.loadCommentByTaskId(workFlowVo);
+        return ResultVo.OK(commentEntityVo);
+    }
+
+    /**
+     * 完成任务
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/doTask",method = RequestMethod.POST)
+    public ResultVo doTask(WorkFlowVo workFlowVo){
+        try {
+            workFlowService.doTask(workFlowVo);
+            return ResultVo.OK(ResultEnum.DO_TASK_SUCCESS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVo.OK(ResultEnum.DO_TASK_FAIL);
+        }
     }
 
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:shiro="http://www.w3.org/1999/xhtml">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>系统请假管理</title>
@@ -66,16 +66,58 @@
 </form>
 <!--数据表格-->
 <table class="layui-hide" id="workFlowTable" lay-filter="workFlowTable"></table>
-<!--数据表格2-->
-<table class="layui-hide" id="workFlowDefTable" lay-filter="workFlowDefTable"></table>
 <!--行工具条-->
 <script type="text/html" id="lineBar">
     <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="doTask">完成任务</a>
     <a  class="layui-btn layui-btn-xs layui-btn-danger" lay-event="showImage">查看进度</a>
 </script>
+<!--完成任务的模态框-->
+<div id="doTaskModal" style="display: none;padding: 20px;">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">请假单标题</label>
+            <div class="layui-input-block">
+                <input type="text" name="title" id="title" lay-verify="title" disabled class="layui-input layui-disabled">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">请假天数</label>
+                <div class="layui-input-inline">
+                    <input type="tel" name="days" disabled id="days" class="layui-input layui-disabled">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">开始时间</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="start" disabled id="start" class="layui-input layui-disabled">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">请假原因</label>
+            <div class="layui-input-block">
+                <div id="content" style="font-size: 14px;font-weight: 600;color: #303030;padding: 10px;"></div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">批注信息</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入批注信息" id="remark" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block" id="btn-wrapper">
+                <button type="button" class="layui-btn layui-btn-normal" id="TaskWay-2"></button>
+            </div>
+        </div>
+    </form>
+    <table class="layui-hide" id="commentTable" lay-filter="commentTable"></table>
+</div>
 <script type="text/javascript" src="/resources/layui/layui.js"></script>
 <script  type="text/javascript">
     var tableIns;
+    var commentTable;
     layui.use(['layedit', 'laypage', 'layer', 'table','form'], function(){
         var table = layui.table //表格
         var form=layui.form;
@@ -127,11 +169,73 @@
                 case 'delete':
                     deleteProcess(data);
                     break;
-                case 'showImage':
-                    showImage(data);
+                case 'doTask':
+                    doTask(data);
                     break;
             };
         });
+        //完成任务
+        function doTask(data) {
+            $.get("/workFlow/loadSickPaperByTaskId",{"taskId":data.id},function (res) {
+                if(res.code==0) openDoTaskModal(res.data,data.id);
+            })
+        }
+        //打开完成任务的模态框
+        var doTaskModal;
+        function openDoTaskModal(data,taskId) {
+            doTaskModal=layer.open({
+                type:1,
+                title:'请假任务单',
+                content: $("#doTaskModal"),
+                area:['850px','550px'],
+                minwith:true,
+                success:function(){
+                    var sickPaper=data.sickPaper;
+                    console.log(sickPaper)
+                    $("#doTaskModal").find("#title").val(sickPaper.title);
+                    $("#doTaskModal").find("#content").html(sickPaper.content);
+                    $("#doTaskModal").find("#days").val(sickPaper.days);
+                    $("#doTaskModal").find("#start").val(sickPaper.start);
+                    //组装按钮
+                    var ways=data.ways;
+                    var html="";
+                    var btnclass="layui-btn-normal";
+                    $.each(ways,function (index,item) {
+                        if(index==1){btnclass="layui-btn-primary";}
+                        html+=" <button type=\"button\" value='"+item+"' class=\"layui-btn "+btnclass+"\" id=\"TaskWay\">"+item+"</button>"
+                    })
+                    $("#btn-wrapper").html(html);
+                    //监听任务完成的按钮事件
+                    $("[id = TaskWay]").click(function(obj){
+                        var outcome=$(this).attr("value");
+                        layer.confirm('你是否要'+outcome, {icon: 3, title:'提示'},function (index) {
+                            $.post("/workFlow/doTask",{"taskId":taskId,"outCome":outcome,"remark":$("#remark").val(),"sickPaperId":sickPaper.id},function (res) {
+                                if(res.code==0){
+                                    //关闭提示框和弹出框
+                                    layer.close(index);
+                                    layer.close(doTaskModal);
+                                    //刷新表格
+                                    tableIns.reload();
+                                }
+                                layer.msg(res.msg);
+                            })
+                        })
+                    });
+                    //加载批注信息
+                    commentTable= table.render({
+                        elem: '#commentTable'
+                        ,url:'/workFlow/loadCommentByTaskId?taskId='+taskId
+                        ,title: '批注信息'
+                        ,cols: [ [
+                            ,{field: 'userId', title: '评注人',width:100}
+                            ,{field: 'message', title: '批注内容',width:400}
+                            ,{field: 'time', title: '时间'}
+                        ] ]
+                    });
+                }
+            });
+        }
+
     });
 </script>
 </body>
