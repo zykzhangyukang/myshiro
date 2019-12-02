@@ -101,21 +101,6 @@ public class WorkFlowController {
         return pageVo;
     }
     /**
-     * 查看代办任务
-     * @param workFlowVo
-     * @return
-     */
-    @GetMapping("/queryTaskByName")
-    public ResultVo queryTaskByName(WorkFlowVo workFlowVo){
-        try {
-            workFlowService.queryTask(workFlowVo.getAssignee());
-            return ResultVo.OK();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResultVo.ERROR();
-        }
-    }
-    /**
      * 流程部署
      * @param file
      * @param deploymentEntityVo

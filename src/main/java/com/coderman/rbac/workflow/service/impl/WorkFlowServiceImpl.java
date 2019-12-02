@@ -161,11 +161,6 @@ public class WorkFlowServiceImpl implements WorkFlowService {
         return inputStream;
     }
 
-    @Override
-    public List queryTask(String name) {
-        List<Task> list = taskService.createTaskQuery().taskAssignee(name).list();
-        return list;
-    }
 
     @Transactional
     @Override

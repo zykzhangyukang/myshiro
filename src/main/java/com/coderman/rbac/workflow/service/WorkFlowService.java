@@ -6,7 +6,6 @@ import com.coderman.rbac.workflow.vo.CommentEntityVo;
 import com.coderman.rbac.workflow.vo.DeploymentEntityVo;
 import com.coderman.rbac.workflow.vo.ProcessDefinitionEntityVo;
 import com.coderman.rbac.workflow.vo.WorkFlowVo;
-import javafx.concurrent.Task;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,12 +57,6 @@ public interface WorkFlowService {
     InputStream workFlowImage(WorkFlowVo workFlowVo) throws IOException;
 
 
-    /**
-     * 查询代办任务
-     * @param name
-     * @return
-     */
-     List<Task> queryTask(String name);
 
     /**
      * 提交申请，启动流程
