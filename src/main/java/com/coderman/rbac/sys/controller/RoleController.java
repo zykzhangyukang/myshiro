@@ -7,21 +7,24 @@ import com.coderman.rbac.sys.service.RoleService;
 import com.coderman.rbac.sys.vo.PageVo;
 import com.coderman.rbac.sys.vo.ResultVo;
 import com.coderman.rbac.sys.vo.RoleVo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.Arrays;
-
 /**
  * 角色前端控制器
  * Created by zhangyukang on 2019/11/11 17:00
  */
 @RestController
 @RequestMapping("/role")
+@Api(value = "角色管理类")
 public class RoleController {
 
     @Autowired
@@ -36,6 +39,9 @@ public class RoleController {
     @RequiresPermissions({"role:updateRoleMenu"})
     @PostMapping("/updateRoleMenu")
     @ControllerEndpoint(exceptionMessage = "分配菜单失败",operation = "分配菜单/按钮")
+    @ApiOperation(value = "更新角色菜单",notes = "更新角色菜单返回对象")
+    @ApiImplicitParam(paramType = "update",name = "role",value = "角色",required = true)
+    @ApiResponse(code = 400,message = "参数没有填好",response = String.class)
     public ResultVo updateRoleMenu(RoleVo roleVo,Long mIds[]){
         roleVo.setMIds(Arrays.asList(mIds));
         try {
@@ -46,12 +52,12 @@ public class RoleController {
             return ResultVo.OK(ResultEnum.SQ_FAIL);
         }
     }
-
     /**
      * 查询角色
      * @param roleVo
      * @return
      */
+    @ApiOperation(value = "查询角色",notes = "根据ID查询角色")
     @GetMapping("/findPage")
     public PageVo<Role> findPage(RoleVo roleVo){
         PageVo<Role> page = roleService.findPage(roleVo);

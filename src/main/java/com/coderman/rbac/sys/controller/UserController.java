@@ -12,7 +12,12 @@ import com.coderman.rbac.sys.utils.WebUtil;
 import com.coderman.rbac.sys.vo.PageVo;
 import com.coderman.rbac.sys.vo.ResultVo;
 import com.coderman.rbac.sys.vo.UserVo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.hibernate.validator.internal.IgnoreForbiddenApisErrors;
 import org.omg.PortableInterceptor.USER_EXCEPTION;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Repeat;
@@ -27,6 +32,7 @@ import java.util.*;
  * 用户管理控制器
  * Created by zhangyukang on 2019/11/10 18:56
  */
+@Api(value = "用户模块")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -38,6 +44,8 @@ public class UserController {
      * 用户更改密码
      * @return
      */
+    @ApiOperation(value = "用户更改密码")
+    @ApiImplicitParam(value = "用户信息的参数对象",paramType = "query")
     @PostMapping("/changePwd")
     public ResultVo changePwd(UserVo userVo){
         //验证旧密码
@@ -59,6 +67,7 @@ public class UserController {
      * 用户更换头像
      * @return
      */
+    @ApiOperation(value = "更改用户的头像",notes = "更改登入用户的头像")
     @ControllerEndpoint(exceptionMessage = "更换头像失败",operation ="更换头像")
     @PostMapping("/changeAvatar")
     public ResultFileVo changAvatar(MultipartFile file,UserVo userVo){
@@ -73,6 +82,8 @@ public class UserController {
      * 用户信息
      * @return
      */
+    @ApiOperation(value = "获取用户的信息",notes = "获取用户的详细信息")
+    @ApiImplicitParam(value = "用户的参数对象",paramType = "query")
     @GetMapping("/userInfo")
     public ResultVo userInfo(UserVo userVo){
             UserDTO user= userService.userInfo(userVo);
@@ -82,6 +93,7 @@ public class UserController {
      * 查询用户数量
      * @return
      */
+    @ApiOperation(value = "查询用户的对象数量",notes = "查询该系统的用户数量")
     @GetMapping("/count")
     public Map<String,Object> count(){
         Long  count=userService.count();
@@ -95,6 +107,8 @@ public class UserController {
      * @param userVo
      * @return
      */
+    @ApiOperation(value = "查询单个用户",notes = "根据ID查询单个用户信息")
+    @ApiImplicitParam(value = "用户参数对象")
     @GetMapping("/findUserById")
     public ResultVo findUserById(UserVo userVo){
         User user =userService.findUserById(userVo);
@@ -105,6 +119,7 @@ public class UserController {
      * 加载父级领导通过父级部门ID
      * @return
      */
+    @ApiOperation(value = "加载用户父级领导",notes = "通过父级部门ID查询所有的父级领导")
     @PostMapping("/loadManagersByParentDeptId")
     public ResultVo loadManagersByParentDeptId(UserVo userVo){
         List<User> managerList=userService.loadManagersByParentDeptId(userVo);
@@ -115,6 +130,8 @@ public class UserController {
      * 重置用户(密码)
      * @return
      */
+    @ApiOperation(value = "重置用户的密码",notes = "重置用户的密码")
+    @ApiImplicitParam(value = "用户参数对象",paramType = "query")
     @RequiresPermissions("user:reSet")
     @GetMapping("/reSetUser")
     @ControllerEndpoint(exceptionMessage = "重置用户失败",operation ="重置用户")
@@ -133,6 +150,8 @@ public class UserController {
      * @param userVo
      * @return
      */
+    @ApiOperation(value = "用户分配角色",notes = "用户分配角色")
+    @ApiImplicitParam(value ="角色ID的数组",paramType = "query")
     @RequiresPermissions({"user:giveUserRoles"})
     @GetMapping("/giveUserRoles")
     @ControllerEndpoint(exceptionMessage = "分配角色失败",operation ="分配角色")
@@ -155,6 +174,8 @@ public class UserController {
      * @param userVo
      * @return
      */
+    @ApiOperation(value = "加载用户的角色",notes = "加载用户拥有的角色和没用拥有的角色")
+    @ApiImplicitParam(value = "用户的参数的对象",paramType = "query")
     @GetMapping("/loadUserRoles")
     public ResultVo loadUserRoles(UserVo userVo){
         Map<String,Object> map=userService.loadUserRoles(userVo);
@@ -165,6 +186,8 @@ public class UserController {
      * @param userVo
      * @return
      */
+    @ApiOperation(value = "批量删除",notes = "批量删除用户")
+    @ApiImplicitParam(value ="用户的参数对象",paramType = "query")
     @RequiresPermissions({"user:batchDelete"})
     @GetMapping("/batchDelete")
     @ControllerEndpoint(exceptionMessage = "批量删除用户失败",operation ="批量删除用户")
@@ -181,6 +204,8 @@ public class UserController {
      * @param userVo
      * @return
      */
+    @ApiOperation(value = "删除用户",notes = "删除用户根据用户的id")
+    @ApiImplicitParam(value = "用户的参数对象",paramType = "query")
     @RequiresPermissions({"user:delete"})
     @GetMapping("/delete")
     @ControllerEndpoint(exceptionMessage = "删除用户失败",operation ="删除用户")
@@ -197,6 +222,8 @@ public class UserController {
      * @param userVo
      * @return
      */
+    @ApiOperation(value = "查询用户的列表",notes = "查询用户的分页信息")
+    @ApiImplicitParam(value = "用户的参数对象",paramType = "query")
     @GetMapping("/findPage")
     public PageVo<UserDTO> findPage(UserVo userVo){
         PageVo<UserDTO> page = userService.findPage(userVo);
@@ -206,6 +233,8 @@ public class UserController {
      * 锁定用户
      * @return
      */
+    @ApiOperation(value = "锁定用户",notes = "锁定用户")
+    @ApiImplicitParam(value = "用户的参数对象",paramType = "query")
     @RequiresPermissions({"user:lock"})
     @PostMapping("/lock")
     @ControllerEndpoint(exceptionMessage = "锁定用户失败",operation ="用户锁定/解锁")
@@ -223,6 +252,8 @@ public class UserController {
      * 更新用户的性别
      * @return
      */
+    @ApiOperation(value = "更新用户的性别",notes = "更新用户的性别")
+    @ApiImplicitParam(value = "用户的参数对象",paramType = "query")
     @RequiresPermissions({"user:update:sex"})
     @ControllerEndpoint(exceptionMessage = "更新用户性别失败",operation ="更新用户性别")
     @PostMapping("/updateSex")
@@ -241,6 +272,8 @@ public class UserController {
      * @param userVo
      * @return
      */
+    @ApiOperation(value = "更新用户",notes = "更新用户的信息")
+    @ApiImplicitParam(value = "更新用户的参数对象",paramType = "query")
     @RequiresPermissions({"user:update"})
     @PostMapping("/update")
     @ControllerEndpoint(exceptionMessage = "修改用户失败",operation ="修改用户")
@@ -270,6 +303,8 @@ public class UserController {
      * @param userVo
      * @return
      */
+    @ApiOperation(value = "添加用户",notes = "添加用户的详细信息")
+    @ApiImplicitParam(value = "用户的参数对象",paramType = "query")
     @RequiresPermissions({"user:add"})
     @PostMapping("/add")
     @ControllerEndpoint(exceptionMessage = "添加用户失败",operation ="添加用户")

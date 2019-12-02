@@ -1,5 +1,6 @@
 package com.coderman.rbac.sys.controller;
 
+import io.swagger.annotations.Api;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * 系统模块路由
  * Created by zhangyukang on 2019/11/9 20:15
  */
+@Api(value = "系统模块的路由")
 @Controller
 @RequestMapping("/system")
 public class SystemController {
