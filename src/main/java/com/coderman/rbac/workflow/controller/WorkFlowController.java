@@ -8,6 +8,8 @@ import com.coderman.rbac.workflow.service.WorkFlowService;
 import com.coderman.rbac.workflow.vo.CommentEntityVo;
 import com.coderman.rbac.workflow.vo.DeploymentEntityVo;
 import com.coderman.rbac.workflow.vo.WorkFlowVo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,12 +28,14 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.zip.ZipInputStream;
 
 /**
  * 流程管理模块前端控制器
  * Created by zhangyukang on 2019/11/28 16:12
  */
+@Api(value = "流程管理模块前端控制器")
 @Slf4j
 @Controller
 @RequestMapping("/workFlow")
@@ -63,7 +67,24 @@ public class WorkFlowController {
      * @return
      */
     @RequestMapping(value = "/processImage",method = RequestMethod.GET)
-    public String workFlowImage(String id,Map<String,Object> map){
+    public String workFlowImage(String id,Map<String,Object> map,WorkFlowVo workFlowVo){
+        if(workFlowVo.getTaskId()!=null&&!"".equals(workFlowVo.getTaskId())){
+            id=workFlowService.findDeployByTaskId(workFlowVo.getTaskId());
+            Map positionMap=workFlowService.findProcessImagePosition(workFlowVo.getTaskId());//获取坐标信息
+            map.put("positionMap",positionMap);
+        }else if(workFlowVo.getSickPaperId()!=null&&!"".equals(workFlowVo.getSickPaperId())){
+            workFlowVo.setTaskId(workFlowService.getTaskIdByBizKey(workFlowVo.getSickPaperId()));
+            id=workFlowService.findDeployByTaskId(workFlowVo.getTaskId());
+            Map positionMap=workFlowService.findProcessImagePosition(workFlowVo.getTaskId());//获取坐标信息
+            map.put("positionMap",positionMap);
+        } else {
+            Map map2=new HashMap();
+            map2.put("x",0);
+            map2.put("y",0);
+            map2.put("width",0);
+            map2.put("height",0);
+            map.put("positionMap",map2);
+        }
         map.put("deployId",id);
         return "workflow/work/processImage";
     }
@@ -82,6 +103,7 @@ public class WorkFlowController {
      * @param workFlowVo
      * @return
      */
+    @ApiOperation(value = "查询所有流程部署信息",notes = "查询所有流程部署分页信息")
     @ResponseBody
     @RequestMapping("/listAllProcessDeploy")
     public PageVo<DeploymentEntityVo> listAllProcessDeploy(WorkFlowVo workFlowVo){
@@ -94,6 +116,7 @@ public class WorkFlowController {
      * @param workFlowVo
      * @return
      */
+    @ApiOperation(value = "查询所有流程定义信息",notes = "查询所有流程定义分页信息")
     @ResponseBody
     @RequestMapping("/listAllProcessDefine")
     public PageVo listAllProcessDefine(WorkFlowVo workFlowVo){
@@ -107,6 +130,7 @@ public class WorkFlowController {
      * @return
      * @throws IOException
      */
+    @ApiOperation(value = "流程部署",notes = "流程部署")
     @ResponseBody
     @RequestMapping("/deployProcess")
     public ResultVo deployProcess(MultipartFile file,DeploymentEntityVo deploymentEntityVo) throws IOException {
@@ -128,6 +152,7 @@ public class WorkFlowController {
      * @param workFlowVo
      * @return
      */
+    @ApiOperation(value = "删除流程",notes = "删除流程")
     @ResponseBody
     @RequestMapping(value = "/delete")
     public ResultVo delete(WorkFlowVo workFlowVo){
@@ -142,10 +167,11 @@ public class WorkFlowController {
         }
     }
     /**
-     * 批量删除登入日志
+     * 删除流程部署信息
      * @param workFlowVo
      * @return
      */
+    @ApiOperation(value = "批量删除流程部署信息",notes = "删除流程部署信息")
     @ResponseBody
     @GetMapping("/batchDelete")
     public ResultVo batchDelete(WorkFlowVo workFlowVo){
@@ -162,6 +188,7 @@ public class WorkFlowController {
      * @param workFlowVo
      * @param response
      */
+    @ApiOperation(value = "查看流程图",notes = "查看流程图")
     @GetMapping("/workFlowImage")
     public void workFlowImage(WorkFlowVo  workFlowVo, HttpServletResponse response){
         try {
@@ -177,6 +204,7 @@ public class WorkFlowController {
      * 提交请假申请
      * @return
      */
+    @ApiOperation(value = "提交请假申请",notes = "提交请假申请")
     @ResponseBody
     @RequestMapping(value = "/apply",method = RequestMethod.GET)
     public ResultVo apply(WorkFlowVo workFlowVo){
@@ -192,6 +220,7 @@ public class WorkFlowController {
      * 我的代办任务
      * @return
      */
+    @ApiOperation(value = "我的代办任务",notes = "我的代办任务")
     @ResponseBody
     @RequestMapping(value = "/listAllTasks",method = RequestMethod.GET)
     public PageVo listAllTasks(WorkFlowVo workFlowVo){
@@ -202,6 +231,7 @@ public class WorkFlowController {
      * 我的任务数
      * @return
      */
+    @ApiOperation(value = "我的任务数",notes = "我的任务数")
     @ResponseBody
     @RequestMapping(value = "/countTask",method = RequestMethod.GET)
     public Map<String,Object> countTask(){
@@ -215,6 +245,7 @@ public class WorkFlowController {
      * 通过任务Id获取请假单的信息
      * @return
      */
+    @ApiOperation(value = "通过任务Id获取请假单的信息",notes = "通过任务Id获取请假单的信息")
     @ResponseBody
     @RequestMapping(value = "/loadSickPaperByTaskId",method = RequestMethod.GET)
     public ResultVo loadSickPaperByTaskId(WorkFlowVo workFlowVo){
@@ -232,6 +263,7 @@ public class WorkFlowController {
      * @param workFlowVo
      * @return
      */
+    @ApiOperation(value = "加载批注",notes = "加载批注")
     @ResponseBody
     @RequestMapping(value = "/loadCommentByTaskId",method = RequestMethod.GET)
     public ResultVo loadCommentByTaskId(WorkFlowVo workFlowVo){
@@ -243,6 +275,7 @@ public class WorkFlowController {
      * 完成任务
      * @return
      */
+    @ApiOperation(value = "完成任务",notes = "完成任务")
     @ResponseBody
     @RequestMapping(value = "/doTask",method = RequestMethod.POST)
     public ResultVo doTask(WorkFlowVo workFlowVo){

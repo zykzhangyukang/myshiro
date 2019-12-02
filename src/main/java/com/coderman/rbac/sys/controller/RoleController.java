@@ -69,6 +69,7 @@ public class RoleController {
      * @param roleVo
      * @return
      */
+    @ApiOperation(value = "删除角色",notes = "根据ID删除角色")
     @RequiresPermissions({"role:delete"})
     @GetMapping("/delete")
     @ControllerEndpoint(exceptionMessage = "删除角色失败",operation = "删除角色")
@@ -87,6 +88,7 @@ public class RoleController {
      * @param roleVo
      * @return
      */
+    @ApiOperation(value = "添加角色",notes = "添加角色信息")
     @RequiresPermissions({"role:add"})
     @PostMapping("/add")
     @ControllerEndpoint(exceptionMessage = "添加角色失败",operation = "添加角色")
@@ -106,6 +108,7 @@ public class RoleController {
      * @param roleVo
      * @return
      */
+    @ApiOperation(value = "更新角色信息",notes = "更新角色的基本信息")
     @RequiresPermissions({"role:update"})
     @PostMapping("/update")
     @ControllerEndpoint(exceptionMessage = "修改角色失败",operation = "修改角色")

@@ -9,6 +9,7 @@ import com.coderman.rbac.sys.enums.ResultEnum;
 import com.coderman.rbac.sys.utils.WebUtil;
 import com.coderman.rbac.sys.vo.PageVo;
 import com.coderman.rbac.sys.vo.ResultVo;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,12 +27,13 @@ public class SickPaperController {
     @Autowired
     private SickPaperService sickPaperService;
 
+    @ApiOperation(value = "查询请假单",notes = "查询请假单的分页信息")
     @GetMapping("/findPage")
     public PageVo<SickPaper> findPage(SickPaperVo sickPaperVo){
         PageVo<SickPaper> page = sickPaperService.findPage(sickPaperVo);
         return page;
     }
-
+    @ApiOperation(value = "添加请假单",notes = "添加用户的请假单")
     @PostMapping("/add")
     public ResultVo add(SickPaperVo sickPaperVo){
         try {
@@ -42,7 +44,7 @@ public class SickPaperController {
             return ResultVo.ERROR(ResultEnum.ADD_FAIL);
         }
     }
-
+    @ApiOperation(value = "更新请假单",notes = "更新用户的请假单信息")
     @PostMapping("/update")
     public ResultVo update(SickPaperVo sickPaperVo){
         try {
@@ -54,6 +56,7 @@ public class SickPaperController {
         }
     }
 
+    @ApiOperation(value = "删除请假单",notes = "删除用户的请假单")
     @GetMapping("/delete")
     public ResultVo delete(SickPaperVo sickPaperVo){
         try {

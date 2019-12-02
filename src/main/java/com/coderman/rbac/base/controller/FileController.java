@@ -4,6 +4,7 @@ import com.coderman.rbac.base.utils.OssUploadImgProvider;
 import com.coderman.rbac.base.vo.ResultFileVo;
 import com.coderman.rbac.sys.enums.ResultEnum;
 import com.coderman.rbac.sys.vo.ResultVo;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +30,7 @@ public class FileController {
      * 留言板图片上传
      * @return
      */
+    @ApiOperation(value = " 留言板图片上传")
     @PostMapping("/uploadImage")
     public ResultFileVo uploadImage(MultipartFile file){
         String src;

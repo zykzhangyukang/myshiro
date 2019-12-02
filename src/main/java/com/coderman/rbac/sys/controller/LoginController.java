@@ -17,7 +17,10 @@ import com.coderman.rbac.sys.vo.UserVo;
 import eu.bitwalker.useragentutils.Browser;
 import eu.bitwalker.useragentutils.OperatingSystem;
 import eu.bitwalker.useragentutils.UserAgent;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import net.bytebuddy.asm.Advice;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -38,6 +41,7 @@ import java.util.Date;
  * 用户登入控制器
  * Created by zhangyukang on 2019/11/10 10:06
  */
+@Api(value = "用户登入模块")
 @Slf4j
 @RestController
 @RequestMapping("/login")
@@ -52,6 +56,7 @@ public class LoginController {
      * 用户登入
      * @return
      */
+    @ApiOperation(value = "用户登入",notes = "用户登入系统")
     @PostMapping("/login")
     public ResultVo login(UserVo userVo){
         if(StringUtils.isEmpty(userVo.getPassWord())||StringUtils.isEmpty(userVo.getPassWord())){
@@ -107,6 +112,7 @@ public class LoginController {
      * @param loginLogVo
      * @return
      */
+    @ApiOperation(value = "批量删除登入日志",notes = "批量删除用户登入日志")
     @RequiresPermissions({"login:batchDeleteLog"})
     @GetMapping("/batchDelete")
     public ResultVo batchDelete(LoginLogVo loginLogVo){
@@ -122,6 +128,7 @@ public class LoginController {
      * 删除登入日志
      * @return
      */
+    @ApiOperation(value = "删除登入日志",notes = "删除单条登入日志")
     @RequiresPermissions({"login:deleteLog"})
     @GetMapping("/deleteLog")
     public ResultVo deleteLog(LoginLogVo loginLogVo){
@@ -137,6 +144,7 @@ public class LoginController {
      * @param loginLogVo
      * @return
      */
+    @ApiOperation(value = "查询登入日志",notes = "查询系统的登入日志分页")
     @GetMapping("/logList")
     public PageVo<LoginLog> logList(LoginLogVo loginLogVo){
         PageVo<LoginLog> page=loginLogService.findPage(loginLogVo);

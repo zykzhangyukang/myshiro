@@ -13,6 +13,8 @@ import com.coderman.rbac.sys.vo.MenuVo;
 import com.coderman.rbac.sys.vo.PageVo;
 import com.coderman.rbac.sys.vo.ResultVo;
 import com.coderman.rbac.sys.vo.RoleVo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import net.bytebuddy.asm.Advice;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -30,6 +32,7 @@ import java.util.List;
 /**
  * Created by zhangyukang on 2019/11/10 11:47
  */
+@Api(value = "菜单模块")
 @RestController
 @RequestMapping("/menu")
 public class MenuController {
@@ -44,6 +47,7 @@ public class MenuController {
      * 删除菜单
      * @return
      */
+    @ApiOperation(value = "删除菜单",notes = "删除菜单信息")
     @RequiresPermissions({"menu:delete"})
     @PostMapping("/delete")
     @ControllerEndpoint(exceptionMessage = "删除菜单失败",operation ="删除菜单/按钮")
@@ -62,6 +66,7 @@ public class MenuController {
      * 添加菜单
      * @return
      */
+    @ApiOperation(value = "添加菜单")
     @RequiresPermissions({"menu:add"})
     @PostMapping("/add")
     @ControllerEndpoint(exceptionMessage = "添加菜单失败",operation ="添加菜单/按钮")
@@ -79,6 +84,7 @@ public class MenuController {
      * 查询所有的菜单
      * @return
      */
+    @ApiOperation(value = "查询所有菜单",notes = "查询菜单的分页信息")
     @GetMapping("/findMenuPage")
     public PageVo<Menu> findMenuPage(MenuVo menuVo){
         PageVo<Menu> menus=menuService.findMenuPage(menuVo);
@@ -89,6 +95,7 @@ public class MenuController {
      * 更新菜单
      * @return
      */
+    @ApiOperation(value = "更新菜单",notes = "更新菜单信息")
     @RequiresPermissions({"menu:update"})
     @PostMapping("/update")
     @ControllerEndpoint(exceptionMessage = "更新菜单失败",operation ="更新菜单/按钮")
@@ -109,6 +116,7 @@ public class MenuController {
      * 根据角色id获取该角色菜单树
      * @return
      */
+    @ApiOperation(value = "获取菜单树",notes = "根据角色id获取该角色菜单树")
     @PostMapping("/loadAllMenuByRoleId")
     public ResultVo<List<MenuDTreeJson>> loadAllMenuByRoleId(RoleVo roleVo){
         List<MenuDTreeJson> menuDTreeJsons = menuService.loadAllMenuByRoleId(roleVo.getId());
@@ -118,6 +126,7 @@ public class MenuController {
      * 所有可用的菜单和按钮
      * @return: 角色添加页面JSON（dTree）
      */
+    @ApiOperation(value = "加载菜单按钮",notes = "加载所有可用的菜单和按钮")
     @PostMapping("/loadAllMenuJSON")
     public ResultVo<List<MenuDTreeJson>> loadAllMenuJSON(){
         List<MenuDTreeJson> menuDTreeJsons = menuService.loadAllMenuJSON();
@@ -128,6 +137,7 @@ public class MenuController {
      * 加载系统左边的菜单
      * @return
      */
+    @ApiOperation(value = "加载菜单",notes = "加载系统左边的菜单树")
     @GetMapping("/loadLeftMenu")
     public List<MenuNode> loadLeftMenu(){
         User user = (User) WebUtil.getSession().getAttribute(MyConstant.USER);

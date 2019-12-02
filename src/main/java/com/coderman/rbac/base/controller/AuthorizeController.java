@@ -17,6 +17,8 @@ import com.coderman.rbac.sys.service.LoginLogService;
 import com.coderman.rbac.sys.service.UserService;
 import com.coderman.rbac.sys.utils.MD5Util;
 import com.coderman.rbac.sys.utils.WebUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -32,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.Date;
 import java.util.UUID;
 
+@Api(value = "Github第三方登入模块")
 @Controller
 public class AuthorizeController {
 
@@ -61,6 +64,7 @@ public class AuthorizeController {
      * @param
      * @return
      */
+    @ApiOperation(value = "Github的回调",notes = "github登入回调")
     @GetMapping("/githubCallBack")
     public String githubCallBack(@RequestParam(name = "code") String code, @RequestParam(name = "state") String state) {
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();

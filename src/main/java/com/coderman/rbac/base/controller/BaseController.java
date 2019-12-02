@@ -1,5 +1,6 @@
 package com.coderman.rbac.base.controller;
 
+import io.swagger.annotations.Api;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * 基础管理模块路由
  * Created by zhangyukang on 2019/11/23 16:25
  */
+@Api(value = "基础管理模块路由")
 @Controller
 @RequestMapping("/base")
 public class BaseController {

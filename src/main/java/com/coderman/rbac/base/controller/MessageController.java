@@ -6,11 +6,14 @@ import com.coderman.rbac.base.vo.MessageVo;
 import com.coderman.rbac.sys.enums.ResultEnum;
 import com.coderman.rbac.sys.vo.PageVo;
 import com.coderman.rbac.sys.vo.ResultVo;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 /**
  * 系统留言
@@ -28,6 +31,7 @@ public class MessageController {
      * @param messageVo
      * @return
      */
+    @ApiOperation(value = "系统留言",notes = "系统留言的分页信息")
     @GetMapping("/findPage")
     public PageVo findPage(MessageVo messageVo){
         PageVo<Message> messages=messageService.findPage(messageVo);
@@ -38,6 +42,7 @@ public class MessageController {
      * 发布留言
      * @return
      */
+    @ApiOperation(value = "发布留言",notes = "发布留言信息")
     @PostMapping("/publish")
     public ResultVo publish(MessageVo messageVo){
         try {
@@ -53,6 +58,7 @@ public class MessageController {
      * 修改留言
      * @return
      */
+    @ApiOperation(value = "修改留言",notes = "修改留言信息")
     @PostMapping("/update")
     public ResultVo update(MessageVo messageVo){
         try {
@@ -68,6 +74,7 @@ public class MessageController {
      * 删除留言
      * @return
      */
+    @ApiOperation(value = "删除留言",notes = "删除留言信息")
     @GetMapping("/delete")
     public ResultVo delete(MessageVo messageVo){
         try {

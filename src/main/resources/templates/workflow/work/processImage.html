@@ -5,7 +5,10 @@
     <title>流程图</title>
 </head>
 <body>
+<div style="position: relative;">
+<div th:style="'padding:2px;width:' + @{${positionMap.width}} + 'px ;height:' + @{${positionMap.height}} + 'px;border:2px solid red;position:absolute;top:' + @{${positionMap.y-78}} +'px;left:'+ @{${positionMap.x-65}} +'px'"></div>
 <img th:src="@{/workFlow/workFlowImage}+'?id='+${deployId}">
+</div>
 </body>
 <script>
 

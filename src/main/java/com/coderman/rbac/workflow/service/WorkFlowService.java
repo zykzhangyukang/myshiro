@@ -10,6 +10,7 @@ import com.coderman.rbac.workflow.vo.WorkFlowVo;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipInputStream;
 
 /**
@@ -101,4 +102,25 @@ public interface WorkFlowService {
      * @param workFlowVo
      */
     void doTask(WorkFlowVo workFlowVo);
+
+    /**
+     * 根据任务ID获取部署ID
+     * @param taskId
+     * @return
+     */
+    String findDeployByTaskId(String taskId);
+
+    /**
+     * 流程图的坐标信息
+     * @param taskId
+     * @return
+     */
+    Map findProcessImagePosition(String taskId);
+
+    /**
+     * 根据业务ID获取任务ID
+     * @param sickPaperId
+     * @return
+     */
+    String getTaskIdByBizKey(String sickPaperId);
 }

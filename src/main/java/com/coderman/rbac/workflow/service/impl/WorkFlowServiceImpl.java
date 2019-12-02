@@ -20,6 +20,7 @@ import org.activiti.engine.impl.pvm.PvmTransition;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
+import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
@@ -133,7 +134,7 @@ public class WorkFlowServiceImpl implements WorkFlowService {
     @Transactional
     @Override
     public void delete(WorkFlowVo workFlowVo) {
-      repositoryService.deleteDeployment(workFlowVo.getId());
+      repositoryService.deleteDeployment(workFlowVo.getId(),true);
     }
 
     @Transactional(rollbackFor=Exception.class)
@@ -278,5 +279,40 @@ public class WorkFlowServiceImpl implements WorkFlowService {
             }
             sickPaperMapper.updateByPrimaryKeySelective(sickPaper);
         }
+    }
+
+    @Override
+    public String findDeployByTaskId(String taskId) {
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        String processDefinitionId = task.getProcessDefinitionId();
+        ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().processDefinitionId(processDefinitionId).singleResult();
+        return  processDefinition.getDeploymentId();
+    }
+
+    @Override
+    public Map findProcessImagePosition(String taskId) {
+        TaskEntity task = (TaskEntity) taskService.createTaskQuery().taskId(taskId).singleResult();
+        ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(task.getProcessInstanceId()).singleResult();
+        ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) repositoryService.getProcessDefinition(task.getProcessDefinitionId());
+        ActivityImpl activity = processDefinitionEntity.findActivity(processInstance.getActivityId());
+        int x = activity.getX();
+        int y = activity.getY();
+        int height = activity.getHeight();
+        int width = activity.getWidth();
+        Map map=new HashMap();
+        map.put("x",x);
+        map.put("y",y);
+        map.put("width",width);
+        map.put("height",height);
+        return map;
+    }
+
+    @Override
+    public String getTaskIdByBizKey(String sickPaperId) {
+        String bizKey=MyConstant.PROCESS_KEY+"=>"+sickPaperId;
+        Execution execution = runtimeService.createExecutionQuery().processInstanceBusinessKey(bizKey).singleResult();
+        String processInstanceId = execution.getProcessInstanceId();
+        Task task = taskService.createTaskQuery().processInstanceId(processInstanceId).singleResult();
+        return task.getId();
     }
 }

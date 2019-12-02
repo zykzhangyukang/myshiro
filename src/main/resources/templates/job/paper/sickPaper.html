@@ -92,8 +92,8 @@
     <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="apply">申请</a>
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a  class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete">删除</a>
-    {{#  } else { }}
-    <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="viewMessage">查看进度</a>
+    {{#  } else if(d.status!=3&&d.status!=1&&d.status!=5) { }}
+    <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="showImage">查看进度</a>
     {{#  } }}
 </script>
 
@@ -313,6 +313,9 @@
                 case 'apply':
                     apply(data);
                     break;
+                case 'showImage':
+                    showImage(data);
+                    break;
                 case 'edit':
                     initEdit();
                     edit(data);
@@ -367,6 +370,19 @@
             }else{
                 layer.msg("请选中操作行")
             }
+        }
+        //查看进度图
+        //查看进度（获取位置）
+        function showImage(data) {
+            layer.open({
+                type: 2
+                ,shade: 0.8,
+                title: '流程图',
+                shadeClose: true,
+                maxmin: true, //开启最大化最小化按钮
+                area: ['993px', '560px'],
+                content: '/workFlow/processImage?sickPaperId='+data.id,
+            });
         }
     });
 </script>

@@ -9,6 +9,7 @@ import com.coderman.rbac.sys.service.UserService;
 import com.coderman.rbac.sys.utils.WebUtil;
 import com.coderman.rbac.sys.vo.ResultVo;
 import com.coderman.rbac.sys.vo.UserVo;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +32,7 @@ public class SessionController {
     @Autowired
     private UserService userService;
 
+    @ApiOperation(value = "刷新session",notes = "刷新当前用户的session")
     @GetMapping("/flush")
     public ResultVo flush(UserVo userVo){
         User userById = userService.findUserById(userVo);
@@ -52,6 +54,7 @@ public class SessionController {
      * @param username
      * @return
      */
+    @ApiOperation(value = "获取在线人数",notes = "获取当前在线的人数")
     @GetMapping("/online/{username}")
     public ResultVo<List<ActiveUser>> online(@PathVariable(value = "username") String username){
         List<ActiveUser> activeUsers=sessionService.listOnLine(username);
@@ -63,6 +66,7 @@ public class SessionController {
      * @param id
      * @return
      */
+    @ApiOperation(value = "提出用户",notes = "提出当前登入用户根据用户ID")
     @RequiresPermissions({"session:user:kickout"})
     @GetMapping("delete/{id}")
     public ResultVo forceLogout(@PathVariable String id) {
